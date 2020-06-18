@@ -9,6 +9,6 @@
 set -e
 
 # deploy
-echo "deploying ..."
-cat deployment.yml | envsubst -no-unset -no-empty | kubectl apply -f -
+echo "deploying [$(basename "$PWD")] to [$(kubectl config current-context)] ..."
+kubectl kustomize $(kubectl config current-context) | envsubst -no-unset -no-empty | kubectl apply -f -
 echo "done!"
