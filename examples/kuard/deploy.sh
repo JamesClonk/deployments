@@ -1,11 +1,14 @@
 #!/bin/bash
 
+# # check for modern envsubst with flags
+# ENVSUBST=envsubst
+# if envsubst -h 2>&1 | grep -q 'no-empty'; then
+# 	ENVSUBST="envsubst -no-unset -no-empty"
+# fi
 # fail on error
 set -e
 
-if [ -z "${BASIC_AUTH}" ]; then
-	echo "BASIC_AUTH must be set!"
-	exit 1
-fi
-
-cat deployment.yml | envsubst | kubectl apply -f -
+# deploy
+echo "deploying ..."
+cat deployment.yml | envsubst -no-unset -no-empty | kubectl apply -f -
+echo "done!"
