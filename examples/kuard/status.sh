@@ -3,6 +3,6 @@
 # fail on error
 set -e
 
-# info
+# status
 APP_NAME=$(basename "$PWD")
 kapp inspect --app ${APP_NAME} --tree
