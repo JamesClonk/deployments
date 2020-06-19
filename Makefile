@@ -33,5 +33,5 @@ status:
 target:
 	@kubectl config use-context $(call ARGS,${DEFAULT_ENVIRONMENT})
 
-kuard jcio home-info ircollector irvisualizer production prod testing test local microk8s:
+cf-env kuard jcio home-info ircollector irvisualizer production prod testing test local microk8s:
 	@exit $?

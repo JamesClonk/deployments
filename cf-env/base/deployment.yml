@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cf-env
+spec:
+  selector:
+    matchLabels:
+      app: cf-env
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: cf-env
+        image: jamesclonk/cf-env:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
