@@ -33,6 +33,12 @@ diff:
 status:
 	@cd $(call ARGS,${DEFAULT_APP}); ./status.sh
 
+.PHONY: dashboard
+## dashboard: open kubernetes dashboard
+dashboard:
+	sleep 2 && firefox 'https://127.0.0.1:4443' &
+	@kubectl -n kubernetes-dashboard port-forward service/kubernetes-dashboard 4443:443
+
 .PHONY: target
 ## target: targets a kubernetes environment
 target:
