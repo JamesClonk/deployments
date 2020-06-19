@@ -29,3 +29,13 @@ spec:
           httpGet:
             path: /healthy
             port: 8080
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchExpressions:
+              - key: "app"
+                operator: In
+                values:
+                - kuard
