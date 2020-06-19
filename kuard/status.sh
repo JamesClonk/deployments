@@ -1,8 +1,6 @@
 #!/bin/bash
-
-# fail on error
 set -e
+source ../utils.sh
 
 # status
-APP_NAME=$(basename "$PWD")
 kapp inspect --app ${APP_NAME} --tree
