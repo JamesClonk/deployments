@@ -16,7 +16,7 @@ help:
 .PHONY: deploy-all
 ## deploy-all: deploys all applications to kubernetes
 deploy-all:
-	@for dir in $$(find . -type f -name 'deploy.sh' | sed -r 's|/[^/]+$$||' | sort | uniq); do pushd $$dir; ./deploy.sh; popd; echo " "; done
+	@for dir in $$(find . -type f -name 'deploy.sh' | sed -r 's|/[^/]+$$||' | sort | uniq); do pushd $$dir; ./deploy.sh || exit 1; popd; echo " "; done
 
 .PHONY: deploy
 ## deploy: deploys applications to kubernetes
