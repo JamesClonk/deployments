@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-source ../utils.sh
+source ../setup.sh
 
 # status
-kapp inspect --app ${APP_NAME} --tree
+kapp inspect --app ${KUBE_APP_NAME} --tree

@@ -4,6 +4,8 @@ APP ?= $(shell basename $$(pwd))
 COMMIT_SHA = $(shell git rev-parse --short HEAD)
 ARGS = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 DEFAULT_APP = kuard
+DEFAULT_ENVIRONMENT = local
+.PHONY: $(MAKECMDGOALS)
 
 .PHONY: help
 ## help: prints this help message
@@ -25,3 +27,11 @@ diff:
 ## status: displays application status
 status:
 	@cd $(call ARGS,${DEFAULT_APP}); ./status.sh
+
+.PHONY: target
+## target: targets a kubernetes environment
+target:
+	@kubectl config use-context $(call ARGS,${DEFAULT_ENVIRONMENT})
+
+kuard jcio home-info ircollector irvisualizer production prod testing test local microk8s:
+	@exit $?
