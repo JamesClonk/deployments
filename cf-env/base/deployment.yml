@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: cf-env
-        image: jamesclonk/cf-env:latest
+        image: jamesclonk/cf-env:89d20c44e3d6b1a4e0c0502e9d1f5bc908e81264
         ports:
         - containerPort: 8080
         env:
