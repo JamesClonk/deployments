@@ -63,8 +63,8 @@ if [ "$KUBE_ENVIRONMENT" == "local" ]; then
 	export KUBE_DOMAIN="127.0.0.1.xip.io"
 fi
 if [ "$KUBE_ENVIRONMENT" == "test" ]; then
-	export KUBE_DOMAIN="test.51.15.242.160.xip.io"
+	export KUBE_DOMAIN="test.jamesclonk.com"
 fi
 if [ "$KUBE_ENVIRONMENT" == "prod" ]; then
-	export KUBE_DOMAIN="51.15.242.160.xip.io"
+	export KUBE_DOMAIN="jamesclonk.com"
 fi
