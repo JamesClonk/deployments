@@ -17,7 +17,7 @@ jobs:
         name: kubernetes
         command: |
           GIT_COMMIT_MESSAGE="$(git log -n 1 --pretty=format:%B)"
-          if [[ echo "${GIT_COMMIT_MESSAGE}" | grep -qE '.*\[deploy ([-_a-z]+)\].*' ]]; then
+          if $(echo "${GIT_COMMIT_MESSAGE}" | grep -qE '.*\[deploy ([-_a-z]+)\].*'); then
             DEPLOYMENT=$(echo "${GIT_COMMIT_MESSAGE}" | sed -re 's/.*\[deploy ([-_a-z]+)\].*/\1/g')
             make deploy "${DEPLOYMENT}"
           else
