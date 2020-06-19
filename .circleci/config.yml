@@ -1,0 +1,25 @@
+version: 2.1
+
+orbs:
+  kube-orb: circleci/kubernetes@0.11.0
+
+jobs:
+  deploy:
+    docker:
+    - image: 'cimg/base:stable'
+    steps:
+    - checkout
+    - kube-orb/install-kubeconfig:
+        kubeconfig: KUBECONFIG_DATA
+    - run: make setup
+    - run: make target production
+    - run:
+        name: kubernetes
+        command: |
+          GIT_COMMIT_MESSAGE="$(git log -n 1 --pretty=format:%B)"
+          if [[ echo "${GIT_COMMIT_MESSAGE}" | grep -qE '.*\[deploy ([-_a-z]+)\].*' ]]; then
+            DEPLOYMENT=$(echo "${GIT_COMMIT_MESSAGE}" | sed -re 's/.*\[deploy ([-_a-z]+)\].*/\1/g')
+            make deploy "${DEPLOYMENT}"
+          else
+            make deploy-all
+          fi

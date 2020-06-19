@@ -13,6 +13,11 @@ help:
 	@echo "Usage:"
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 
+.PHONY: deploy-all
+## deploy-all: deploys all applications to kubernetes
+deploy-all:
+	@for dir in $$(find . -type f -name 'deploy.sh' | sed -r 's|/[^/]+$$||' | sort | uniq); do pushd $$dir; ./deploy.sh; popd; echo " "; done
+
 .PHONY: deploy
 ## deploy: deploys applications to kubernetes
 deploy:
@@ -32,6 +37,11 @@ status:
 ## target: targets a kubernetes environment
 target:
 	@kubectl config use-context $(call ARGS,${DEFAULT_ENVIRONMENT})
+
+.PHONY: setup
+## setup: setup working environment
+setup:
+	./setup.sh
 
 cf-env kuard jcio home-info ircollector irvisualizer production prod testing test local microk8s:
 	@exit $?
