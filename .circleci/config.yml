@@ -4,7 +4,7 @@ orbs:
   kube-orb: circleci/kubernetes@0.11.0
 
 jobs:
-  deploy:
+  build:
     docker:
     - image: 'cimg/base:stable'
     steps:
