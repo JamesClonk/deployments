@@ -24,3 +24,7 @@ spec:
           limits:
             memory: "64Mi"
             cpu: "50m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080

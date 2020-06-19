@@ -21,3 +21,11 @@ spec:
           limits:
             memory: "32Mi"
             cpu: "50m"
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+        livenessProbe:
+          httpGet:
+            path: /healthy
+            port: 8080
