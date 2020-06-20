@@ -10,6 +10,10 @@ metadata:
     nginx.ingress.kubernetes.io/auth-secret: basic-auth
     nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
 spec:
+  tls:
+  - hosts:
+    - kuard.${KUBE_DOMAIN}
+    secretName: kuard-tls
   rules:
   - host: kuard.${KUBE_DOMAIN}
     http:
