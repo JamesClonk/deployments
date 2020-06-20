@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jcio-frontend
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: jcio-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moviedb-frontend
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: moviedb-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moviedb-backend
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: moviedb-backend
