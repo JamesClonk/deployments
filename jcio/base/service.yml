@@ -5,7 +5,7 @@ metadata:
 spec:
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: 3000
   selector:
     app: jcio-frontend
 ---
@@ -16,7 +16,7 @@ metadata:
 spec:
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: 3007
   selector:
     app: moviedb-frontend
 ---
@@ -27,6 +27,6 @@ metadata:
 spec:
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: 4007
   selector:
     app: moviedb-backend

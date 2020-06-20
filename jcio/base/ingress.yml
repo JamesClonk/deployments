@@ -26,33 +26,33 @@ spec:
       - backend:
           serviceName: jcio-frontend
           servicePort: 80
-# ---
-# apiVersion: networking.k8s.io/v1beta1
-# kind: Ingress
-# metadata:
-#   name: moviedb
-#   annotations:
-#     kubernetes.io/ingress.class: "nginx"
-#     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-#     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-#     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-# spec:
-#   tls:
-#   - hosts:
-#     - moviedb.${KUBE_DOMAIN}
-#     - moviedb-frontend.${KUBE_DOMAIN}
-#     - moviedb-backend.${KUBE_DOMAIN}
-#     secretName: moviedb-tls
-#   rules:
-#   - host: moviedb.${KUBE_DOMAIN}
-#     http:
-#       paths:
-#       - backend:
-#           serviceName: moviedb-frontend
-#           servicePort: 80
-#   - host: moviedb-backend.${KUBE_DOMAIN}
-#     http:
-#       paths:
-#       - backend:
-#           serviceName: moviedb-backend
-#           servicePort: 80
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: moviedb
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - moviedb.${KUBE_DOMAIN}
+    - moviedb-frontend.${KUBE_DOMAIN}
+    - moviedb-backend.${KUBE_DOMAIN}
+    secretName: moviedb-tls
+  rules:
+  - host: moviedb.${KUBE_DOMAIN}
+    http:
+      paths:
+      - backend:
+          serviceName: moviedb-frontend
+          servicePort: 80
+  - host: moviedb-backend.${KUBE_DOMAIN}
+    http:
+      paths:
+      - backend:
+          serviceName: moviedb-backend
+          servicePort: 80
