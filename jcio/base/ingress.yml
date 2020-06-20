@@ -6,6 +6,11 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-next-upstream: "error timeout http_502"
+    nginx.ingress.kubernetes.io/proxy-next-upstream-tries: "5"
+    nginx.ingress.kubernetes.io/proxy-next-upstream-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   tls:
@@ -19,13 +24,13 @@ spec:
       paths:
       - backend:
           serviceName: jcio-frontend
-          servicePort: 80
+          servicePort: 3000
   - host: www.${KUBE_DOMAIN}
     http:
       paths:
       - backend:
           serviceName: jcio-frontend
-          servicePort: 80
+          servicePort: 3000
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -35,6 +40,12 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-next-upstream: "error timeout http_502"
+    nginx.ingress.kubernetes.io/proxy-next-upstream-tries: "5"
+    nginx.ingress.kubernetes.io/proxy-next-upstream-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/connection-proxy-header: "keep-alive"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   tls:
@@ -49,10 +60,16 @@ spec:
       paths:
       - backend:
           serviceName: moviedb-frontend
-          servicePort: 80
+          servicePort: 3007
+  - host: moviedb-frontend.${KUBE_DOMAIN}
+    http:
+      paths:
+      - backend:
+          serviceName: moviedb-frontend
+          servicePort: 3007
   - host: moviedb-backend.${KUBE_DOMAIN}
     http:
       paths:
       - backend:
           serviceName: moviedb-backend
-          servicePort: 80
+          servicePort: 4007

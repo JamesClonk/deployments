@@ -22,7 +22,7 @@ spec:
         resources:
           requests:
             memory: "32Mi"
-            cpu: "10m"
+            cpu: "50m"
           limits:
             memory: "64Mi"
             cpu: "100m"
@@ -39,7 +39,7 @@ spec:
   selector:
     matchLabels:
       app: moviedb-frontend
-  replicas: 1
+  replicas: 3
   template:
     spec:
       containers:
@@ -59,10 +59,10 @@ spec:
         resources:
           requests:
             memory: "32Mi"
-            cpu: "10m"
+            cpu: "50m"
           limits:
             memory: "64Mi"
-            cpu: "50m"
+            cpu: "100m"
         readinessProbe:
           httpGet:
             path: /ready
@@ -76,7 +76,7 @@ spec:
   selector:
     matchLabels:
       app: moviedb-backend
-  replicas: 1
+  replicas: 3
   template:
     spec:
       containers:
@@ -115,10 +115,10 @@ spec:
         resources:
           requests:
             memory: "32Mi"
-            cpu: "10m"
+            cpu: "50m"
           limits:
             memory: "64Mi"
-            cpu: "50m"
+            cpu: "100m"
         readinessProbe:
           httpGet:
             path: /
