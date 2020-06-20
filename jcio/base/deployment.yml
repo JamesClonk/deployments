@@ -11,10 +11,12 @@ spec:
     spec:
       containers:
       - name: jcio-frontend
-        image: jamesclonk/jcio-frontend:latest
+        image: jamesclonk/jcio-frontend@sha256:b3796353aad3122c1317c206e073f6e4d041ce952c6749dcdf10bd148739854e
         ports:
         - containerPort: 8080
         env:
+        - name: PORT
+          value: "8080"
         - name: JCIO_ENV
           value: production
         resources:
@@ -28,90 +30,94 @@ spec:
           httpGet:
             path: /
             port: 8080
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: moviedb-frontend
-spec:
-  selector:
-    matchLabels:
-      app: moviedb-frontend
-  replicas: 1
-  template:
-    spec:
-      containers:
-      - name: moviedb-frontend
-        image: jamesclonk/moviedb-frontend:latest
-        ports:
-        - containerPort: 8080
-        env:
-        - name: JCIO_ENV
-          value: production
-        - name: JCIO_HTTP_HMAC_SECRET
-          value: ${JCIO_HTTP_HMAC_SECRET}
-        resources:
-          requests:
-            memory: "32Mi"
-            cpu: "10m"
-          limits:
-            memory: "64Mi"
-            cpu: "50m"
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8080
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: moviedb-backend
-spec:
-  selector:
-    matchLabels:
-      app: moviedb-backend
-  replicas: 1
-  template:
-    spec:
-      containers:
-      - name: moviedb-backend
-        image: jamesclonk/moviedb-backend:latest
-        ports:
-        - containerPort: 8080
-        env:
-        - name: JCIO_ENV
-          value: production
-        - name: JCIO_HTTP_HMAC_SECRET
-          value: ${JCIO_HTTP_HMAC_SECRET}
-        - name: JCIO_DATABASE_TYPE
-          value: postgres
-        - name: VCAP_SERVICES
-          value: |
-            {
-              "user-provided": [
-               {
-                "binding_name": null,
-                "credentials": {
-                 "maxconns": "5",
-                 "uri": "${JCIO_MOVIEDB_CONNSTR}"
-                },
-                "instance_name": "moviedb",
-                "label": "user-provided",
-                "name": "moviedb",
-                "syslog_drain_url": "",
-                "tags": [],
-                "volume_mounts": []
-               }
-              ]
-            }
-        resources:
-          requests:
-            memory: "32Mi"
-            cpu: "10m"
-          limits:
-            memory: "64Mi"
-            cpu: "50m"
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8080
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: moviedb-frontend
+# spec:
+#   selector:
+#     matchLabels:
+#       app: moviedb-frontend
+#   replicas: 1
+#   template:
+#     spec:
+#       containers:
+#       - name: moviedb-frontend
+#         image: jamesclonk/moviedb-frontend:latest
+#         ports:
+#         - containerPort: 8080
+#         env:
+#         - name: PORT
+#           value: "8080"
+#         - name: JCIO_ENV
+#           value: production
+#         - name: JCIO_HTTP_HMAC_SECRET
+#           value: ${JCIO_HTTP_HMAC_SECRET}
+#         resources:
+#           requests:
+#             memory: "32Mi"
+#             cpu: "10m"
+#           limits:
+#             memory: "64Mi"
+#             cpu: "50m"
+#         readinessProbe:
+#           httpGet:
+#             path: /
+#             port: 8080
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: moviedb-backend
+# spec:
+#   selector:
+#     matchLabels:
+#       app: moviedb-backend
+#   replicas: 1
+#   template:
+#     spec:
+#       containers:
+#       - name: moviedb-backend
+#         image: jamesclonk/moviedb-backend:latest
+#         ports:
+#         - containerPort: 8080
+#         env:
+#         - name: PORT
+#           value: "8080"
+#         - name: JCIO_ENV
+#           value: production
+#         - name: JCIO_HTTP_HMAC_SECRET
+#           value: ${JCIO_HTTP_HMAC_SECRET}
+#         - name: JCIO_DATABASE_TYPE
+#           value: postgres
+#         - name: VCAP_SERVICES
+#           value: |
+#             {
+#               "user-provided": [
+#                {
+#                 "binding_name": null,
+#                 "credentials": {
+#                  "maxconns": "5",
+#                  "uri": "${JCIO_MOVIEDB_CONNSTR}"
+#                 },
+#                 "instance_name": "moviedb",
+#                 "label": "user-provided",
+#                 "name": "moviedb",
+#                 "syslog_drain_url": "",
+#                 "tags": [],
+#                 "volume_mounts": []
+#                }
+#               ]
+#             }
+#         resources:
+#           requests:
+#             memory: "32Mi"
+#             cpu: "10m"
+#           limits:
+#             memory: "64Mi"
+#             cpu: "50m"
+#         readinessProbe:
+#           httpGet:
+#             path: /
+#             port: 8080
