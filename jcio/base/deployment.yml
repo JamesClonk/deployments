@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: jcio-frontend
-        image: jamesclonk/jcio-frontend@sha256:b3796353aad3122c1317c206e073f6e4d041ce952c6749dcdf10bd148739854e
+        image: jamesclonk/jcio-frontend:9fc1aaca127b7d049df8a06a29519b26fd64d5f0
         ports:
         - containerPort: 3000
         env:
