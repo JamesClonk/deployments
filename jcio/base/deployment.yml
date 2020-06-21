@@ -5,9 +5,16 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: jcio-frontend
-  replicas: 2
+      app: jcio
+      app.service: www
+      app.service.component: frontend
+  replicas: 1
   template:
+    metadata:
+      labels:
+        app: jcio
+        app.service: www
+        app.service.component: frontend
     spec:
       containers:
       - name: jcio-frontend
@@ -38,9 +45,16 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: moviedb-frontend
-  replicas: 3
+      app: jcio
+      app.service: moviedb
+      app.service.component: frontend
+  replicas: 1
   template:
+    metadata:
+      labels:
+        app: jcio
+        app.service: moviedb
+        app.service.component: frontend
     spec:
       containers:
       - name: moviedb-frontend
@@ -75,9 +89,16 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: moviedb-backend
-  replicas: 3
+      app: jcio
+      app.service: moviedb
+      app.service.component: backend
+  replicas: 1
   template:
+    metadata:
+      labels:
+        app: jcio
+        app.service: moviedb
+        app.service.component: backend
     spec:
       containers:
       - name: moviedb-backend

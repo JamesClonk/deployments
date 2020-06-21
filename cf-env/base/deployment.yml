@@ -8,6 +8,9 @@ spec:
       app: cf-env
   replicas: 1
   template:
+    metadata:
+      labels:
+        app: cf-env
     spec:
       containers:
       - name: cf-env

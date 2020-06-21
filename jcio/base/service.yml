@@ -7,7 +7,9 @@ spec:
   - port: 3000
     targetPort: 3000
   selector:
-    app: jcio-frontend
+    app: jcio
+    app.service: www
+    app.service.component: frontend
 ---
 apiVersion: v1
 kind: Service
@@ -18,7 +20,9 @@ spec:
   - port: 3007
     targetPort: 3007
   selector:
-    app: moviedb-frontend
+    app: jcio
+    app.service: moviedb
+    app.service.component: frontend
 ---
 apiVersion: v1
 kind: Service
@@ -29,4 +33,6 @@ spec:
   - port: 4007
     targetPort: 4007
   selector:
-    app: moviedb-backend
+    app: jcio
+    app.service: moviedb
+    app.service.component: backend

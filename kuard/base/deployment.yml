@@ -8,6 +8,9 @@ spec:
       app: kuard
   replicas: 1
   template:
+    metadata:
+      labels:
+        app: kuard
     spec:
       containers:
       - name: kuard
