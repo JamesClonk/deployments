@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: home-info-dashboard
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+spec:
+  tls:
+  - hosts:
+    - home-info.${KUBE_DOMAIN_ALPHA}
+    - home-info.${KUBE_DOMAIN_BETA}
+    secretName: home-info-tls
+  rules:
+  - host: ${KUBE_DOMAIN_ALPHA}
+    http:
+      paths:
+      - backend:
+          serviceName: home-info-dashboard
+          servicePort: 8080
+  - host: ${KUBE_DOMAIN_BETA}
+    http:
+      paths:
+      - backend:
+          serviceName: home-info-dashboard
+          servicePort: 8080

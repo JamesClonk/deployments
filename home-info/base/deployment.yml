@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-info-dashboard
+spec:
+  selector:
+    matchLabels:
+      app: home-info
+      app.service.component: dashboard
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: home-info
+        app.service.component: dashboard
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - home-info
+                - key: app.service.component
+                  operator: In
+                  values:
+                  - dashboard
+      containers:
+      - name: home-info-dashboard
+        image: jamesclonk/home-info-dashboard:8dc9d61d8cfbe7e987052a6f2ddc8c7616d6db47
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: HOME_INFO_DB_URI
+          value: "${HOME_INFO_DB_URI}"
+        - name: AUTH_PASSWORD
+          value: "${HOME_INFO_AUTH_PASSWORD}"
+        - name: AUTH_USERNAME
+          value: "${HOME_INFO_AUTH_USERNAME}"
+        - name: CONFIG_BEDROOM_HUMIDITY_SENSOR_ID
+          value: "5"
+        - name: CONFIG_BEDROOM_TEMPERATURE_SENSOR_ID
+          value: "4"
+        - name: CONFIG_FORECAST_TEMPERATURE_SENSOR_ID
+          value: "3"
+        - name: CONFIG_HOME_OFFICE_HUMIDITY_SENSOR_ID
+          value: "7"
+        - name: CONFIG_HOME_OFFICE_TEMPERATURE_SENSOR_ID
+          value: "6"
+        - name: CONFIG_LIVING_ROOM_HUMIDITY_SENSOR_ID
+          value: "2"
+        - name: CONFIG_LIVING_ROOM_TEMPERATURE_SENSOR_ID
+          value: "1"
+        - name: DEFAULT_CANTON
+          value: "Bern"
+        - name: DEFAULT_CITY
+          value: "Bern"
+        - name: SLACK_CHANNEL
+          value: "USER_Fabio"
+        - name: SLACK_DEBUG
+          value: "false"
+        - name: SLACK_TOKEN
+          value: "${HOME_INFO_SLACK_TOKEN}"
+        - name: TELEBOT_USERNAME
+          value: "${HOME_INFO_TELEBOT_USERNAME}"
+        - name: TELEBOT_DEBUG
+          value: "false"
+        - name: TELEBOT_TOKEN
+          value: "${HOME_INFO_TELEBOT_TOKEN}"
+        - name: TZ
+          value: "Europe/Zurich"
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "64Mi"
+            cpu: "200m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
