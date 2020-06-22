@@ -11,18 +11,6 @@ function install_tool {
 	fi
 }
 
-function undpack_and_install_tool {
-	TOOL_NAME=$1
-	TOOL_URL=$2
-	if [ ! -f "$HOME/bin/$TOOL_NAME" ]; then
-		echo "installing [$TOOL_NAME] ..."
-		wget "$TOOL_URL" -O "$HOME/bin/$TOOL_NAME.tgz"
-		tar -xvzf "$HOME/bin/$TOOL_NAME.tgz" -C "$HOME/bin/"
-		rm -f "$HOME/bin/$TOOL_NAME.tgz"
-		chmod +x "$HOME/bin/$TOOL_NAME"
-	fi
-}
-
 # $HOME/bin
 if [ ! -d "$HOME/bin" ]; then mkdir "$HOME/bin"; fi
 export PATH="$HOME/bin:$PATH"
@@ -31,7 +19,6 @@ export PATH="$HOME/bin:$PATH"
 install_tool "kubectl" "https://storage.googleapis.com/kubernetes-release/release/v1.18.4/bin/linux/amd64/kubectl"
 install_tool "envsubst" "https://github.com/JamesClonk/envsubst/releases/download/v1.1.1/envsubst_1.1.1_Linux-64bit"
 install_tool "kapp" "https://github.com/k14s/kapp/releases/download/v0.30.0/kapp-linux-amd64"
-undpack_and_install_tool "pack" "https://github.com/buildpacks/pack/releases/download/v0.11.2/pack-v0.11.2-linux.tgz"
 
 # vars
 export KUBE_APP_NAME=$(basename "$PWD")
