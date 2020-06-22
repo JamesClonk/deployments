@@ -8,7 +8,7 @@ spec:
       app: jcio
       app.service: www
       app.service.component: frontend
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -16,6 +16,26 @@ spec:
         app.service: www
         app.service.component: frontend
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - jcio
+                - key: app.service
+                  operator: In
+                  values:
+                  - www
+                - key: app.service.component
+                  operator: In
+                  values:
+                  - frontend
       containers:
       - name: jcio-frontend
         image: jamesclonk/jcio-frontend:9fc1aaca127b7d049df8a06a29519b26fd64d5f0
@@ -48,7 +68,7 @@ spec:
       app: jcio
       app.service: moviedb
       app.service.component: frontend
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -56,6 +76,26 @@ spec:
         app.service: moviedb
         app.service.component: frontend
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - jcio
+                - key: app.service
+                  operator: In
+                  values:
+                  - moviedb
+                - key: app.service.component
+                  operator: In
+                  values:
+                  - frontend
       containers:
       - name: moviedb-frontend
         image: jamesclonk/moviedb-frontend:87286a8dd8d0ff6fb9108880b51887854ad0872c
@@ -67,7 +107,7 @@ spec:
         - name: JCIO_ENV
           value: production
         - name: JCIO_MOVIEDB_BACKEND
-          value: https://moviedb-backend.${KUBE_DOMAIN}
+          value: http://moviedb-backend.jcio:4007
         - name: JCIO_HTTP_HMAC_SECRET
           value: ${JCIO_HTTP_HMAC_SECRET}
         resources:
@@ -92,7 +132,7 @@ spec:
       app: jcio
       app.service: moviedb
       app.service.component: backend
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -100,6 +140,26 @@ spec:
         app.service: moviedb
         app.service.component: backend
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - jcio
+                - key: app.service
+                  operator: In
+                  values:
+                  - moviedb
+                - key: app.service.component
+                  operator: In
+                  values:
+                  - backend
       containers:
       - name: moviedb-backend
         image: jamesclonk/moviedb-backend:6abf341bd5f1d050e43ac34be3f56b0f72e4af75

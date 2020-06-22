@@ -58,13 +58,17 @@ if [ "$KUBE_ENVIRONMENT" == "test" ]; then
 fi
 
 # what's the domain for that env?
-export KUBE_DOMAIN="127.0.0.1.xip.io"
+export KUBE_DOMAIN_ALPHA="127.0.0.1.xip.io"
+export KUBE_DOMAIN_BETA="127.0.0.1.xip.io"
 if [ "$KUBE_ENVIRONMENT" == "local" ]; then
-	export KUBE_DOMAIN="127.0.0.1.xip.io"
+	export KUBE_DOMAIN_ALPHA="127.0.0.1.xip.io"
+	export KUBE_DOMAIN_BETA="127.0.0.1.xip.io"
 fi
 if [ "$KUBE_ENVIRONMENT" == "test" ]; then
-	export KUBE_DOMAIN="test.jamesclonk.com"
+	export KUBE_DOMAIN_ALPHA="test.jamesclonk.io"
+	export KUBE_DOMAIN_BETA="test.jamesclonk.com"
 fi
 if [ "$KUBE_ENVIRONMENT" == "prod" ]; then
-	export KUBE_DOMAIN="jamesclonk.com"
+	export KUBE_DOMAIN_ALPHA="jamesclonk.io"
+	export KUBE_DOMAIN_BETA="jamesclonk.com"
 fi

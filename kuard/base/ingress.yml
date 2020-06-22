@@ -13,10 +13,17 @@ metadata:
 spec:
   tls:
   - hosts:
-    - kuard.${KUBE_DOMAIN}
+    - kuard.${KUBE_DOMAIN_ALPHA}
+    - kuard.${KUBE_DOMAIN_BETA}
     secretName: kuard-tls
   rules:
-  - host: kuard.${KUBE_DOMAIN}
+  - host: kuard.${KUBE_DOMAIN_ALPHA}
+    http:
+      paths:
+      - backend:
+          serviceName: kuard
+          servicePort: 80
+  - host: kuard.${KUBE_DOMAIN_BETA}
     http:
       paths:
       - backend:

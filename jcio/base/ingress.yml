@@ -10,17 +10,31 @@ metadata:
 spec:
   tls:
   - hosts:
-    - ${KUBE_DOMAIN}
-    - www.${KUBE_DOMAIN}
+    - ${KUBE_DOMAIN_ALPHA}
+    - www.${KUBE_DOMAIN_ALPHA}
+    - ${KUBE_DOMAIN_BETA}
+    - www.${KUBE_DOMAIN_BETA}
     secretName: jcio-tls
   rules:
-  - host: ${KUBE_DOMAIN}
+  - host: ${KUBE_DOMAIN_ALPHA}
     http:
       paths:
       - backend:
           serviceName: jcio-frontend
           servicePort: 3000
-  - host: www.${KUBE_DOMAIN}
+  - host: www.${KUBE_DOMAIN_ALPHA}
+    http:
+      paths:
+      - backend:
+          serviceName: jcio-frontend
+          servicePort: 3000
+  - host: ${KUBE_DOMAIN_BETA}
+    http:
+      paths:
+      - backend:
+          serviceName: jcio-frontend
+          servicePort: 3000
+  - host: www.${KUBE_DOMAIN_BETA}
     http:
       paths:
       - backend:
@@ -39,24 +53,45 @@ metadata:
 spec:
   tls:
   - hosts:
-    - moviedb.${KUBE_DOMAIN}
-    - moviedb-frontend.${KUBE_DOMAIN}
-    - moviedb-backend.${KUBE_DOMAIN}
+    - moviedb.${KUBE_DOMAIN_ALPHA}
+    - moviedb-frontend.${KUBE_DOMAIN_ALPHA}
+    - moviedb-backend.${KUBE_DOMAIN_ALPHA}
+    - moviedb.${KUBE_DOMAIN_BETA}
+    - moviedb-frontend.${KUBE_DOMAIN_BETA}
+    - moviedb-backend.${KUBE_DOMAIN_BETA}
     secretName: moviedb-tls
   rules:
-  - host: moviedb.${KUBE_DOMAIN}
+  - host: moviedb.${KUBE_DOMAIN_ALPHA}
     http:
       paths:
       - backend:
           serviceName: moviedb-frontend
           servicePort: 3007
-  - host: moviedb-frontend.${KUBE_DOMAIN}
+  - host: moviedb-frontend.${KUBE_DOMAIN_ALPHA}
     http:
       paths:
       - backend:
           serviceName: moviedb-frontend
           servicePort: 3007
-  - host: moviedb-backend.${KUBE_DOMAIN}
+  - host: moviedb-backend.${KUBE_DOMAIN_ALPHA}
+    http:
+      paths:
+      - backend:
+          serviceName: moviedb-backend
+          servicePort: 4007
+  - host: moviedb.${KUBE_DOMAIN_BETA}
+    http:
+      paths:
+      - backend:
+          serviceName: moviedb-frontend
+          servicePort: 3007
+  - host: moviedb-frontend.${KUBE_DOMAIN_BETA}
+    http:
+      paths:
+      - backend:
+          serviceName: moviedb-frontend
+          servicePort: 3007
+  - host: moviedb-backend.${KUBE_DOMAIN_BETA}
     http:
       paths:
       - backend:

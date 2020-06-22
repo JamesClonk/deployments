@@ -10,10 +10,18 @@ metadata:
 spec:
   tls:
   - hosts:
-    - cf-env.${KUBE_DOMAIN}
+    - cf-env.${KUBE_DOMAIN_ALPHA}
+    - cf-env.${KUBE_DOMAIN_BETA}
     secretName: cf-env-tls
   rules:
-  - host: cf-env.${KUBE_DOMAIN}
+  - host: cf-env.${KUBE_DOMAIN_ALPHA}
+    http:
+      paths:
+      - backend:
+          serviceName: cf-env
+          servicePort: 80
+
+  - host: cf-env.${KUBE_DOMAIN_BETA}
     http:
       paths:
       - backend:
