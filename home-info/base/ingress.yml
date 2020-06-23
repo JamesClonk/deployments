@@ -14,13 +14,13 @@ spec:
     - home-info.${KUBE_DOMAIN_BETA}
     secretName: home-info-tls
   rules:
-  - host: ${KUBE_DOMAIN_ALPHA}
+  - host: home-info.${KUBE_DOMAIN_ALPHA}
     http:
       paths:
       - backend:
           serviceName: home-info-dashboard
           servicePort: 8080
-  - host: ${KUBE_DOMAIN_BETA}
+  - host: home-info.${KUBE_DOMAIN_BETA}
     http:
       paths:
       - backend:
