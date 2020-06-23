@@ -38,7 +38,7 @@ spec:
                   - frontend
       containers:
       - name: irvisualizer
-        image: jamesclonk/irvisualizer:9fc1aaca127b7d049df8a06a29519b26fd64d5f0
+        image: jamesclonk/web-container:ee041cb5039942f9004910609a58287357f28674
         ports:
         - containerPort: 8080
         env:
@@ -115,7 +115,7 @@ spec:
                   - backend
       containers:
       - name: ircollector
-        image: jamesclonk/ircollector:6abf341bd5f1d050e43ac34be3f56b0f72e4af75
+        image: jamesclonk/web-container:ee041cb5039942f9004910609a58287357f28674
         ports:
         - containerPort: 8080
         env:

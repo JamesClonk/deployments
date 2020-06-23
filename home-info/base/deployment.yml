@@ -32,7 +32,7 @@ spec:
                   - dashboard
       containers:
       - name: home-info-dashboard
-        image: jamesclonk/home-info-dashboard:2d8619eeabc057795da8d6c343d50144d9a7fae7
+        image: jamesclonk/home-info-dashboard:153f1968b6bd354a3aef46fbc7261390e556144f
         ports:
         - containerPort: 8080
         env:
