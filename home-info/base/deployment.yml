@@ -7,7 +7,7 @@ spec:
     matchLabels:
       app: home-info
       app.service.component: dashboard
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -32,7 +32,7 @@ spec:
                   - dashboard
       containers:
       - name: home-info-dashboard
-        image: jamesclonk/home-info-dashboard:09530b965eae08a83323e91fe4e532735ca192fd
+        image: jamesclonk/home-info-dashboard:2d8619eeabc057795da8d6c343d50144d9a7fae7
         ports:
         - containerPort: 8080
         env:
@@ -84,6 +84,15 @@ spec:
             memory: "64Mi"
             cpu: "200m"
         readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
           httpGet:
             path: /
             port: 8080

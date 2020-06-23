@@ -57,6 +57,15 @@ spec:
           httpGet:
             path: /
             port: 3000
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+          httpGet:
+            path: /
+            port: 3000
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -118,6 +127,15 @@ spec:
             memory: "64Mi"
             cpu: "100m"
         readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3007
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
           httpGet:
             path: /ready
             port: 3007
@@ -201,6 +219,15 @@ spec:
             memory: "64Mi"
             cpu: "100m"
         readinessProbe:
+          httpGet:
+            path: /
+            port: 4007
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
           httpGet:
             path: /
             port: 4007
