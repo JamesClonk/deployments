@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: irvisualizer
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: irvisualizer
+    app.service: irvisualizer
+    app.service.component: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ircollector
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: irvisualizer
+    app.service: ircollector
+    app.service.component: backend

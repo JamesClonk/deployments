@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: irvisualizer
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+spec:
+  tls:
+  - hosts:
+    - irvisualizer.${KUBE_DOMAIN_ALPHA}
+    - irvisualizer.${KUBE_DOMAIN_BETA}
+    secretName: irvisualizer-tls
+  rules:
+  - host: irvisualizer.${KUBE_DOMAIN_ALPHA}
+    http:
+      paths:
+      - backend:
+          serviceName: irvisualizer
+          servicePort: 8080
+  - host: irvisualizer.${KUBE_DOMAIN_BETA}
+    http:
+      paths:
+      - backend:
+          serviceName: irvisualizer
+          servicePort: 8080
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ircollector
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+spec:
+  tls:
+  - hosts:
+    - ircollector.${KUBE_DOMAIN_ALPHA}
+    - ircollector.${KUBE_DOMAIN_BETA}
+    secretName: ircollector-tls
+  rules:
+  - host: ircollector.${KUBE_DOMAIN_ALPHA}
+    http:
+      paths:
+      - backend:
+          serviceName: ircollector
+          servicePort: 8080
+  - host: ircollector.${KUBE_DOMAIN_BETA}
+    http:
+      paths:
+      - backend:
+          serviceName: ircollector
+          servicePort: 8080

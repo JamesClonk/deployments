@@ -1,0 +1,157 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: irvisualizer
+spec:
+  selector:
+    matchLabels:
+      app: irvisualizer
+      app.service: irvisualizer
+      app.service.component: frontend
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: irvisualizer
+        app.service: irvisualizer
+        app.service.component: frontend
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - irvisualizer
+                - key: app.service
+                  operator: In
+                  values:
+                  - irvisualizer
+                - key: app.service.component
+                  operator: In
+                  values:
+                  - frontend
+      containers:
+      - name: irvisualizer
+        image: jamesclonk/irvisualizer:9fc1aaca127b7d049df8a06a29519b26fd64d5f0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: LOG_LEVEL
+          value: "debug"
+        - name: AUTH_PASSWORD
+          value: "${IR_VISUALIZER_AUTH_PASSWORD}"
+        - name: AUTH_USERNAME
+          value: "${IR_VISUALIZER_AUTH_USERNAME}"
+        - name: LOGGLY_TOKEN
+          value: "${IR_VISUALIZER_LOGGLY_TOKEN}"
+        - name: DB_URI
+          value: "${IR_VISUALIZER_DB_URI}"
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "50m"
+          limits:
+            memory: "64Mi"
+            cpu: "250m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+          httpGet:
+            path: /
+            port: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ircollector
+spec:
+  selector:
+    matchLabels:
+      app: irvisualizer
+      app.service: ircollector
+      app.service.component: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: irvisualizer
+        app.service: ircollector
+        app.service.component: backend
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - irvisualizer
+                - key: app.service
+                  operator: In
+                  values:
+                  - ircollector
+                - key: app.service.component
+                  operator: In
+                  values:
+                  - backend
+      containers:
+      - name: ircollector
+        image: jamesclonk/ircollector:6abf341bd5f1d050e43ac34be3f56b0f72e4af75
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: LOG_LEVEL
+          value: "debug"
+        - name: AUTH_PASSWORD
+          value: "${IR_VISUALIZER_AUTH_PASSWORD}"
+        - name: AUTH_USERNAME
+          value: "${IR_VISUALIZER_AUTH_USERNAME}"
+        - name: IR_PASSWORD
+          value: "${IR_VISUALIZER_IR_PASSWORD}"
+        - name: IR_USERNAME
+          value: "${IR_VISUALIZER_IR_USERNAME}"
+        - name: LOGGLY_TOKEN
+          value: "${IR_VISUALIZER_LOGGLY_TOKEN}"
+        - name: DB_URI
+          value: "${IR_VISUALIZER_DB_URI}"
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "50m"
+          limits:
+            memory: "64Mi"
+            cpu: "250m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+          httpGet:
+            path: /
+            port: 8080
