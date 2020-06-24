@@ -8,7 +8,7 @@ spec:
       app: irvisualizer
       app.service: irvisualizer
       app.service.component: frontend
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -38,7 +38,7 @@ spec:
                   - frontend
       containers:
       - name: irvisualizer
-        image: jamesclonk/web-container:ee041cb5039942f9004910609a58287357f28674
+        image: jamesclonk/irvisualizer:7d43d03459df436f4cd1200bebd48dea2ff81180
         ports:
         - containerPort: 8080
         env:
@@ -56,8 +56,8 @@ spec:
           value: "${IR_VISUALIZER_DB_URI}"
         resources:
           requests:
-            memory: "32Mi"
-            cpu: "50m"
+            memory: "64Mi"
+            cpu: "100m"
           limits:
             memory: "64Mi"
             cpu: "250m"
@@ -115,7 +115,7 @@ spec:
                   - backend
       containers:
       - name: ircollector
-        image: jamesclonk/web-container:ee041cb5039942f9004910609a58287357f28674
+        image: jamesclonk/ircollector:3b97801379750dd8439b07f1b62fd00d85097988
         ports:
         - containerPort: 8080
         env:
@@ -137,14 +137,14 @@ spec:
           value: "${IR_VISUALIZER_DB_URI}"
         resources:
           requests:
-            memory: "32Mi"
-            cpu: "50m"
+            memory: "64Mi"
+            cpu: "100m"
           limits:
             memory: "64Mi"
             cpu: "250m"
         readinessProbe:
           httpGet:
-            path: /
+            path: /health
             port: 8080
         livenessProbe:
           initialDelaySeconds: 15
@@ -153,5 +153,8 @@ spec:
           successThreshold: 1
           failureThreshold: 5
           httpGet:
-            path: /
+            path: /seasons
             port: 8080
+            httpHeaders:
+            - name: Authorization
+              value: ${IR_VISUALIZER_AUTH_HEADER}
