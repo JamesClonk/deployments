@@ -8,7 +8,7 @@ spec:
       app: irvisualizer
       app.service: irvisualizer
       app.service.component: frontend
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -58,9 +58,11 @@ spec:
           requests:
             memory: "64Mi"
             cpu: "100m"
+            ephemeral-storage: "1Gi"
           limits:
             memory: "64Mi"
             cpu: "250m"
+            ephemeral-storage: "1Gi"
         readinessProbe:
           httpGet:
             path: /
