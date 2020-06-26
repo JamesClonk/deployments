@@ -57,7 +57,7 @@ spec:
         resources:
           requests:
             memory: "64Mi"
-            cpu: "100m"
+            cpu: "150m"
             ephemeral-storage: "1Gi"
           limits:
             memory: "64Mi"
@@ -117,7 +117,7 @@ spec:
                   - backend
       containers:
       - name: ircollector
-        image: jamesclonk/ircollector:3b97801379750dd8439b07f1b62fd00d85097988
+        image: jamesclonk/ircollector:25064fa48c2022a45550e8523ebdca7ccb5d353e
         ports:
         - containerPort: 8080
         env:
@@ -140,7 +140,7 @@ spec:
         resources:
           requests:
             memory: "64Mi"
-            cpu: "100m"
+            cpu: "200m"
           limits:
             memory: "64Mi"
             cpu: "250m"
