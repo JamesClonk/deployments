@@ -38,7 +38,7 @@ spec:
                   - frontend
       containers:
       - name: irvisualizer
-        image: jamesclonk/irvisualizer:7ce46a4b9e37b14713cf9924b3139ed5a19068c2
+        image: jamesclonk/irvisualizer:6ccd343b9f3cb7e995421c007f28885fbd8eb898
         ports:
         - containerPort: 8080
         env:
