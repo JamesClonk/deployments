@@ -38,7 +38,7 @@ spec:
                   - frontend
       containers:
       - name: jcio-frontend
-        image: jamesclonk/jcio-frontend:9fc1aaca127b7d049df8a06a29519b26fd64d5f0
+        image: jamesclonk/jcio-frontend:1c8512cf2ceeb3d0c6cba0784c6f574229d0fbec
         ports:
         - containerPort: 3000
         env:
