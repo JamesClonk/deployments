@@ -117,7 +117,7 @@ spec:
                   - backend
       containers:
       - name: ircollector
-        image: jamesclonk/ircollector:95854aa63ab66ebd5118cd016564b414c868fe03
+        image: jamesclonk/ircollector:20e3d8ba9e6f81fa728c2c3bd82d417f31c154cf
         ports:
         - containerPort: 8080
         env:
@@ -150,7 +150,7 @@ spec:
             port: 8080
         livenessProbe:
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
           timeoutSeconds: 5
           successThreshold: 1
           failureThreshold: 5
