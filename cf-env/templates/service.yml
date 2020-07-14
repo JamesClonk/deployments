@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cf-env
+  namespace: cf-env
 spec:
   ports:
   - port: 80

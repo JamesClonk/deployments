@@ -1,7 +1,9 @@
+#@ load("@ytt:data", "data")
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: cf-env
+  namespace: cf-env
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -9,19 +11,13 @@ metadata:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   tls:
-  - hosts:
-    - cf-env.${KUBE_DOMAIN_ALPHA}
-    - cf-env.${KUBE_DOMAIN_BETA}
-    secretName: cf-env-tls
+  - secretName: cf-env-tls
+    hosts:
+    #@ for/end host in data.values.domains:
+    - #@ "cf-env." + host
   rules:
-  - host: cf-env.${KUBE_DOMAIN_ALPHA}
-    http:
-      paths:
-      - backend:
-          serviceName: cf-env
-          servicePort: 80
-
-  - host: cf-env.${KUBE_DOMAIN_BETA}
+  #@ for/end host in data.values.domains:
+  - host: #@ "cf-env." + host
     http:
       paths:
       - backend:

@@ -1,0 +1,5 @@
+#@data/values
+---
+domains:
+- ${KUBE_DOMAIN_ALPHA}
+- ${KUBE_DOMAIN_BETA}

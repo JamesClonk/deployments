@@ -32,6 +32,7 @@ export PATH="$HOME/bin:$PATH"
 install_tool "kubectl" "https://storage.googleapis.com/kubernetes-release/release/v1.18.4/bin/linux/amd64/kubectl"
 install_tool "envsubst" "https://github.com/JamesClonk/envsubst/releases/download/v1.1.1/envsubst_1.1.1_Linux-64bit"
 install_tool "kapp" "https://github.com/k14s/kapp/releases/download/v0.30.0/kapp-linux-amd64"
+install_tool "ytt" "https://github.com/k14s/ytt/releases/download/v0.28.0/ytt-linux-amd64"
 install_tool_from_tarball "k9s" "https://github.com/derailed/k9s/releases/download/v0.20.5/k9s_Linux_x86_64.tar.gz"
 
 # vars
