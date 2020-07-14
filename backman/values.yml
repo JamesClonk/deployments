@@ -8,3 +8,96 @@ backman:
   username: "${BACKMAN_USERNAME}"
   password: "${BACKMAN_PASSWORD}"
   auth_header: ${BACKMAN_AUTH_HEADER}
+
+  #! TODO: improve this!
+  vcap_application: |
+    {
+      "application_id": "fa05c1a9-0fc1-4fbd-bae1-139850dec7a3",
+      "application_name": "backman",
+      "application_uris": [
+        "backman.${KUBE_DOMAIN_ALPHA}",
+        "backman.${KUBE_DOMAIN_BETA}"
+      ],
+      "application_version": "fb8fbcc6-8d58-479e-bcc7-3b4ce5a7f0ca",
+      "cf_api": "https://api.example.com",
+      "limits": {
+        "disk": 1024,
+        "fds": 16384,
+        "mem": 512
+      },
+      "name": "backman",
+      "organization_id": "c0134bad-97a9-468d-ab9d-e97547e3aed5",
+      "organization_name": "my-org",
+      "space_id": "06450c72-4669-4dc6-8096-45f9777db68a",
+      "space_name": "my-space",
+      "uris": [
+        "backman.${KUBE_DOMAIN_ALPHA}",
+        "backman.${KUBE_DOMAIN_BETA}"
+      ],
+      "version": "fb8fbcc6-8d58-479e-bcc7-3b4ce5a7f0ca"
+    }
+  #! TODO: improve this!
+  vcap_services: |
+    {
+        "user-provided": [{
+            "binding_name": null,
+            "credentials": {
+                "region": "fr-par",
+                "accessHost": "${BACKMAN_S3_HOST}",
+                "accessKey": "${BACKMAN_S3_KEY}",
+                "sharedSecret": "${BACKMAN_S3_SECRET}"
+            },
+            "instance_name": "backman-storage",
+            "label": "user-provided",
+            "name": "backman-storage",
+            "syslog_drain_url": "",
+            "tags": [],
+            "volume_mounts": []
+        }, {
+            "binding_name": null,
+            "credentials": {
+                "database": "irvisualizer",
+                "database_uri": "${IR_VISUALIZER_DB_URI}",
+                "jdbcUrl": "${IR_VISUALIZER_DB_URI}",
+                "name": "irvisualizer",
+                "uri": "${IR_VISUALIZER_DB_URI}"
+            },
+            "instance_name": "irvisualizer_db",
+            "label": "user-provided",
+            "name": "irvisualizer_db",
+            "syslog_drain_url": "",
+            "tags": [],
+            "volume_mounts": []
+        }, {
+            "binding_name": null,
+            "credentials": {
+                "database": "home_info",
+                "database_uri": "${HOME_INFO_DB_URI}",
+                "jdbcUrl": "${HOME_INFO_DB_URI}",
+                "name": "home_info",
+                "uri": "${HOME_INFO_DB_URI}"
+            },
+            "instance_name": "home_info_db",
+            "label": "user-provided",
+            "name": "home_info_db",
+            "syslog_drain_url": "",
+            "tags": [],
+            "volume_mounts": []
+        }, {
+            "binding_name": null,
+            "credentials": {
+                "database": "moviedb",
+                "database_uri": "${JCIO_MOVIEDB_CONNSTR}",
+                "jdbcUrl": "${JCIO_MOVIEDB_CONNSTR}",
+                "name": "moviedb",
+                "uri": "${JCIO_MOVIEDB_CONNSTR}",
+                "username": "moviedb"
+            },
+            "instance_name": "movie_db",
+            "label": "user-provided",
+            "name": "movie_db",
+            "syslog_drain_url": "",
+            "tags": [],
+            "volume_mounts": []
+        }]
+    }

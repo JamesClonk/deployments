@@ -39,7 +39,7 @@ install_tool_from_tarball "k9s" "https://github.com/derailed/k9s/releases/downlo
 export KUBE_APP_NAME=$(basename "$PWD")
 
 # disable diff on CI
-export KAPP_DIFF="${KAPP_DIFF}"
+export KAPP_DIFF="--diff-changes"
 if [ ! -z "${CI}" ]; then
 	export KAPP_DIFF=""
 fi
