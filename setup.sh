@@ -38,6 +38,21 @@ install_tool_from_tarball "k9s" "https://github.com/derailed/k9s/releases/downlo
 # vars
 export KUBE_APP_NAME=$(basename "$PWD")
 
+# disable diff on CI
+export KAPP_DIFF="${KAPP_DIFF}"
+if [ ! -z "${CI}" ]; then
+	export KAPP_DIFF=""
+fi
+if [ ! -z "${CIRCLECI}" ]; then
+	export KAPP_DIFF=""
+fi
+if [ ! -z "${CIRCLE_JOB}" ]; then
+	export KAPP_DIFF=""
+fi
+if [ ! -z "${TRAVIS}" ]; then
+	export KAPP_DIFF=""
+fi
+
 # which env are we targetting?
 if [ -z "${KUBE_ENVIRONMENT}" ]; then
 	export KUBE_ENVIRONMENT=$(kubectl config current-context)

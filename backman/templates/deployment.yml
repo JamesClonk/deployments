@@ -1,7 +1,9 @@
+#@ load("@ytt:data", "data")
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backman
+  namespace: backman
 spec:
   selector:
     matchLabels:
@@ -47,9 +49,9 @@ spec:
         - name: TZ
           value: "Europe/Zurich"
         - name: BACKMAN_USERNAME
-          value: "${BACKMAN_USERNAME}"
+          value: #@ data.values.backman.username
         - name: BACKMAN_PASSWORD
-          value: "${BACKMAN_PASSWORD}"
+          value: #@ data.values.backman.password
         - name: BACKMAN_CONFIG
           value: |
             {
@@ -165,7 +167,7 @@ spec:
             port: 8080
             httpHeaders:
             - name: Authorization
-              value: ${BACKMAN_AUTH_HEADER}
+              value: #@ data.values.backman.auth_header
         livenessProbe:
           initialDelaySeconds: 15
           periodSeconds: 15
@@ -177,4 +179,4 @@ spec:
             port: 8080
             httpHeaders:
             - name: Authorization
-              value: ${BACKMAN_AUTH_HEADER}
+              value: #@ data.values.backman.auth_header

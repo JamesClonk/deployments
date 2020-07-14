@@ -1,0 +1,10 @@
+#@data/values
+---
+domains:
+- ${KUBE_DOMAIN_ALPHA}
+- ${KUBE_DOMAIN_BETA}
+
+backman:
+  username: "${BACKMAN_USERNAME}"
+  password: "${BACKMAN_PASSWORD}"
+  auth_header: ${BACKMAN_AUTH_HEADER}
