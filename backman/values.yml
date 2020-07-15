@@ -5,9 +5,11 @@ domains:
 - ${KUBE_DOMAIN_BETA}
 
 backman:
+  image: "jamesclonk/backman:1.15.0"
+
   username: "${BACKMAN_USERNAME}"
   password: "${BACKMAN_PASSWORD}"
-  auth_header: ${BACKMAN_AUTH_HEADER}
+  auth_header: "${BACKMAN_AUTH_HEADER}"
 
   #! TODO: improve this!
   vcap_application: |

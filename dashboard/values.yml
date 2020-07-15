@@ -5,6 +5,6 @@ domains:
 - ${KUBE_DOMAIN_BETA}
 
 dashboard:
-  auth: ${DASHBOARD_BASIC_AUTH}
-  username: ${DASHBOARD_BASIC_AUTH_USERNAME}
-  password: ${DASHBOARD_BASIC_AUTH_PASSWORD}
+  auth: "${DASHBOARD_BASIC_AUTH}"
+  username: "${DASHBOARD_BASIC_AUTH_USERNAME}"
+  password: "${DASHBOARD_BASIC_AUTH_PASSWORD}"

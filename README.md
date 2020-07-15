@@ -5,6 +5,5 @@ K8s deployments repository
 
 - https://k14s.io/
   - https://get-kapp.io/
+  - https://get-ytt.io/
   - https://github.com/k14s/kapp-controller
-- https://github.com/kubernetes-sigs/kustomize
-  - https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/

@@ -40,7 +40,7 @@ spec:
                   - gui
       containers:
       - name: backman
-        image: jamesclonk/backman:1.15.0
+        image: #@ data.values.backman.image
         ports:
         - containerPort: 8080
         env:

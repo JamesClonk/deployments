@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data")
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +17,7 @@ spec:
     spec:
       containers:
       - name: cf-env
-        image: jamesclonk/cf-env:89d20c44e3d6b1a4e0c0502e9d1f5bc908e81264
+        image: #@ data.values.image
         ports:
         - containerPort: 8080
         env:
