@@ -1,7 +1,9 @@
+#@ load("@ytt:data", "data")
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: irvisualizer
+  namespace: irvisualizer
 spec:
   selector:
     matchLabels:
@@ -38,7 +40,7 @@ spec:
                   - frontend
       containers:
       - name: irvisualizer
-        image: jamesclonk/irvisualizer:6ccd343b9f3cb7e995421c007f28885fbd8eb898
+        image: #@ data.values.irvisualizer.image
         ports:
         - containerPort: 8080
         env:
@@ -47,13 +49,13 @@ spec:
         - name: LOG_LEVEL
           value: "debug"
         - name: AUTH_PASSWORD
-          value: "${IR_VISUALIZER_AUTH_PASSWORD}"
+          value: #@ data.values.irvisualizer.auth.password
         - name: AUTH_USERNAME
-          value: "${IR_VISUALIZER_AUTH_USERNAME}"
+          value: #@ data.values.irvisualizer.auth.username
         - name: LOGGLY_TOKEN
-          value: "${IR_VISUALIZER_LOGGLY_TOKEN}"
+          value: #@ data.values.loggly_token
         - name: DB_URI
-          value: "${IR_VISUALIZER_DB_URI}"
+          value: #@ data.values.db_uri
         resources:
           requests:
             memory: "64Mi"
@@ -81,6 +83,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ircollector
+  namespace: irvisualizer
 spec:
   selector:
     matchLabels:
@@ -117,7 +120,7 @@ spec:
                   - backend
       containers:
       - name: ircollector
-        image: jamesclonk/ircollector:20e3d8ba9e6f81fa728c2c3bd82d417f31c154cf
+        image: #@ data.values.ircollector.image
         ports:
         - containerPort: 8080
         env:
@@ -126,17 +129,17 @@ spec:
         - name: LOG_LEVEL
           value: "debug"
         - name: AUTH_PASSWORD
-          value: "${IR_VISUALIZER_AUTH_PASSWORD}"
+          value: #@ data.values.ircollector.auth.password
         - name: AUTH_USERNAME
-          value: "${IR_VISUALIZER_AUTH_USERNAME}"
+          value: #@ data.values.ircollector.auth.username
         - name: IR_PASSWORD
-          value: "${IR_VISUALIZER_IR_PASSWORD}"
+          value: #@ data.values.ircollector.iracing_auth.password
         - name: IR_USERNAME
-          value: "${IR_VISUALIZER_IR_USERNAME}"
+          value: #@ data.values.ircollector.iracing_auth.username
         - name: LOGGLY_TOKEN
-          value: "${IR_VISUALIZER_LOGGLY_TOKEN}"
+          value: #@ data.values.loggly_token
         - name: DB_URI
-          value: "${IR_VISUALIZER_DB_URI}"
+          value: #@ data.values.db_uri
         resources:
           requests:
             memory: "64Mi"
@@ -159,4 +162,4 @@ spec:
             port: 8080
             httpHeaders:
             - name: Authorization
-              value: ${IR_VISUALIZER_AUTH_HEADER}
+              value: #@ data.values.ircollector.auth.header

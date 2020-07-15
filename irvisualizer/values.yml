@@ -1,0 +1,27 @@
+#@data/values
+---
+domains:
+- ${KUBE_DOMAIN_ALPHA}
+- ${KUBE_DOMAIN_BETA}
+
+db_uri: "${IR_VISUALIZER_DB_URI}"
+loggly_token: "${IR_VISUALIZER_LOGGLY_TOKEN}"
+
+irvisualizer:
+  image: "jamesclonk/irvisualizer:6ccd343b9f3cb7e995421c007f28885fbd8eb898"
+
+  auth:
+    username: "${IR_VISUALIZER_AUTH_USERNAME}"
+    password: "${IR_VISUALIZER_AUTH_PASSWORD}"
+
+ircollector:
+  image: "jamesclonk/ircollector:20e3d8ba9e6f81fa728c2c3bd82d417f31c154cf"
+
+  auth:
+    username: "${IR_VISUALIZER_AUTH_USERNAME}"
+    password: "${IR_VISUALIZER_AUTH_PASSWORD}"
+    header: "${IR_VISUALIZER_AUTH_HEADER}"
+
+  iracing_auth:
+    username: "${IR_VISUALIZER_IR_USERNAME}"
+    password: "${IR_VISUALIZER_IR_PASSWORD}"
