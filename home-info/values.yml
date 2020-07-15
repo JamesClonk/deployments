@@ -1,0 +1,19 @@
+#@data/values
+---
+domains:
+- ${KUBE_DOMAIN_ALPHA}
+- ${KUBE_DOMAIN_BETA}
+
+home_info:
+  image: "jamesclonk/home-info-dashboard:153f1968b6bd354a3aef46fbc7261390e556144f"
+
+  db_uri: "${HOME_INFO_DB_URI}"
+
+  auth:
+    username: "${HOME_INFO_AUTH_USERNAME}"
+    password: "${HOME_INFO_AUTH_PASSWORD}"
+  slack:
+    token: "${HOME_INFO_SLACK_TOKEN}"
+  telebot:
+    username: "${HOME_INFO_TELEBOT_USERNAME}"
+    token: "${HOME_INFO_TELEBOT_TOKEN}"

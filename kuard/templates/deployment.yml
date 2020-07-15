@@ -1,7 +1,9 @@
+#@ load("@ytt:data", "data")
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kuard
+  namespace: kuard
 spec:
   selector:
     matchLabels:
@@ -15,7 +17,7 @@ spec:
     spec:
       containers:
       - name: kuard
-        image: gcr.io/kuar-demo/kuard-amd64@sha256:1ecc9fb2c871302fdb57a25e0c076311b7b352b0a9246d442940ca8fb4efe229
+        image: #@ data.values.kuard.image
         ports:
         - containerPort: 8080
         resources:
