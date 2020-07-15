@@ -1,7 +1,9 @@
+#@ load("@ytt:data", "data")
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jcio-frontend
+  namespace: jcio
 spec:
   selector:
     matchLabels:
@@ -38,7 +40,7 @@ spec:
                   - frontend
       containers:
       - name: jcio-frontend
-        image: jamesclonk/jcio-frontend:1c8512cf2ceeb3d0c6cba0784c6f574229d0fbec
+        image: #@ data.values.jcio.image
         ports:
         - containerPort: 3000
         env:
@@ -71,6 +73,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: moviedb-frontend
+  namespace: jcio
 spec:
   selector:
     matchLabels:
@@ -107,7 +110,7 @@ spec:
                   - frontend
       containers:
       - name: moviedb-frontend
-        image: jamesclonk/moviedb-frontend:87286a8dd8d0ff6fb9108880b51887854ad0872c
+        image: #@ data.values.moviedb.frontend.image
         ports:
         - containerPort: 3007
         env:
@@ -116,9 +119,9 @@ spec:
         - name: JCIO_ENV
           value: production
         - name: JCIO_MOVIEDB_BACKEND
-          value: http://moviedb-backend.jcio:4007
+          value: "http://moviedb-backend.jcio:4007"
         - name: JCIO_HTTP_HMAC_SECRET
-          value: ${JCIO_HTTP_HMAC_SECRET}
+          value: #@ data.values.moviedb.hmac_secret
         resources:
           requests:
             memory: "32Mi"
@@ -144,6 +147,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: moviedb-backend
+  namespace: jcio
 spec:
   selector:
     matchLabels:
@@ -180,7 +184,7 @@ spec:
                   - backend
       containers:
       - name: moviedb-backend
-        image: jamesclonk/moviedb-backend:6abf341bd5f1d050e43ac34be3f56b0f72e4af75
+        image: #@ data.values.moviedb.backend.image
         ports:
         - containerPort: 4007
         env:
@@ -189,28 +193,11 @@ spec:
         - name: JCIO_ENV
           value: production
         - name: JCIO_HTTP_HMAC_SECRET
-          value: ${JCIO_HTTP_HMAC_SECRET}
+          value: #@ data.values.moviedb.hmac_secret
         - name: JCIO_DATABASE_TYPE
           value: postgres
         - name: VCAP_SERVICES
-          value: |
-            {
-              "user-provided": [
-               {
-                "binding_name": null,
-                "credentials": {
-                 "maxconns": "5",
-                 "uri": "${JCIO_MOVIEDB_CONNSTR}"
-                },
-                "instance_name": "moviedb",
-                "label": "user-provided",
-                "name": "moviedb",
-                "syslog_drain_url": "",
-                "tags": [],
-                "volume_mounts": []
-               }
-              ]
-            }
+          value: #@ data.values.moviedb.backend.vcap_services
         resources:
           requests:
             memory: "32Mi"

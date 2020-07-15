@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: jcio-frontend
+  namespace: jcio
 spec:
   ports:
   - port: 3000
@@ -15,6 +16,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: moviedb-frontend
+  namespace: jcio
 spec:
   ports:
   - port: 3007
@@ -28,6 +30,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: moviedb-backend
+  namespace: jcio
 spec:
   ports:
   - port: 4007
