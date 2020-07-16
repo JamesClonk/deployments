@@ -1,19 +1,19 @@
 #@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cf-env
-  namespace: cf-env
+  name: #@ data.values.app
+  namespace: #@ data.values.namespace
 spec:
   selector:
-    matchLabels:
-      app: cf-env
+    matchLabels: #@ labels()
   replicas: 1
   revisionHistoryLimit: 5
   template:
     metadata:
-      labels:
-        app: cf-env
+      labels: #@ labels()
     spec:
       containers:
       - name: cf-env

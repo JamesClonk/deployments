@@ -1,0 +1,7 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels():
+  app: #@ data.values.app
+  app.service: #@ data.values.app
+  app.service.component: #@ data.values.app
+#@ end

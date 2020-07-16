@@ -1,4 +1,6 @@
 #@data/values
 ---
+namespace: cert-manager
+
 lets_encrypt:
   email: "${LETS_ENCRYPT_EMAIL_ADDRESS}"

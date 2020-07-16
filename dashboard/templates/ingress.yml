@@ -19,10 +19,10 @@ spec:
   - secretName: kubernetes-dashboard-tls
     hosts:
     #@ for/end host in data.values.domains:
-    - #@ "dashboard." + host
+    - #@ data.values.app + "." + host
   rules:
   #@ for/end host in data.values.domains:
-  - host: #@ "dashboard." + host
+  - host: #@ data.values.app + "." + host
     http:
       paths:
       - backend:

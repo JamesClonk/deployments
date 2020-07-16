@@ -1,5 +1,6 @@
 #@data/values
 ---
+app: ${KUBE_APP_NAME}
 namespace: kubernetes-dashboard
 
 domains:
