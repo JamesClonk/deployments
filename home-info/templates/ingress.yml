@@ -1,9 +1,10 @@
 #@ load("@ytt:data", "data")
+---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: home-info-dashboard
-  namespace: home-info
+  name: #@ data.values.app + "-dashboard"
+  namespace: #@ data.values.namespace
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -11,15 +12,15 @@ metadata:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   tls:
-  - secretName: home-info-tls
+  - secretName: #@ data.values.app + "-tls"
     hosts:
     #@ for/end host in data.values.domains:
-    - #@ "home-info." + host
+    - #@ data.values.app + "." + host
   rules:
   #@ for/end host in data.values.domains:
-  - host: #@ "home-info." + host
+  - host: #@ data.values.app + "." + host
     http:
       paths:
       - backend:
-          serviceName: home-info-dashboard
+          serviceName: #@ data.values.app + "-dashboard"
           servicePort: 8080

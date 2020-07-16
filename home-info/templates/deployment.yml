@@ -1,37 +1,20 @@
 #@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels", "podAntiAffinity")
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: home-info-dashboard
-  namespace: home-info
+  name: #@ data.values.app + "-dashboard"
+  namespace: #@ data.values.namespace
 spec:
   selector:
-    matchLabels:
-      app: home-info
-      app.service.component: dashboard
+    matchLabels: #@ labels("dashboard")
   replicas: 2
   template:
     metadata:
-      labels:
-        app: home-info
-        app.service.component: dashboard
+      labels: #@ labels("dashboard")
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - home-info
-                - key: app.service.component
-                  operator: In
-                  values:
-                  - dashboard
+      affinity: #@ podAntiAffinity("dashboard")
       containers:
       - name: home-info-dashboard
         image: #@ data.values.home_info.image

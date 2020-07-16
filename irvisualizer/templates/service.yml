@@ -1,27 +1,24 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: irvisualizer
-  namespace: irvisualizer
+  namespace: #@ data.values.namespace
 spec:
   ports:
   - port: 8080
     targetPort: 8080
-  selector:
-    app: irvisualizer
-    app.service: irvisualizer
-    app.service.component: frontend
+  selector: #@ labels("irvisualizer","frontend")
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ircollector
-  namespace: irvisualizer
+  namespace: #@ data.values.namespace
 spec:
   ports:
   - port: 8080
     targetPort: 8080
-  selector:
-    app: irvisualizer
-    app.service: ircollector
-    app.service.component: backend
+  selector: #@ labels("ircollector","backend")

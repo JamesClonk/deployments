@@ -1,43 +1,20 @@
 #@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels", "podAntiAffinity")
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: irvisualizer
-  namespace: irvisualizer
+  namespace: #@ data.values.namespace
 spec:
   selector:
-    matchLabels:
-      app: irvisualizer
-      app.service: irvisualizer
-      app.service.component: frontend
+    matchLabels: #@ labels("irvisualizer","frontend")
   replicas: 2
   template:
     metadata:
-      labels:
-        app: irvisualizer
-        app.service: irvisualizer
-        app.service.component: frontend
+      labels: #@ labels("irvisualizer","frontend")
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - irvisualizer
-                - key: app.service
-                  operator: In
-                  values:
-                  - irvisualizer
-                - key: app.service.component
-                  operator: In
-                  values:
-                  - frontend
+      affinity: #@ podAntiAffinity("irvisualizer","frontend")
       containers:
       - name: irvisualizer
         image: #@ data.values.irvisualizer.image
@@ -83,41 +60,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ircollector
-  namespace: irvisualizer
+  namespace: #@ data.values.namespace
 spec:
   selector:
-    matchLabels:
-      app: irvisualizer
-      app.service: ircollector
-      app.service.component: backend
+    matchLabels: #@ labels("ircollector","backend")
   replicas: 1
   template:
     metadata:
-      labels:
-        app: irvisualizer
-        app.service: ircollector
-        app.service.component: backend
+      labels: #@ labels("ircollector","backend")
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - irvisualizer
-                - key: app.service
-                  operator: In
-                  values:
-                  - ircollector
-                - key: app.service.component
-                  operator: In
-                  values:
-                  - backend
+      affinity: #@ podAntiAffinity("ircollector","backend")
       containers:
       - name: ircollector
         image: #@ data.values.ircollector.image

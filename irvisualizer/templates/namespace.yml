@@ -1,4 +1,6 @@
+#@ load("@ytt:data", "data")
+---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: irvisualizer
+  name: #@ data.values.namespace

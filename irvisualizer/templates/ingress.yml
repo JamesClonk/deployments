@@ -1,9 +1,10 @@
 #@ load("@ytt:data", "data")
+---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: irvisualizer
-  namespace: irvisualizer
+  namespace: #@ data.values.namespace
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
@@ -28,7 +29,7 @@ apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: ircollector
-  namespace: irvisualizer
+  namespace: #@ data.values.namespace
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"

@@ -1,12 +1,13 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: home-info-dashboard
-  namespace: home-info
+  name: #@ data.values.app + "-dashboard"
+  namespace: #@ data.values.namespace
 spec:
   ports:
   - port: 8080
     targetPort: 8080
-  selector:
-    app: home-info
-    app.service.component: dashboard
+  selector: #@ labels("dashboard")

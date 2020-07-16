@@ -1,0 +1,32 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels(service,component):
+  app: #@ data.values.app
+  app.service: #@ service
+  app.service.component: #@ component
+#@ end
+
+#@ def labelSelector(service,component):
+  matchExpressions:
+  - key: app
+    operator: In
+    values:
+    - #@ data.values.app
+  - key: app.service
+    operator: In
+    values:
+    - #@ service
+  - key: app.service.component
+    operator: In
+    values:
+    - #@ component
+#@ end
+
+#@ def podAntiAffinity(service,component):
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        topologyKey: kubernetes.io/hostname
+        labelSelector: #@ labelSelector(service,component)
+#@ end
