@@ -1,11 +1,13 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: kuard
-  namespace: kuard
+  namespace: #@ data.values.namespace
 spec:
   ports:
   - port: 80
     targetPort: 8080
-  selector:
-    app: kuard
+  selector: #@ labels()

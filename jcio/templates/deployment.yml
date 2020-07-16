@@ -1,43 +1,20 @@
 #@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels", "podAntiAffinity")
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jcio-frontend
-  namespace: jcio
+  namespace: #@ data.values.namespace
 spec:
   selector:
-    matchLabels:
-      app: jcio
-      app.service: www
-      app.service.component: frontend
+    matchLabels: #@ labels("www","frontend")
   replicas: 2
   template:
     metadata:
-      labels:
-        app: jcio
-        app.service: www
-        app.service.component: frontend
+      labels: #@ labels("www","frontend")
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - jcio
-                - key: app.service
-                  operator: In
-                  values:
-                  - www
-                - key: app.service.component
-                  operator: In
-                  values:
-                  - frontend
+      affinity: #@ podAntiAffinity("www","frontend")
       containers:
       - name: jcio-frontend
         image: #@ data.values.jcio.image
@@ -73,41 +50,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: moviedb-frontend
-  namespace: jcio
+  namespace: #@ data.values.namespace
 spec:
   selector:
-    matchLabels:
-      app: jcio
-      app.service: moviedb
-      app.service.component: frontend
+    matchLabels: #@ labels("moviedb","frontend")
   replicas: 2
   template:
     metadata:
-      labels:
-        app: jcio
-        app.service: moviedb
-        app.service.component: frontend
+      labels: #@ labels("moviedb","frontend")
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - jcio
-                - key: app.service
-                  operator: In
-                  values:
-                  - moviedb
-                - key: app.service.component
-                  operator: In
-                  values:
-                  - frontend
+      affinity: #@ podAntiAffinity("moviedb","frontend")
       containers:
       - name: moviedb-frontend
         image: #@ data.values.moviedb.frontend.image
@@ -147,41 +99,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: moviedb-backend
-  namespace: jcio
+  namespace: #@ data.values.namespace
 spec:
   selector:
-    matchLabels:
-      app: jcio
-      app.service: moviedb
-      app.service.component: backend
+    matchLabels: #@ labels("moviedb","backend")
   replicas: 2
   template:
     metadata:
-      labels:
-        app: jcio
-        app.service: moviedb
-        app.service.component: backend
+      labels: #@ labels("moviedb","backend")
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - jcio
-                - key: app.service
-                  operator: In
-                  values:
-                  - moviedb
-                - key: app.service.component
-                  operator: In
-                  values:
-                  - backend
+      affinity: #@ podAntiAffinity("moviedb","backend")
       containers:
       - name: moviedb-backend
         image: #@ data.values.moviedb.backend.image

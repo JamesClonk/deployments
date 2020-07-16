@@ -1,13 +1,13 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: backman
-  namespace: backman
+  namespace: #@ data.values.namespace
 spec:
   ports:
   - port: 8080
     targetPort: 8080
-  selector:
-    app: backman
-    app.service: backman
-    app.service.component: gui
+  selector: #@ labels("backman","gui")

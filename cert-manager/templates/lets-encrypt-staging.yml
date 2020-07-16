@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+---
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:

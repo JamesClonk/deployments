@@ -1,41 +1,35 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: jcio-frontend
-  namespace: jcio
+  namespace: #@ data.values.namespace
 spec:
   ports:
   - port: 3000
     targetPort: 3000
-  selector:
-    app: jcio
-    app.service: www
-    app.service.component: frontend
+  selector: #@ labels("www","frontend")
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: moviedb-frontend
-  namespace: jcio
+  namespace: #@ data.values.namespace
 spec:
   ports:
   - port: 3007
     targetPort: 3007
-  selector:
-    app: jcio
-    app.service: moviedb
-    app.service.component: frontend
+  selector: #@ labels("moviedb","frontend")
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: moviedb-backend
-  namespace: jcio
+  namespace: #@ data.values.namespace
 spec:
   ports:
   - port: 4007
     targetPort: 4007
-  selector:
-    app: jcio
-    app.service: moviedb
-    app.service.component: backend
+  selector: #@ labels("moviedb","backend")

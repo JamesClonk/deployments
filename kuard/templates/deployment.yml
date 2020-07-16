@@ -1,19 +1,19 @@
 #@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kuard
-  namespace: kuard
+  namespace: #@ data.values.namespace
 spec:
   selector:
-    matchLabels:
-      app: kuard
+    matchLabels: #@ labels()
   replicas: 1
   revisionHistoryLimit: 5
   template:
     metadata:
-      labels:
-        app: kuard
+      labels: #@ labels()
     spec:
       containers:
       - name: kuard
@@ -35,14 +35,3 @@ spec:
           httpGet:
             path: /healthy
             port: 8080
-      # doesnt work with only 1 node..
-      # affinity:
-      #   podAntiAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #     - topologyKey: "kubernetes.io/hostname"
-      #       labelSelector:
-      #         matchExpressions:
-      #         - key: "app"
-      #           operator: In
-      #           values:
-      #           - kuard

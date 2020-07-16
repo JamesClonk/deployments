@@ -1,43 +1,20 @@
 #@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels", "podAntiAffinity")
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backman
-  namespace: backman
+  namespace: #@ data.values.namespace
 spec:
   selector:
-    matchLabels:
-      app: backman
-      app.service: backman
-      app.service.component: gui
+    matchLabels: #@ labels("backman","gui")
   replicas: 1
   template:
     metadata:
-      labels:
-        app: backman
-        app.service: backman
-        app.service.component: gui
+      labels: #@ labels("backman","gui")
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - backman
-                - key: app.service
-                  operator: In
-                  values:
-                  - backman
-                - key: app.service.component
-                  operator: In
-                  values:
-                  - gui
+      affinity: #@ podAntiAffinity("backman","gui")
       containers:
       - name: backman
         image: #@ data.values.backman.image

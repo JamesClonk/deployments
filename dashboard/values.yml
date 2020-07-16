@@ -1,5 +1,7 @@
 #@data/values
 ---
+namespace: kubernetes-dashboard
+
 domains:
 - ${KUBE_DOMAIN_ALPHA}
 - ${KUBE_DOMAIN_BETA}
