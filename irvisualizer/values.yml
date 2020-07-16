@@ -11,7 +11,7 @@ db_uri: "${IR_VISUALIZER_DB_URI}"
 loggly_token: "${IR_VISUALIZER_LOGGLY_TOKEN}"
 
 irvisualizer:
-  image: "jamesclonk/irvisualizer:6ccd343b9f3cb7e995421c007f28885fbd8eb898"
+  image: "jamesclonk/irvisualizer:a9d4fbb4896a575ae2d56f0ed663374aec25e6ce"
 
   auth:
     username: "${IR_VISUALIZER_AUTH_USERNAME}"
