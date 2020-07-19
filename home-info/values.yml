@@ -8,7 +8,7 @@ domains:
 - ${KUBE_DOMAIN_BETA}
 
 home_info:
-  image: "jamesclonk/home-info-dashboard:153f1968b6bd354a3aef46fbc7261390e556144f"
+  image: "jamesclonk/home-info-dashboard:29132cf31dd416c2b0cf7d68ab1bcace74f72178"
 
   db_uri: "${HOME_INFO_DB_URI}"
 
