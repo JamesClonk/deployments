@@ -8,7 +8,7 @@ domains:
 - ${KUBE_DOMAIN_BETA}
 
 jcio:
-  image: "jamesclonk/jcio-frontend:1c8512cf2ceeb3d0c6cba0784c6f574229d0fbec"
+  image: "jamesclonk/jcio-frontend:5a967a725f4ac8f0f3209241ed16b091ddcf089f"
 
 moviedb:
   hmac_secret: "${JCIO_HTTP_HMAC_SECRET}"
