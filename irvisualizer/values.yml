@@ -11,14 +11,14 @@ db_uri: "${IR_VISUALIZER_DB_URI}"
 loggly_token: "${IR_VISUALIZER_LOGGLY_TOKEN}"
 
 irvisualizer:
-  image: "jamesclonk/irvisualizer:a9d4fbb4896a575ae2d56f0ed663374aec25e6ce"
+  image: "jamesclonk/irvisualizer:c4631594422aeeb58dbbd84a939e9b7f741c9f1f"
 
   auth:
     username: "${IR_VISUALIZER_AUTH_USERNAME}"
     password: "${IR_VISUALIZER_AUTH_PASSWORD}"
 
 ircollector:
-  image: "jamesclonk/ircollector:20e3d8ba9e6f81fa728c2c3bd82d417f31c154cf"
+  image: "jamesclonk/ircollector:24ceeaf90147f1757777e8fe7fde54074191f2bf"
 
   auth:
     username: "${IR_VISUALIZER_AUTH_USERNAME}"
