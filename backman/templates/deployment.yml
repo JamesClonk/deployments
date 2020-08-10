@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:base64", "base64")
 #@ load("_ytt.lib.yml", "labels", "podAntiAffinity")
 ---
 apiVersion: apps/v1
@@ -56,7 +57,7 @@ spec:
             port: 8080
             httpHeaders:
             - name: Authorization
-              value: #@ data.values.backman.auth_header
+              value: #@ "Basic " + base64.encode(data.values.backman.username + ":" +data.values.backman.password)
         livenessProbe:
           initialDelaySeconds: 15
           periodSeconds: 15
@@ -68,4 +69,4 @@ spec:
             port: 8080
             httpHeaders:
             - name: Authorization
-              value: #@ data.values.backman.auth_header
+              value: #@ "Basic " + base64.encode(data.values.backman.username + ":" +data.values.backman.password)

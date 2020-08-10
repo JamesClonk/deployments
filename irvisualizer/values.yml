@@ -23,7 +23,6 @@ ircollector:
   auth:
     username: "${IR_VISUALIZER_AUTH_USERNAME}"
     password: "${IR_VISUALIZER_AUTH_PASSWORD}"
-    header: "${IR_VISUALIZER_AUTH_HEADER}"
 
   iracing_auth:
     username: "${IR_VISUALIZER_IR_USERNAME}"

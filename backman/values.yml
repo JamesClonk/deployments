@@ -12,7 +12,6 @@ backman:
 
   username: "${BACKMAN_USERNAME}"
   password: "${BACKMAN_PASSWORD}"
-  auth_header: "${BACKMAN_AUTH_HEADER}"
 
   #! TODO: improve this!
   vcap_application: |
