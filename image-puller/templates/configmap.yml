@@ -1,0 +1,13 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: #@ data.values.job + "-config"
+  namespace: #@ data.values.namespace
+#@yaml/text-templated-strings
+data:
+  images.dat: |
+    (@- for image in data.values.images: @)
+    (@= image @)
+    (@- end @)
