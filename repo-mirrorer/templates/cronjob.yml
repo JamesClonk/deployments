@@ -1,0 +1,49 @@
+#@ load("@ytt:data", "data")
+
+#@ def jobTemplate():
+  template:
+    spec:
+      containers:
+      - name: #@ data.values.job
+        image: #@ data.values.image
+        env:
+        - name: GITLAB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.job + "-secret"
+              key: gitlab-token
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "50m"
+        limits:
+          memory: "64Mi"
+          cpu: "50m"
+      restartPolicy: Never
+#@ end
+
+#@ if data.values.cronjob:
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: #@ data.values.job
+  namespace: #@ data.values.namespace
+spec:
+  schedule: "10 10 * * *"
+  concurrencyPolicy: Replace
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec: #@ jobTemplate()
+#@ end
+
+#@ if data.values.run_job:
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: #@ data.values.job
+  namespace: #@ data.values.namespace
+spec: #@ jobTemplate()
+#@ end

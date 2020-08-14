@@ -1,0 +1,10 @@
+#@data/values
+---
+job: ${KUBE_APP_NAME}
+namespace: ${KUBE_APP_NAME}
+
+image: "jamesclonk/repo-mirrorer:0f100962dfc32b5a15da6cc73ba3f98e007832a8"
+
+cronjob: true
+run_job: false
+gitlab_token: "${REPO_MIRRORER_GITLAB_TOKEN}"
