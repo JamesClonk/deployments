@@ -11,6 +11,7 @@ db_uri: "${IR_VISUALIZER_DB_URI}"
 loggly_token: "${IR_VISUALIZER_LOGGLY_TOKEN}"
 
 irvisualizer:
+  replicas: 2
   image: "jamesclonk/irvisualizer:c4631594422aeeb58dbbd84a939e9b7f741c9f1f"
 
   auth:
@@ -18,6 +19,7 @@ irvisualizer:
     password: "${IR_VISUALIZER_AUTH_PASSWORD}"
 
 ircollector:
+  replicas: 1
   image: "jamesclonk/ircollector:24ceeaf90147f1757777e8fe7fde54074191f2bf"
 
   auth:

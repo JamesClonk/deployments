@@ -10,7 +10,7 @@ metadata:
 spec:
   selector:
     matchLabels: #@ labels("irvisualizer","frontend")
-  replicas: 2
+  replicas: #@ data.values.irvisualizer.replicas
   template:
     metadata:
       labels: #@ labels("irvisualizer","frontend")
@@ -65,7 +65,7 @@ metadata:
 spec:
   selector:
     matchLabels: #@ labels("ircollector","backend")
-  replicas: 1
+  replicas: #@ data.values.ircollector.replicas
   template:
     metadata:
       labels: #@ labels("ircollector","backend")

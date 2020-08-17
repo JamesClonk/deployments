@@ -9,7 +9,7 @@ metadata:
 spec:
   selector:
     matchLabels: #@ labels("dashboard")
-  replicas: 2
+  replicas: #@ data.values.home_info.replicas
   template:
     metadata:
       labels: #@ labels("dashboard")
