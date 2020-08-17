@@ -1,0 +1,41 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+
+#@ if data.values.jcio.replicas > 1:
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: jcio-frontend
+  namespace: #@ data.values.namespace
+spec:
+  minAvailable: 50%
+  selector:
+    matchLabels: #@ labels("www","frontend")
+#@ end
+
+#@ if data.values.moviedb.frontend.replicas > 1:
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: moviedb-frontend
+  namespace: #@ data.values.namespace
+spec:
+  minAvailable: 50%
+  selector:
+    matchLabels: #@ labels("moviedb","frontend")
+#@ end
+
+#@ if data.values.moviedb.backend.replicas > 1:
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: moviedb-backend
+  namespace: #@ data.values.namespace
+spec:
+  minAvailable: 50%
+  selector:
+    matchLabels: #@ labels("moviedb","backend")
+#@ end

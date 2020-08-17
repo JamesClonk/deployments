@@ -9,7 +9,7 @@ metadata:
 spec:
   selector:
     matchLabels: #@ labels("www","frontend")
-  replicas: 2
+  replicas: #@ data.values.jcio.replicas
   template:
     metadata:
       labels: #@ labels("www","frontend")
@@ -54,7 +54,7 @@ metadata:
 spec:
   selector:
     matchLabels: #@ labels("moviedb","frontend")
-  replicas: 2
+  replicas: #@ data.values.moviedb.frontend.replicas
   template:
     metadata:
       labels: #@ labels("moviedb","frontend")
@@ -103,7 +103,7 @@ metadata:
 spec:
   selector:
     matchLabels: #@ labels("moviedb","backend")
-  replicas: 2
+  replicas: #@ data.values.moviedb.backend.replicas
   template:
     metadata:
       labels: #@ labels("moviedb","backend")
