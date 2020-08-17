@@ -9,7 +9,7 @@ metadata:
 spec:
   selector:
     matchLabels: #@ labels()
-  replicas: 1
+  replicas: #@ data.values.replicas
   revisionHistoryLimit: 5
   template:
     metadata:

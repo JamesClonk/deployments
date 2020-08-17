@@ -10,7 +10,7 @@ metadata:
 spec:
   selector:
     matchLabels: #@ labels("backman","gui")
-  replicas: 1
+  replicas: #@ data.values.backman.replicas
   template:
     metadata:
       labels: #@ labels("backman","gui")

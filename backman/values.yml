@@ -8,6 +8,7 @@ domains:
 - ${KUBE_DOMAIN_BETA}
 
 backman:
+  replicas: 1
   image: "jamesclonk/backman:1.15.0"
 
   username: "${BACKMAN_USERNAME}"
