@@ -1,5 +1,4 @@
 #@ load("@ytt:data", "data")
-#@ load("@ytt:base64", "base64")
 #@ load("_ytt.lib.yml", "labels", "podAntiAffinity")
 ---
 apiVersion: apps/v1
@@ -27,9 +26,20 @@ spec:
         - name: TZ
           value: "Europe/Zurich"
         - name: BACKMAN_USERNAME
-          value: #@ data.values.backman.username
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: username
         - name: BACKMAN_PASSWORD
-          value: #@ data.values.backman.password
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: password
+        - name: PROBE_AUTHORIZATION
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: basic_auth
         - name: BACKMAN_CONFIG
           value: |
             {
@@ -41,9 +51,15 @@ spec:
               }
             }
         - name: VCAP_APPLICATION
-          value: #@ data.values.backman.vcap_application
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: vcap_application.json
         - name: VCAP_SERVICES
-          value: #@ data.values.backman.vcap_services
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: vcap_services.json
         resources:
           requests:
             memory: "512Mi"
@@ -52,21 +68,19 @@ spec:
             memory: "1Gi"
             cpu: "500m"
         readinessProbe:
-          httpGet:
-            path: /metrics
-            port: 8080
-            httpHeaders:
-            - name: Authorization
-              value: #@ "Basic " + base64.encode(data.values.backman.username + ":" +data.values.backman.password)
+          exec:
+            command:
+            - bash
+            - -c
+            - 'curl --fail http://localhost:8080/metrics --header "Authorization: ${PROBE_AUTHORIZATION}"'
         livenessProbe:
           initialDelaySeconds: 15
           periodSeconds: 15
           timeoutSeconds: 5
           successThreshold: 1
           failureThreshold: 5
-          httpGet:
-            path: /api/v1/states
-            port: 8080
-            httpHeaders:
-            - name: Authorization
-              value: #@ "Basic " + base64.encode(data.values.backman.username + ":" +data.values.backman.password)
+          exec:
+            command:
+            - bash
+            - -c
+            - 'curl --fail http://localhost:8080/api/v1/states --header "Authorization: ${PROBE_AUTHORIZATION}"'
