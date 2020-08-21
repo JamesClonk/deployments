@@ -26,14 +26,26 @@ spec:
           value: "8080"
         - name: LOG_LEVEL
           value: "debug"
-        - name: AUTH_PASSWORD
-          value: #@ data.values.irvisualizer.auth.password
         - name: AUTH_USERNAME
-          value: #@ data.values.irvisualizer.auth.username
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: auth.username
+        - name: AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: auth.password
         - name: LOGGLY_TOKEN
-          value: #@ data.values.loggly_token
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: loggly_token
         - name: DB_URI
-          value: #@ data.values.db_uri
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: db_uri
         resources:
           requests:
             memory: "64Mi"
@@ -81,18 +93,41 @@ spec:
           value: "8080"
         - name: LOG_LEVEL
           value: "debug"
-        - name: AUTH_PASSWORD
-          value: #@ data.values.ircollector.auth.password
         - name: AUTH_USERNAME
-          value: #@ data.values.ircollector.auth.username
-        - name: IR_PASSWORD
-          value: #@ data.values.ircollector.iracing_auth.password
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: auth.username
+        - name: AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: auth.password
         - name: IR_USERNAME
-          value: #@ data.values.ircollector.iracing_auth.username
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: iracing_auth.username
+        - name: IR_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: iracing_auth.password
         - name: LOGGLY_TOKEN
-          value: #@ data.values.loggly_token
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: loggly_token
         - name: DB_URI
-          value: #@ data.values.db_uri
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: db_uri
+        - name: PROBE_AUTHORIZATION
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: basic_auth
         resources:
           requests:
             memory: "64Mi"
@@ -110,9 +145,8 @@ spec:
           timeoutSeconds: 5
           successThreshold: 1
           failureThreshold: 5
-          httpGet:
-            path: /seasons
-            port: 8080
-            httpHeaders:
-            - name: Authorization
-              value: #@ "Basic " + base64.encode(data.values.ircollector.auth.username + ":" +data.values.ircollector.auth.password)
+          exec:
+            command:
+            - bash
+            - -c
+            - 'curl --fail http://localhost:8080/seasons --header "Authorization: ${PROBE_AUTHORIZATION}"'
