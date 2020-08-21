@@ -73,7 +73,10 @@ spec:
         - name: JCIO_MOVIEDB_BACKEND
           value: "http://moviedb-backend.jcio:4007"
         - name: JCIO_HTTP_HMAC_SECRET
-          value: #@ data.values.moviedb.hmac_secret
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: hmac_secret
         resources:
           requests:
             memory: "32Mi"
@@ -120,11 +123,17 @@ spec:
         - name: JCIO_ENV
           value: production
         - name: JCIO_HTTP_HMAC_SECRET
-          value: #@ data.values.moviedb.hmac_secret
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: hmac_secret
         - name: JCIO_DATABASE_TYPE
           value: postgres
         - name: VCAP_SERVICES
-          value: #@ data.values.moviedb.backend.vcap_services
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: vcap_services.json
         resources:
           requests:
             memory: "32Mi"

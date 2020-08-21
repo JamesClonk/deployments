@@ -21,21 +21,5 @@ moviedb:
   backend:
     replicas: 2
     image: "jamesclonk/moviedb-backend:6abf341bd5f1d050e43ac34be3f56b0f72e4af75"
-    vcap_services: |
-      {
-        "user-provided": [
-         {
-          "binding_name": null,
-          "credentials": {
-           "maxconns": "5",
-           "uri": "${JCIO_MOVIEDB_CONNSTR}"
-          },
-          "instance_name": "moviedb",
-          "label": "user-provided",
-          "name": "moviedb",
-          "syslog_drain_url": "",
-          "tags": [],
-          "volume_mounts": []
-         }
-        ]
-      }
+
+    db_uri: "${JCIO_MOVIEDB_CONNSTR}"
