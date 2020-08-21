@@ -24,11 +24,20 @@ spec:
         - name: PORT
           value: "8080"
         - name: HOME_INFO_DB_URI
-          value: #@ data.values.home_info.db_uri
-        - name: AUTH_PASSWORD
-          value: #@ data.values.home_info.auth.password
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: home_info.db_uri
         - name: AUTH_USERNAME
-          value: #@ data.values.home_info.auth.username
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: auth.username
+        - name: AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: auth.password
         - name: CONFIG_BEDROOM_HUMIDITY_SENSOR_ID
           value: "5"
         - name: CONFIG_BEDROOM_TEMPERATURE_SENSOR_ID
@@ -52,13 +61,22 @@ spec:
         - name: SLACK_DEBUG
           value: "false"
         - name: SLACK_TOKEN
-          value: #@ data.values.home_info.slack.token
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: slack.token
         - name: TELEBOT_USERNAME
-          value: #@ data.values.home_info.telebot.username
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: telebot.username
         - name: TELEBOT_DEBUG
           value: "false"
         - name: TELEBOT_TOKEN
-          value: #@ data.values.home_info.telebot.token
+          valueFrom:
+            secretKeyRef:
+              name: #@ data.values.app
+              key: telebot.token
         - name: TZ
           value: "Europe/Zurich"
         resources:
