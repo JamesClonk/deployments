@@ -2,9 +2,15 @@
 set -e
 source ../setup.sh
 
-# deploy
-echo "deleting [${KUBE_APP_NAME}] ..."
-kapp -y delete --app ${KUBE_APP_NAME}
+# delete first if there are changes
+set +e
+cat values.yml | envsubst -no-unset -no-empty | ytt --strict --ignore-unknown-comments -f templates -f - | kapp deploy --app ${KUBE_APP_NAME} ${KAPP_DIFF} --diff-run --diff-exit-status -f -
+EXITCODE=$?
+set -e
+if [[ ${EXITCODE} != 2 ]]; then
+	echo "deleting [${KUBE_APP_NAME}] ..."
+	kapp -y delete --app ${KUBE_APP_NAME}
+fi
 
 # deploy
 echo "deploying [${KUBE_APP_NAME}] ..."
