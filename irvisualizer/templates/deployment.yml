@@ -1,5 +1,4 @@
 #@ load("@ytt:data", "data")
-#@ load("@ytt:base64", "base64")
 #@ load("_ytt.lib.yml", "labels", "podAntiAffinity")
 ---
 apiVersion: apps/v1
@@ -26,26 +25,9 @@ spec:
           value: "8080"
         - name: LOG_LEVEL
           value: "debug"
-        - name: AUTH_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: auth.username
-        - name: AUTH_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: auth.password
-        - name: LOGGLY_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: loggly_token
-        - name: DB_URI
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: db_uri
+        envFrom:
+        - secretRef:
+            name: #@ data.values.app
         resources:
           requests:
             memory: "64Mi"
@@ -93,41 +75,9 @@ spec:
           value: "8080"
         - name: LOG_LEVEL
           value: "debug"
-        - name: AUTH_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: auth.username
-        - name: AUTH_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: auth.password
-        - name: IR_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: iracing_auth.username
-        - name: IR_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: iracing_auth.password
-        - name: LOGGLY_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: loggly_token
-        - name: DB_URI
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: db_uri
-        - name: PROBE_AUTHORIZATION
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: basic_auth
+        envFrom:
+        - secretRef:
+            name: #@ data.values.app
         resources:
           requests:
             memory: "64Mi"
