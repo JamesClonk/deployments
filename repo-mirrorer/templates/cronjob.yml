@@ -3,6 +3,7 @@
 #@ def jobTemplate():
   template:
     spec:
+      restartPolicy: Never
       containers:
       - name: #@ data.values.job
         image: #@ data.values.image
@@ -19,7 +20,6 @@
         limits:
           memory: "64Mi"
           cpu: "50m"
-      restartPolicy: Never
 #@ end
 
 #@ if data.values.cronjob:

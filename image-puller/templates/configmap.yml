@@ -5,6 +5,8 @@ kind: ConfigMap
 metadata:
   name: #@ data.values.job + "-config"
   namespace: #@ data.values.namespace
+  annotations:
+    kapp.k14s.io/versioned: ""
 #@yaml/text-templated-strings
 data:
   images.dat: |
