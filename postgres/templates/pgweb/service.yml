@@ -1,0 +1,19 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+
+#@ if data.values.pgweb.enabled:
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ data.values.app + "-pgweb"
+  namespace: #@ data.values.namespace
+  labels: #@ labels("pgweb")
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector: #@ labels("pgweb")
+#@ end

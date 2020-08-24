@@ -1,0 +1,68 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+
+#@ if data.values.pgadmin.enabled:
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ data.values.app + "-pgadmin"
+  namespace: #@ data.values.namespace
+  labels: #@ labels("pgadmin")
+spec:
+  replicas: 1
+  selector:
+    matchLabels: #@ labels("pgadmin")
+  template:
+    metadata:
+      labels: #@ labels("pgadmin")
+    spec:
+      restartPolicy: Always
+      securityContext:
+        runAsUser: 5050
+        runAsGroup: 5050
+        fsGroup: 5050
+      containers:
+      - name: pgadmin
+        image: #@ data.values.pgadmin.image
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - secretRef:
+            name: #@ data.values.app + "-pgadmin-secret"
+        securityContext:
+          allowPrivilegeEscalation: false
+        resources:
+          requests:
+            memory: "192Mi"
+            cpu: "100m"
+          limits:
+            memory: "192Mi"
+            cpu: "350m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          failureThreshold: 5
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          failureThreshold: 5
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 10
+        volumeMounts:
+        - name: #@ data.values.app + "-pgadmin-config"
+          mountPath: /pgadmin4/servers.json
+          subPath: servers.json
+      volumes:
+      - name: #@ data.values.app + "-pgadmin-config"
+        secret:
+          secretName: #@ data.values.app + "-pgadmin-secret"
+#@ end

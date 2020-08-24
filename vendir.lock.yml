@@ -1,0 +1,13 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      commitTitle: add kapp versioned annotation [ci skip]
+      sha: b510f7d1912985bbfb523db948b84091dfaea862
+    path: github.com/JamesClonk/postgres-k8s
+  path: vendor
+- contents:
+  - directory: {}
+    path: .
+  path: postgres/templates
+kind: LockConfig

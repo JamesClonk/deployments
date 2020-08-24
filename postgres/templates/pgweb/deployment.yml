@@ -1,0 +1,64 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+
+#@ if data.values.pgweb.enabled:
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ data.values.app + "-pgweb"
+  namespace: #@ data.values.namespace
+  labels: #@ labels("pgweb")
+spec:
+  replicas: 1
+  selector:
+    matchLabels: #@ labels("pgweb")
+  template:
+    metadata:
+      labels: #@ labels("pgweb")
+    spec:
+      restartPolicy: Always
+      securityContext:
+        runAsUser: 2000
+        runAsGroup: 2000
+        fsGroup: 2000
+      containers:
+      - name: pgweb
+        image: #@ data.values.pgweb.image
+        ports:
+        - containerPort: 8081
+        envFrom:
+        - secretRef:
+            name: #@ data.values.app + "-pgweb-secret"
+        securityContext:
+          allowPrivilegeEscalation: false
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "50m"
+          limits:
+            memory: "64Mi"
+            cpu: "100m"
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - 'wget http://localhost:8081 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
+          failureThreshold: 5
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 5
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - 'wget http://localhost:8081 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+#@ end

@@ -1,0 +1,18 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: vendor
+  contents:
+  - path: github.com/JamesClonk/postgres-k8s
+    git:
+      url: https://github.com/JamesClonk/postgres-k8s
+      ref: b510f7d1912985bbfb523db948b84091dfaea862
+    includePaths:
+    - "templates/**/*"
+- path: postgres/templates
+  contents:
+  - path: .
+    directory:
+      path: vendor/github.com/JamesClonk/postgres-k8s/templates/standalone
+    excludePaths:
+    - LICENSE

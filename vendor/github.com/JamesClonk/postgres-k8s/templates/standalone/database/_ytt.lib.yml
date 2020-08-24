@@ -1,0 +1,33 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels(component):
+  app: #@ data.values.app
+  app.service: postgres
+  app.component: #@ component
+#@ end
+
+#@ def cpu(n):
+#@   return str(n)+"m"
+#@ end
+
+#@ def memory(n):
+#@   return "{}Mi".format(n)
+#@ end
+
+#@ def disk():
+#@   return "{}Gi".format(data.values.postgres.disk_in_gb)
+#@ end
+
+#@ def resources():
+#@   requested_memory = int(data.values.postgres.memory_in_mb)
+#@   resource = {
+#@     "cpu": int((requested_memory / 128) * 100),
+#@     "memory": requested_memory
+#@   }
+  requests:
+    cpu: #@ cpu(resource["cpu"])
+    memory: #@ memory(resource["memory"])
+  limits:
+    cpu: #@ cpu(1.5 * resource["cpu"])
+    memory: #@ memory(1.5 * resource["memory"])
+#@ end

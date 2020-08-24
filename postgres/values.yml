@@ -1,0 +1,19 @@
+#@data/values
+---
+app: ${KUBE_APP_NAME}
+namespace: ${KUBE_APP_NAME}
+
+domains:
+- ${KUBE_DOMAIN_ALPHA}
+- ${KUBE_DOMAIN_BETA}
+
+postgres:
+  memory_in_mb: 512
+  disk_in_gb: 5
+  persistent_volume: true
+
+pgadmin:
+  enabled: false
+
+pgweb:
+  enabled: true

@@ -1,0 +1,17 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels(component):
+  app: #@ data.values.app
+  app.service: postgres
+  app.component: #@ component
+#@ end
+
+#@ def connstr():
+#@   return "postgres://{}:{}@{}:{}/{}?sslmode=disable".format(
+#@     data.values.postgres.database.user,
+#@     data.values.postgres.database.password,
+#@     data.values.app + "-database." + data.values.namespace + ".svc.cluster.local",
+#@     data.values.postgres.database.port,
+#@     data.values.postgres.database.name,
+#@   )
+#@ end

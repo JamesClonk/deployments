@@ -1,0 +1,31 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("_ytt.lib.yml", "disk")
+
+#@ if data.values.postgres.persistent_volume:
+#@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata":{"name":data.values.app + "-database"}})
+---
+spec:
+  #@overlay/match missing_ok=True
+  volumeClaimTemplates:
+  - metadata:
+      name: #@ data.values.app + "-volume"
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: #@ disk()
+
+#@ else:
+#@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata":{"name":data.values.app + "-database"}})
+---
+spec:
+  template:
+    spec:
+      #@overlay/match missing_ok=True
+      volumes:
+      - name: #@ data.values.app + "-volume"
+        emptyDir:
+          sizeLimit: #@ disk()
+#@ end
