@@ -10,6 +10,10 @@ K8s deployments repository
     Template and overlay Kubernetes configuration via YAML structures
   - ###### https://github.com/k14s/kapp-controller
     Kubernetes controller for Kapp, provides App CRDs
+  - ###### https://github.com/k14s/vendir
+    Declaratively state what files should be in a directory
+  - ###### https://get-kbld.io
+    Seamlessly incorporates image building, pushing, and resolution into deployment workflows
   - ###### https://github.com/k14s/kwt
     Expose Kubernetes overlay network directly to your local machine
 - #### https://github.com/derailed/k9s

@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.24.0
+overrides:
+- image: jamesclonk/image-puller:101b7af72ad941657f6dd93ce82c39ff349d4eef
+  newImage: index.docker.io/jamesclonk/image-puller@sha256:1370e6f6476f03c4445b11fcc8077942c3f00c8bee45f4650e2256a8422981ec
+  preresolved: true

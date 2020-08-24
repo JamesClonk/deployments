@@ -1,0 +1,7 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.24.0
+overrides:
+- image: jamesclonk/home-info-dashboard:29132cf31dd416c2b0cf7d68ab1bcace74f72178
+  newImage: index.docker.io/jamesclonk/home-info-dashboard@sha256:1d04b05073d29149418c56a77a98a1f2acb0311fd18bd4444d818cd390dd2f51
+  preresolved: true
