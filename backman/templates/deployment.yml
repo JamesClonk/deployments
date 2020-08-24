@@ -25,41 +25,9 @@ spec:
           value: "8080"
         - name: TZ
           value: "Europe/Zurich"
-        - name: BACKMAN_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: username
-        - name: BACKMAN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: password
-        - name: PROBE_AUTHORIZATION
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: basic_auth
-        - name: BACKMAN_CONFIG
-          value: |
-            {
-              "log_level": "debug",
-              "s3": {
-                "service_label": "user-provided",
-                "service_name": "backman-storage",
-                "bucket_name": "backman-storage"
-              }
-            }
-        - name: VCAP_APPLICATION
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: vcap_application.json
-        - name: VCAP_SERVICES
-          valueFrom:
-            secretKeyRef:
-              name: #@ data.values.app
-              key: vcap_services.json
+        envFrom:
+        - secretRef:
+            name: #@ data.values.app
         resources:
           requests:
             memory: "512Mi"
