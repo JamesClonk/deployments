@@ -49,5 +49,5 @@ target:
 setup:
 	./setup.sh
 
-image-puller repo-mirrorer cf-env kuard jcio home-info ircollector irvisualizer production prod testing test local microk8s:
+image-puller repo-mirrorer cf-env kuard jcio home-info ircollector irvisualizer postgres production prod testing test local microk8s:
 	@exit $?
