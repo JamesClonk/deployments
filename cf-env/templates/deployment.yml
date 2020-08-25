@@ -15,9 +15,17 @@ spec:
     metadata:
       labels: #@ labels()
     spec:
+      serviceAccountName: #@ data.values.app
+      securityContext:
+        runAsUser: 1007
+        runAsGroup: 1007
+        fsGroup: 1007
       containers:
       - name: cf-env
         image: #@ data.values.image
+        securityContext:
+          privileged: false
+          allowPrivilegeEscalation: false
         ports:
         - containerPort: 8080
         env:
