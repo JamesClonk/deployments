@@ -15,9 +15,20 @@ postgres:
 
   database:
     port: 5432
-    name: test-db
-    user: test-user
-    password: test-password
+    name: postgres
+    user: "${POSTGRES_DB_USER}"
+    password: "${POSTGRES_DB_PASSWORD}"
+
+  additional_databases:
+  - name: "${IR_VISUALIZER_DB_NAME}"
+    user: "${IR_VISUALIZER_DB_USER}"
+    password: "${IR_VISUALIZER_DB_PASSWORD}"
+  - name: "${HOME_INFO_DB_NAME}"
+    user: "${HOME_INFO_DB_USER}"
+    password: "${HOME_INFO_DB_PASSWORD}"
+  - name: "${JCIO_MOVIEDB_NAME}"
+    user: "${JCIO_MOVIEDB_USER}"
+    password: "${JCIO_MOVIEDB_PASSWORD}"
 
 pgadmin:
   enabled: false
@@ -25,5 +36,5 @@ pgadmin:
 pgweb:
   enabled: true
   auth:
-    user: pgweb-user
-    password: pgweb-password
+    user: "${POSTGRES_PGWEB_USER}"
+    password: "${POSTGRES_PGWEB_PASSWORD}"
