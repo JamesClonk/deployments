@@ -23,8 +23,8 @@ spec:
 spec:
   template:
     spec:
-      #@overlay/match missing_ok=True
       volumes:
+      #@overlay/match by=overlay.subset({"name":data.values.app + "-volume"}), missing_ok=True
       - name: #@ data.values.app + "-volume"
         emptyDir:
           sizeLimit: #@ disk()

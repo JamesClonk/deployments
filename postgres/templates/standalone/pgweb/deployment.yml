@@ -9,6 +9,9 @@ metadata:
   name: #@ data.values.app + "-pgweb"
   namespace: #@ data.values.namespace
   labels: #@ labels("pgweb")
+  annotations:
+    kapp.k14s.io/change-group: "postgres/dashboard"
+    kapp.k14s.io/change-rule: "upsert after upserting postgres/database"
 spec:
   replicas: 1
   selector:
@@ -46,7 +49,7 @@ spec:
             - -c
             - 'wget http://localhost:8081 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
           failureThreshold: 5
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 15
           successThreshold: 1
           timeoutSeconds: 5
@@ -57,7 +60,7 @@ spec:
             - -c
             - 'wget http://localhost:8081 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
           failureThreshold: 5
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 5

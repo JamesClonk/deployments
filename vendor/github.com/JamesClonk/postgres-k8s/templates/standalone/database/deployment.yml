@@ -7,6 +7,8 @@ metadata:
   name: #@ data.values.app + "-database"
   namespace: #@ data.values.namespace
   labels: #@ labels("database")
+  annotations:
+    kapp.k14s.io/change-group: "postgres/database"
 spec:
   serviceName: #@ data.values.app + "-database"
   replicas: 1
@@ -38,9 +40,9 @@ spec:
             command:
             - /bin/sh
             - -c
-            - exec pg_isready -h 127.0.0.1 -p 5432 -d "${POSTGRES_DB}" -U "${POSTGRES_USER}"
+            - 'exec pg_isready -h 127.0.0.1 -p 5432 -d "${POSTGRES_DB}" -U "${POSTGRES_USER}"'
           failureThreshold: 5
-          initialDelaySeconds: 10
+          initialDelaySeconds: 15
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 5
@@ -49,12 +51,18 @@ spec:
             command:
             - /bin/sh
             - -c
-            - exec pg_isready -h 127.0.0.1 -p 5432 -d "${POSTGRES_DB}" -U "${POSTGRES_USER}"
+            - 'exec pg_isready -h 127.0.0.1 -p 5432 -d "${POSTGRES_DB}" -U "${POSTGRES_USER}"'
           failureThreshold: 5
-          initialDelaySeconds: 45
+          initialDelaySeconds: 60
           periodSeconds: 15
           successThreshold: 1
           timeoutSeconds: 5
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: #@ data.values.app + "-volume"
+        - mountPath: /docker-entrypoint-initdb.d/
+          name: #@ data.values.app + "-init-script"
+      volumes:
+      - name: #@ data.values.app + "-init-script"
+        secret:
+          secretName: #@ data.values.app + "-init-script"

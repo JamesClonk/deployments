@@ -9,6 +9,9 @@ metadata:
   name: #@ data.values.app + "-pgadmin"
   namespace: #@ data.values.namespace
   labels: #@ labels("pgadmin")
+  annotations:
+    kapp.k14s.io/change-group: "postgres/dashboard"
+    kapp.k14s.io/change-rule: "upsert after upserting postgres/database"
 spec:
   replicas: 1
   selector:
@@ -44,7 +47,7 @@ spec:
             path: /
             port: 8080
           failureThreshold: 5
-          initialDelaySeconds: 60
+          initialDelaySeconds: 120
           periodSeconds: 15
           successThreshold: 1
           timeoutSeconds: 10
@@ -53,7 +56,7 @@ spec:
             path: /
             port: 8080
           failureThreshold: 5
-          initialDelaySeconds: 120
+          initialDelaySeconds: 180
           periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 10

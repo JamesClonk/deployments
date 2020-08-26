@@ -6,10 +6,10 @@ directories:
   - path: github.com/JamesClonk/postgres-k8s
     git:
       url: https://github.com/JamesClonk/postgres-k8s
-      ref: b510f7d1912985bbfb523db948b84091dfaea862
+      ref: 8166bc22a5612943ff96aa9a7924809794fba518
     includePaths:
     - "templates/**/*"
-- path: postgres/templates
+- path: postgres/templates/standalone
   contents:
   - path: .
     directory:
