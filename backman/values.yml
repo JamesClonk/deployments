@@ -22,10 +22,10 @@ backman:
   postgres:
   - name: irvisualizer_db
     database: irvisualizer
-    uri: "${IR_VISUALIZER_DB_URI}"
+    uri: "postgres://${IR_VISUALIZER_DB_USERNAME}:${IR_VISUALIZER_DB_PASSWORD}@${IR_VISUALIZER_DB_HOST}/${IR_VISUALIZER_DB_NAME}?sslmode=require"
   - name: home_info_db
     database: home_info
-    uri: "${HOME_INFO_DB_URI}"
+    uri: "postgres://${HOME_INFO_DB_USERNAME}:${HOME_INFO_DB_PASSWORD}@${HOME_INFO_DB_HOST}/${HOME_INFO_DB_NAME}?sslmode=require"
   - name: movie_db
     database: moviedb
-    uri: "${JCIO_MOVIEDB_CONNSTR}"
+    uri: "postgres://${JCIO_MOVIEDB_USERNAME}:${JCIO_MOVIEDB_PASSWORD}@${JCIO_MOVIEDB_HOST}/${JCIO_MOVIEDB_NAME}?sslmode=require"
