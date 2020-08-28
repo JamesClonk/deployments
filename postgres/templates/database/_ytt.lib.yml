@@ -1,0 +1,44 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels():
+  app.kubernetes.io/name: postgresql
+  helm.sh/chart: postgresql-9.3.3
+  app.kubernetes.io/instance: postgresql
+  app.kubernetes.io/managed-by: Helm
+  postgres-client: "true"
+#@ end
+
+#@ def cpu(n):
+#@   return str(n)+"m"
+#@ end
+
+#@ def memory(n):
+#@   return "{}Mi".format(n)
+#@ end
+
+#@ def disk():
+#@   return "{}Gi".format(data.values.postgres.disk_in_gb)
+#@ end
+
+#@ def shared_memory():
+#@ requested_memory = int(data.values.postgres.memory_in_mb)
+#@ shm = int(requested_memory / 4)
+#@ if shm < 64:
+#@   shm = 64
+#@ end
+#@   return "{}Mi".format(shm)
+#@ end
+
+#@ def resources(base_cpu, memory_in_mb):
+#@   requested_memory = int(memory_in_mb)
+#@   resource = {
+#@     "cpu": int((requested_memory / 128) * int(base_cpu)),
+#@     "memory": requested_memory
+#@   }
+  requests:
+    cpu: #@ cpu(resource["cpu"])
+    memory: #@ memory(resource["memory"])
+  limits:
+    cpu: #@ cpu(1.5 * resource["cpu"])
+    memory: #@ memory(1.5 * resource["memory"])
+#@ end

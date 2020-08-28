@@ -1,0 +1,25 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("_ytt.lib.yml", "resources")
+
+#@overlay/match by=overlay.subset({"kind": "Deployment", "metadata":{"name":"postgres-postgresql-ha-pgpool"}}), expects=1
+---
+spec:
+  template:
+    spec:
+      containers:
+      #@overlay/match by=overlay.subset({"name":"pgpool"}), expects=1
+      - name: pgpool
+        #@overlay/replace
+        resources: #@ resources(250, data.values.pgpool.memory_in_mb)
+
+#@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata":{"name":"postgres-postgresql-ha-postgresql"}}), expects=1
+---
+spec:
+  template:
+    spec:
+      containers:
+      #@overlay/match by=overlay.subset({"name":"postgresql"}), expects=1
+      - name: postgresql
+        #@overlay/replace
+        resources: #@ resources(150, data.values.postgres.memory_in_mb)

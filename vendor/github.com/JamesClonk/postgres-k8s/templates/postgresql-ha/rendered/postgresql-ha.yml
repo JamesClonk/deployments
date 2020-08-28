@@ -1,0 +1,605 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          postgres-postgresql-ha-client: "true"
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/instance: postgres
+          app.kubernetes.io/name: postgresql-ha
+    ports:
+    - port: 5432
+  - ports:
+    - port: 9187
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: postgresql
+      app.kubernetes.io/instance: postgres
+      app.kubernetes.io/name: postgresql-ha
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app.kubernetes.io/component: pgpool
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-pgpool
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: pgpool
+      app.kubernetes.io/instance: postgres
+      app.kubernetes.io/name: postgresql-ha
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-postgresql
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: postgresql
+      app.kubernetes.io/instance: postgres
+      app.kubernetes.io/name: postgresql-ha
+---
+apiVersion: v1
+data:
+  admin-password: cnpMTUY2NENmWQ==
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: pgpool
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-pgpool
+type: Opaque
+---
+apiVersion: v1
+data:
+  postgresql-password: YzJSWDVVVmd5Qw==
+  repmgr-password: TjBMWTlTOWRSZA==
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-postgresql
+type: Opaque
+---
+apiVersion: v1
+data:
+  pgpool.conf: |
+    failover_on_backend_error = 'on'
+    detach_false_primary = 'on'
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: pgpool
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-pgpool-configuration
+---
+apiVersion: v1
+data:
+  pre-stop.sh: |-
+    #!/bin/bash
+    set -o errexit
+    set -o pipefail
+    set -o nounset
+
+    # Debug section
+    exec 3>&1
+    exec 4>&2
+
+    # Load Libraries
+    . /opt/bitnami/scripts/liblog.sh
+    . /opt/bitnami/scripts/libpostgresql.sh
+    . /opt/bitnami/scripts/librepmgr.sh
+
+    # Auxiliar functions
+    is_new_primary_ready() {
+        return_value=1
+        currenty_primary_node="$(repmgr_get_primary_node)"
+        currenty_primary_host="$(echo $currenty_primary_node | awk '{print $1}')"
+
+        info "$currenty_primary_host != $REPMGR_NODE_NETWORK_NAME"
+        if [[ $(echo $currenty_primary_node | wc -w) -eq 2 ]] && [[ "$currenty_primary_host" != "$REPMGR_NODE_NETWORK_NAME" ]]; then
+            info "New primary detected, leaving the cluster..."
+            return_value=0
+        else
+            info "Waiting for a new primary to be available..."
+        fi
+        return $return_value
+    }
+
+    export MODULE="pre-stop-hook"
+
+    if [[ "${BITNAMI_DEBUG}" == "true" ]]; then
+        info "Bash debug is on"
+    else
+        info "Bash debug is off"
+        exec 1>/dev/null
+        exec 2>/dev/null
+    fi
+
+    # Load PostgreSQL & repmgr environment variables
+    eval "$(repmgr_env)"
+    eval "$(postgresql_env)"
+
+    postgresql_enable_nss_wrapper
+
+    # Prepare env vars for managing roles
+    primary_node="$(repmgr_get_primary_node)"
+    primary_host="$(echo $primary_node | awk '{print $1}')"
+
+    # Stop postgresql for graceful exit.
+    postgresql_stop
+
+    if [[ "$primary_host" == "$REPMGR_NODE_NETWORK_NAME" ]]; then
+        info "Primary node need to wait for a new primary node before leaving the cluster"
+        retry_while is_new_primary_ready 10 5
+    else
+        info "Standby node doesn't need to wait, leaving the cluster."
+    fi
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-postgresql-hooks-scripts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-pgpool
+spec:
+  ports:
+  - name: postgresql
+    nodePort: null
+    port: 5432
+    protocol: TCP
+    targetPort: postgresql
+  selector:
+    app.kubernetes.io/component: pgpool
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/name: postgresql-ha
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/port: "9187"
+    prometheus.io/scrape: "true"
+  labels:
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-postgresql-metrics
+spec:
+  ports:
+  - name: metrics
+    port: 9187
+    targetPort: metrics
+  selector:
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/name: postgresql-ha
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-postgresql-headless
+spec:
+  clusterIP: None
+  ports:
+  - name: postgresql
+    port: 5432
+    protocol: TCP
+    targetPort: postgresql
+  selector:
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/name: postgresql-ha
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-postgresql
+spec:
+  ports:
+  - name: postgresql
+    port: 5432
+    protocol: TCP
+    targetPort: postgresql
+  selector:
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/name: postgresql-ha
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kbld.k14s.io/images: |
+      - Metas:
+        - Tag: 4.1.3-debian-10-r1
+          Type: resolved
+          URL: docker.io/bitnami/pgpool:4.1.3-debian-10-r1
+        URL: index.docker.io/bitnami/pgpool@sha256:098abc3999a9458f8063074775d31555e10b11d5e0d26fbb3502e5fe3d8b2732
+  labels:
+    app.kubernetes.io/component: pgpool
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-pgpool
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: pgpool
+      app.kubernetes.io/instance: postgres
+      app.kubernetes.io/name: postgresql-ha
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: pgpool
+        app.kubernetes.io/instance: postgres
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql-ha
+        helm.sh/chart: postgresql-ha-3.5.7
+    spec:
+      containers:
+      - env:
+        - name: BITNAMI_DEBUG
+          value: "false"
+        - name: PGPOOL_POSTGRES_CUSTOM_USERS
+          valueFrom:
+            secretKeyRef:
+              key: usernames
+              name: postgres-postgresql-ha-pgpool-additional-database-credentials
+        - name: PGPOOL_POSTGRES_CUSTOM_PASSWORDS
+          valueFrom:
+            secretKeyRef:
+              key: passwords
+              name: postgres-postgresql-ha-pgpool-additional-database-credentials
+        - name: PGPOOL_BACKEND_NODES
+          value: 0:postgres-postgresql-ha-postgresql-0.postgres-postgresql-ha-postgresql-headless.postgres.svc.cluster.local:5432,1:postgres-postgresql-ha-postgresql-1.postgres-postgresql-ha-postgresql-headless.postgres.svc.cluster.local:5432,
+        - name: PGPOOL_SR_CHECK_USER
+          value: repmgr
+        - name: PGPOOL_SR_CHECK_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: repmgr-password
+              name: postgres-postgresql-ha-postgresql
+        - name: PGPOOL_ENABLE_LOAD_BALANCING
+          value: "no"
+        - name: PGPOOL_ENABLE_LDAP
+          value: "no"
+        - name: PGPOOL_POSTGRES_USERNAME
+          value: postgres
+        - name: PGPOOL_POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgresql-password
+              name: postgres-postgresql-ha-postgresql
+        - name: PGPOOL_ADMIN_USERNAME
+          value: admin
+        - name: PGPOOL_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: admin-password
+              name: postgres-postgresql-ha-pgpool
+        - name: PGPOOL_USER_CONF_FILE
+          value: /opt/bitnami/pgpool/user_config/pgpool.conf
+        image: index.docker.io/bitnami/pgpool@sha256:098abc3999a9458f8063074775d31555e10b11d5e0d26fbb3502e5fe3d8b2732
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - /opt/bitnami/scripts/pgpool/healthcheck.sh
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: pgpool
+        ports:
+        - containerPort: 5432
+          name: postgresql
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - bash
+            - -ec
+            - PGPASSWORD=${PGPOOL_POSTGRES_PASSWORD} psql -U "postgres" -d "postgres"
+              -h 127.0.0.1 -tA -c "SELECT 1" >/dev/null
+          failureThreshold: 5
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits: {}
+          requests: {}
+        securityContext:
+          runAsUser: 1001
+        volumeMounts:
+        - mountPath: /opt/bitnami/pgpool/user_config/
+          name: pgpool-config
+      securityContext:
+        fsGroup: 1001
+      volumes:
+      - configMap:
+          name: postgres-postgresql-ha-pgpool-configuration
+        name: pgpool-config
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    kbld.k14s.io/images: |
+      - Metas:
+        - Tag: 0.8.0-debian-10-r190
+          Type: resolved
+          URL: docker.io/bitnami/postgres-exporter:0.8.0-debian-10-r190
+        URL: index.docker.io/bitnami/postgres-exporter@sha256:a59b482a13a2bf928ea16e7a35b9daefef73c77a3819c6f03a96487ae89fba53
+      - Metas:
+        - Tag: 11.9.0-debian-10-r3
+          Type: resolved
+          URL: docker.io/bitnami/postgresql-repmgr:11.9.0-debian-10-r3
+        URL: index.docker.io/bitnami/postgresql-repmgr@sha256:fa6a3e470f545fb383f24a2f88e6da5c1110555b99916c6124f0a9215a5efea5
+  labels:
+    app.kubernetes.io/component: postgresql
+    app.kubernetes.io/instance: postgres
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: postgresql-ha
+    helm.sh/chart: postgresql-ha-3.5.7
+  name: postgres-postgresql-ha-postgresql
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: postgresql
+      app.kubernetes.io/instance: postgres
+      app.kubernetes.io/name: postgresql-ha
+  serviceName: postgres-postgresql-ha-postgresql-headless
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9187"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/component: postgresql
+        app.kubernetes.io/instance: postgres
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: postgresql-ha
+        helm.sh/chart: postgresql-ha-3.5.7
+    spec:
+      containers:
+      - env:
+        - name: BITNAMI_DEBUG
+          value: "false"
+        - name: POSTGRESQL_VOLUME_DIR
+          value: /bitnami/postgresql
+        - name: PGDATA
+          value: /bitnami/postgresql/data
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgresql-password
+              name: postgres-postgresql-ha-postgresql
+        - name: POSTGRES_DB
+          value: postgres
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: REPMGR_UPGRADE_EXTENSION
+          value: "no"
+        - name: REPMGR_PGHBA_TRUST_ALL
+          value: "no"
+        - name: REPMGR_MOUNTED_CONF_DIR
+          value: /bitnami/repmgr/conf
+        - name: REPMGR_PARTNER_NODES
+          value: postgres-postgresql-ha-postgresql-0.postgres-postgresql-ha-postgresql-headless.postgres.svc.cluster.local,postgres-postgresql-ha-postgresql-1.postgres-postgresql-ha-postgresql-headless.postgres.svc.cluster.local,
+        - name: REPMGR_PRIMARY_HOST
+          value: postgres-postgresql-ha-postgresql-0.postgres-postgresql-ha-postgresql-headless.postgres.svc.cluster.local
+        - name: REPMGR_NODE_NAME
+          value: $(MY_POD_NAME)
+        - name: REPMGR_NODE_NETWORK_NAME
+          value: $(MY_POD_NAME).postgres-postgresql-ha-postgresql-headless.postgres.svc.cluster.local
+        - name: REPMGR_LOG_LEVEL
+          value: NOTICE
+        - name: REPMGR_CONNECT_TIMEOUT
+          value: "5"
+        - name: REPMGR_RECONNECT_ATTEMPTS
+          value: "3"
+        - name: REPMGR_RECONNECT_INTERVAL
+          value: "5"
+        - name: REPMGR_USERNAME
+          value: repmgr
+        - name: REPMGR_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: repmgr-password
+              name: postgres-postgresql-ha-postgresql
+        - name: REPMGR_DATABASE
+          value: repmgr
+        image: index.docker.io/bitnami/postgresql-repmgr@sha256:fa6a3e470f545fb383f24a2f88e6da5c1110555b99916c6124f0a9215a5efea5
+        imagePullPolicy: IfNotPresent
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /pre-stop.sh
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - PGPASSWORD=$POSTGRES_PASSWORD psql -w -U "postgres" -d "postgres"  -h
+              127.0.0.1 -c "SELECT 1"
+          failureThreshold: 6
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: postgresql
+        ports:
+        - containerPort: 5432
+          name: postgresql
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - PGPASSWORD=$POSTGRES_PASSWORD psql -w -U "postgres" -d "postgres"  -h
+              127.0.0.1 -c "SELECT 1"
+          failureThreshold: 6
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits: {}
+          requests: {}
+        securityContext:
+          runAsUser: 1001
+        volumeMounts:
+        - mountPath: /docker-entrypoint-initdb.d/
+          name: custom-init-scripts
+        - mountPath: /docker-entrypoint-initdb.d/secret
+          name: custom-init-scripts-secret
+        - mountPath: /bitnami/postgresql
+          name: data
+        - mountPath: /pre-stop.sh
+          name: hooks-scripts
+          subPath: pre-stop.sh
+      - env:
+        - name: DATA_SOURCE_URI
+          value: 127.0.0.1:5432/postgres?sslmode=disable
+        - name: DATA_SOURCE_PASS
+          valueFrom:
+            secretKeyRef:
+              key: postgresql-password
+              name: postgres-postgresql-ha-postgresql
+        - name: DATA_SOURCE_USER
+          value: postgres
+        image: index.docker.io/bitnami/postgres-exporter@sha256:a59b482a13a2bf928ea16e7a35b9daefef73c77a3819c6f03a96487ae89fba53
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /
+            port: metrics
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: metrics
+        ports:
+        - containerPort: 9187
+          name: metrics
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /
+            port: metrics
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 150m
+            memory: 128Mi
+          requests:
+            cpu: 150m
+            memory: 128Mi
+        securityContext:
+          runAsUser: 1001
+        volumeMounts: null
+      securityContext:
+        fsGroup: 1001
+      volumes:
+      - configMap:
+          defaultMode: 493
+          name: postgres-postgresql-ha-postgresql-hooks-scripts
+        name: hooks-scripts
+      - name: custom-init-scripts-secret
+        secret:
+          secretName: postgres-postgresql-ha-postgres-additional-database-credentials
+      - configMap:
+          name: postgres-postgresql-ha-postgres-additional-databases
+        name: custom-init-scripts
+  updateStrategy:
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi

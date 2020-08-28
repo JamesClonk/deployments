@@ -22,6 +22,13 @@ images:
 - "jamesclonk/postgresql@sha256:b0eae02b16fed8fd6a2f7b13e68152657cd1a06f7b90192cf5244bfe78cb745f"
 - "jamesclonk/postgresql@sha256:e4a446a0f4b54465790e12ee5a684f1c21d5aeb6d3a6e4f8448c0ee4a6c2bce4"
 - "jamesclonk/postgresql@sha256:fcb0acce73e0382249e268c4616d83f9ff6e5dda467904905fd24317ec56712a"
+#! prometheus mirroring
+- "jamesclonk/prometheus@sha256:17d34fd73f9e8a78ba7da269d96822ce8972391c2838e08d92a990136adb8e4a"
+- "jamesclonk/prometheus@sha256:24a5204b418e8fa0214cfb628486749003b039c279c56b5bddb5b10cd100d926"
+- "jamesclonk/prometheus@sha256:cf66a6bbd573fd819ea09c72e21b528e9252d58d01ae13564a29749de1e48e0f"
+- "jamesclonk/prometheus@sha256:788260ebd13613456c168d2eed8290f119f2b6301af2507ff65908d979c66c17"
+- "jamesclonk/prometheus@sha256:0a9031142481adfb964fe7f65e698d01a6260de982f0322bc44496c3dcc866f1"
+- "jamesclonk/prometheus@sha256:2f82f0da199c60a7699c43c63a295c44e673242de0b7ee1b17c2d5a23bec34cb"
 #! other stuff
 - "jamesclonk/backman:latest"
 - "jamesclonk/web-container:latest"

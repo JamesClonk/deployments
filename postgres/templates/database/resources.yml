@@ -1,0 +1,15 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("_ytt.lib.yml", "resources")
+
+#@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata":{"name":"postgres"}}), expects=1
+---
+spec:
+  template:
+    spec:
+      containers:
+      #@overlay/match by=overlay.subset({"name":"postgres"}), expects=1
+      - name: postgres
+        #@overlay/replace
+        resources: #@ resources(150, data.values.postgres.memory_in_mb)
+

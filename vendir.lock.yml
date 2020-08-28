@@ -2,12 +2,27 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      commitTitle: add additional databases [ci skip]
-      sha: 8166bc22a5612943ff96aa9a7924809794fba518
-    path: github.com/JamesClonk/postgres-k8s
-  path: vendor
+      commitTitle: '[stable/prometheus] update prometheus to 2.20.1 and cm reloader
+        to 0.4.0 (#23506)...'
+      sha: f42e3c4b827d8ee54cce31de2619631bfa484610
+    path: .
+  path: vendor/github.com/helm/charts
 - contents:
   - directory: {}
     path: .
-  path: postgres/templates/standalone
+  path: prometheus/build/charts/kube-state-metrics
+- contents:
+  - directory: {}
+    path: .
+  path: prometheus/build/charts/prometheus
+- contents:
+  - git:
+      commitTitle: use bitnami postgresql for single instance [ci skip]
+      sha: 0ad193db0249cf2e93a912473633ee3c9ae3cfdf
+    path: .
+  path: vendor/github.com/JamesClonk/postgres-k8s
+- contents:
+  - directory: {}
+    path: .
+  path: postgres/templates
 kind: LockConfig

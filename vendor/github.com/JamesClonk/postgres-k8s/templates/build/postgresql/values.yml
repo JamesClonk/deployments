@@ -1,0 +1,43 @@
+fullnameOverride: postgres
+
+postgresqlDatabase: postgres
+
+serviceAccount:
+  enabled: true
+psp:
+  create: true
+rbac:
+  create: true
+
+existingSecret: postgres-admin-secret
+initdbScriptsConfigMap: postgres-additional-databases
+initdbScriptsSecret: postgres-additional-database-credentials
+
+persistence:
+  enabled: true
+  size: 5Gi
+
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 500m
+  limits:
+    memory: 512Mi
+    cpu: 500m
+
+networkPolicy:
+  enabled: true
+  allowExternal: false
+  explicitNamespacesSelector:
+    matchLabels:
+      postgres-client-access-allowed: "true"
+
+metrics:
+  enabled: true
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 150m
+    limits:
+      memory: 128Mi
+      cpu: 150m

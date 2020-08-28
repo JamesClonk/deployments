@@ -1,0 +1,27 @@
+#@data/values
+---
+app: postgres
+namespace: postgres
+
+pgpool:
+  memory_in_mb: 64
+  admin:
+    password: 'example1'
+
+postgres:
+  memory_in_mb: 256
+  disk_in_gb: 1
+  persistent_volume: true
+
+  database:
+    port: 5432
+    password: 'example2'
+
+  additional_databases:
+  #@overlay/append
+  - name: demo_db
+    user: demo_user
+    password: demo_password
+
+  repmgr:
+    password: 'example3'

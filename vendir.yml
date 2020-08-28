@@ -4,18 +4,42 @@ kind: Config
 minimumRequiredVersion: 0.9.0
 
 directories:
-- path: vendor
+- path: vendor/github.com/helm/charts
   contents:
-  - path: github.com/JamesClonk/postgres-k8s
+  - path: .
     git:
-      url: https://github.com/JamesClonk/postgres-k8s
-      ref: 8166bc22a5612943ff96aa9a7924809794fba518
+      url: https://github.com/helm/charts
+      ref: f42e3c4b827d8ee54cce31de2619631bfa484610 # version: prometheus/11.12.0
     includePaths:
-    - "templates/**/*"
-- path: postgres/templates/standalone
+    - stable/prometheus/**/*
+    - stable/kube-state-metrics/**/*
+- path: prometheus/build/charts/kube-state-metrics
   contents:
   - path: .
     directory:
-      path: vendor/github.com/JamesClonk/postgres-k8s/templates/standalone
+      path: vendor/github.com/helm/charts/stable/kube-state-metrics
+    excludePaths:
+    - LICENSE
+- path: prometheus/build/charts/prometheus
+  contents:
+  - path: .
+    directory:
+      path: vendor/github.com/helm/charts/stable/prometheus
+    excludePaths:
+    - LICENSE
+
+- path: vendor/github.com/JamesClonk/postgres-k8s
+  contents:
+  - path: .
+    git:
+      url: https://github.com/JamesClonk/postgres-k8s
+      ref: 0ad193db0249cf2e93a912473633ee3c9ae3cfdf
+    includePaths:
+    - "templates/**/*"
+- path: postgres/templates
+  contents:
+  - path: .
+    directory:
+      path: vendor/github.com/JamesClonk/postgres-k8s/templates/postgresql
     excludePaths:
     - LICENSE

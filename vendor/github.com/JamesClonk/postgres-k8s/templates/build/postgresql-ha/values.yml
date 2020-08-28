@@ -1,0 +1,32 @@
+postgresql:
+  initdbScriptsCM: postgres-postgresql-ha-postgres-additional-databases
+  initdbScriptsSecret: postgres-postgresql-ha-postgres-additional-database-credentials
+  pdb:
+    create: true
+
+pgpool:
+  customUsersSecret: postgres-postgresql-ha-pgpool-additional-database-credentials
+  useLoadBalancing: false
+  configuration: |
+    failover_on_backend_error = 'on'
+    detach_false_primary = 'on'
+  pdb:
+    create: true
+
+metrics:
+  enabled: true
+  resources:
+    limits:
+      cpu: 150m
+      memory: 128Mi
+    requests:
+      cpu: 150m
+      memory: 128Mi
+
+persistence:
+  enabled: true
+  size: 5Gi
+
+networkPolicy:
+  enabled: true
+  allowExternal: false

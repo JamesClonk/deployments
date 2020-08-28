@@ -9,32 +9,33 @@ domains:
 - ${KUBE_DOMAIN_BETA}
 
 postgres:
-  memory_in_mb: 128
-  disk_in_gb: 1
-  persistent_volume: false
+  memory_in_mb: 512
+  disk_in_gb: 5
+  persistent_volume: true
 
   database:
-    port: 5432
-    name: postgres
-    user: "${POSTGRES_DB_USER}"
     password: "${POSTGRES_DB_PASSWORD}"
 
   additional_databases:
+  #@overlay/replace
   - name: "${IR_VISUALIZER_DB_NAME}"
-    user: "${IR_VISUALIZER_DB_USER}"
+    user: "${IR_VISUALIZER_DB_USERNAME}"
     password: "${IR_VISUALIZER_DB_PASSWORD}"
   - name: "${HOME_INFO_DB_NAME}"
-    user: "${HOME_INFO_DB_USER}"
+    user: "${HOME_INFO_DB_USERNAME}"
     password: "${HOME_INFO_DB_PASSWORD}"
   - name: "${JCIO_MOVIEDB_NAME}"
-    user: "${JCIO_MOVIEDB_USER}"
+    user: "${JCIO_MOVIEDB_USERNAME}"
     password: "${JCIO_MOVIEDB_PASSWORD}"
 
 pgadmin:
-  enabled: false
+  enabled: true
+  auth:
+    user: "${POSTGRES_PGADMIN_USERNAME}"
+    password: "${POSTGRES_PGADMIN_PASSWORD}"
 
 pgweb:
   enabled: true
   auth:
-    user: "${POSTGRES_PGWEB_USER}"
+    user: "${POSTGRES_PGWEB_USERNAME}"
     password: "${POSTGRES_PGWEB_PASSWORD}"

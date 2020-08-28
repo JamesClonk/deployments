@@ -1,0 +1,13 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.24.0
+overrides:
+- image: docker.io/bitnami/pgpool:4.1.3-debian-10-r1
+  newImage: index.docker.io/bitnami/pgpool@sha256:098abc3999a9458f8063074775d31555e10b11d5e0d26fbb3502e5fe3d8b2732
+  preresolved: true
+- image: docker.io/bitnami/postgres-exporter:0.8.0-debian-10-r190
+  newImage: index.docker.io/bitnami/postgres-exporter@sha256:a59b482a13a2bf928ea16e7a35b9daefef73c77a3819c6f03a96487ae89fba53
+  preresolved: true
+- image: docker.io/bitnami/postgresql-repmgr:11.9.0-debian-10-r3
+  newImage: index.docker.io/bitnami/postgresql-repmgr@sha256:fa6a3e470f545fb383f24a2f88e6da5c1110555b99916c6124f0a9215a5efea5
+  preresolved: true

@@ -1,0 +1,19 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind": "Deployment", "metadata":{"name":"postgres-postgresql-ha-pgpool"}}), expects=1
+---
+metadata:
+  #@overlay/merge
+  annotations:
+    #@overlay/match missing_ok=True
+    kapp.k14s.io/change-group: "postgres/pgpool"
+    #@overlay/match missing_ok=True
+    kapp.k14s.io/change-rule: "upsert after upserting postgres/database"
+
+#@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata":{"name":"postgres-postgresql-ha-postgresql"}}), expects=1
+---
+metadata:
+  #@overlay/merge
+  annotations:
+    #@overlay/match missing_ok=True
+    kapp.k14s.io/change-group: "postgres/database"

@@ -1,0 +1,8 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels(component):
+  app: #@ data.values.app
+  app.service: postgres
+  app.component: #@ component
+  postgres-client: "true"
+#@ end

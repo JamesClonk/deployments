@@ -1,0 +1,22 @@
+#@data/values
+---
+app: postgres
+namespace: postgres
+
+pgpool:
+  memory_in_mb: 128
+  admin:
+    password: ''
+
+postgres:
+  memory_in_mb: 512
+  disk_in_gb: 1
+  persistent_volume: true
+
+  database:
+    password: ''
+
+  additional_databases: []
+
+  repmgr:
+    password: ''

@@ -1,0 +1,104 @@
+rbac:
+  create: true
+
+podSecurityPolicy:
+  enabled: true
+
+alertmanager:
+  enabled: true
+  persistentVolume:
+    enabled: false
+    size: 1Gi
+  podSecurityPolicy:
+    enabled: true
+    annotations:
+      seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
+      seccomp.security.alpha.kubernetes.io/defaultProfileName: 'runtime/default'
+      apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+      apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
+  resources:
+    limits:
+      cpu: 50m
+      memory: 32Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
+
+kube-state-metrics:
+  enabled: true
+  rbac:
+    create: true
+  serviceAccount:
+    create: true
+  podSecurityPolicy:
+    enabled: true
+    annotations:
+      seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
+      seccomp.security.alpha.kubernetes.io/defaultProfileName: 'runtime/default'
+      apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+      apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
+  resources:
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 32Mi
+
+nodeExporter:
+  enabled: true
+  podSecurityPolicy:
+    enabled: true
+    annotations:
+      seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
+      seccomp.security.alpha.kubernetes.io/defaultProfileName: 'runtime/default'
+      apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+      apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
+  resources:
+    limits:
+      cpu: 200m
+      memory: 64Mi
+    requests:
+      cpu: 100m
+      memory: 32Mi
+
+server:
+  enabled: true
+  persistentVolume:
+    enabled: false
+    size: 2Gi
+  emptyDir:
+    sizeLimit: 2Gi
+  podSecurityPolicy:
+    enabled: true
+    annotations:
+      seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
+      seccomp.security.alpha.kubernetes.io/defaultProfileName: 'runtime/default'
+      apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+      apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  retention: "7d"
+
+pushgateway:
+  enabled: true
+  resources:
+    limits:
+      cpu: 50m
+      memory: 32Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
+  persistentVolume:
+    enabled: false
+    size: 512Mi
+
+networkPolicy:
+  enabled: true
+
+forceNamespace: prometheus

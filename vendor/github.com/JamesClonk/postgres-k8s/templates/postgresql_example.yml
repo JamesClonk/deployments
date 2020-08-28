@@ -1,0 +1,30 @@
+#@data/values
+---
+app: postgres
+namespace: postgres
+
+postgres:
+  memory_in_mb: 256
+  disk_in_gb: 1
+  persistent_volume: true
+
+  database:
+    password: test_password
+
+  additional_databases:
+  #@overlay/append
+  - name: more_db
+    user: more_user
+    password: more_secret
+
+pgadmin:
+  enabled: true
+  auth:
+    user: pgadmin-user
+    password: pgadmin-password
+
+pgweb:
+  enabled: true
+  auth:
+    user: pgweb-user
+    password: pgweb-password

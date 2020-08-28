@@ -1,0 +1,347 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: postgres
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.3.3
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/instance: postgresql
+  ingress:
+  - ports:
+    - port: 5432
+    from:
+    - podSelector:
+        matchLabels:
+          postgres-client: "true"
+      namespaceSelector:
+        matchLabels:
+          postgres-client-access-allowed: "true"
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: postgresql
+          app.kubernetes.io/instance: postgresql
+          role: slave
+  - ports:
+    - port: 9187
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: postgres
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.3.3
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+spec:
+  privileged: false
+  volumes:
+  - configMap
+  - secret
+  - persistentVolumeClaim
+  - emptyDir
+  - projected
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
+  runAsUser:
+    rule: MustRunAsNonRoot
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: MustRunAs
+    ranges:
+    - min: 1
+      max: 65535
+  fsGroup:
+    rule: MustRunAs
+    ranges:
+    - min: 1
+      max: 65535
+  readOnlyRootFilesystem: false
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.3.3
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+  name: postgres
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: postgres
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.3.3
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+rules:
+- apiGroups:
+  - extensions
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+  resourceNames:
+  - postgres
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: postgres
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.3.3
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  kind: Role
+  name: postgres
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: postgres
+  namespace: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-metrics
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.3.3
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    prometheus.io/port: "9187"
+    prometheus.io/scrape: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http-metrics
+    port: 9187
+    targetPort: http-metrics
+  selector:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: postgresql
+    role: master
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-headless
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.3.3
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: tcp-postgresql
+    port: 5432
+    targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: postgresql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.3.3
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+  annotations: null
+spec:
+  type: ClusterIP
+  ports:
+  - name: tcp-postgresql
+    port: 5432
+    targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: postgresql
+    role: master
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.3.3
+    app.kubernetes.io/instance: postgresql
+    app.kubernetes.io/managed-by: Helm
+  annotations: null
+spec:
+  serviceName: postgres-headless
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/instance: postgresql
+      role: master
+  template:
+    metadata:
+      name: postgres
+      labels:
+        app.kubernetes.io/name: postgresql
+        helm.sh/chart: postgresql-9.3.3
+        app.kubernetes.io/instance: postgresql
+        app.kubernetes.io/managed-by: Helm
+        role: master
+    spec:
+      securityContext:
+        fsGroup: 1001
+      serviceAccountName: postgres
+      containers:
+      - name: postgres
+        image: docker.io/bitnami/postgresql:11.9.0-debian-10-r1
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          runAsUser: 1001
+        env:
+        - name: BITNAMI_DEBUG
+          value: "false"
+        - name: POSTGRESQL_PORT_NUMBER
+          value: "5432"
+        - name: POSTGRESQL_VOLUME_DIR
+          value: /bitnami/postgresql
+        - name: PGDATA
+          value: /bitnami/postgresql/data
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-admin-secret
+              key: postgresql-password
+        - name: POSTGRES_DB
+          value: postgres
+        - name: POSTGRESQL_ENABLE_LDAP
+          value: "no"
+        - name: POSTGRESQL_ENABLE_TLS
+          value: "no"
+        ports:
+        - name: tcp-postgresql
+          containerPort: 5432
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - exec pg_isready -U "postgres" -d "dbname=postgres" -h 127.0.0.1 -p 5432
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - -e
+            - |
+              exec pg_isready -U "postgres" -d "dbname=postgres" -h 127.0.0.1 -p 5432
+              [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+        volumeMounts:
+        - name: custom-init-scripts
+          mountPath: /docker-entrypoint-initdb.d/
+        - name: custom-init-scripts-secret
+          mountPath: /docker-entrypoint-initdb.d/secret
+        - name: dshm
+          mountPath: /dev/shm
+        - name: data
+          mountPath: /bitnami/postgresql
+          subPath: null
+      - name: metrics
+        image: docker.io/bitnami/postgres-exporter:0.8.0-debian-10-r188
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DATA_SOURCE_URI
+          value: 127.0.0.1:5432/postgres?sslmode=disable
+        - name: DATA_SOURCE_PASS
+          valueFrom:
+            secretKeyRef:
+              name: postgres-admin-secret
+              key: postgresql-password
+        - name: DATA_SOURCE_USER
+          value: postgres
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http-metrics
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http-metrics
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+        volumeMounts: null
+        ports:
+        - name: http-metrics
+          containerPort: 9187
+        resources:
+          limits:
+            cpu: 150m
+            memory: 128Mi
+          requests:
+            cpu: 150m
+            memory: 128Mi
+      volumes:
+      - name: custom-init-scripts
+        configMap:
+          name: postgres-additional-databases
+      - name: custom-init-scripts-secret
+        secret:
+          secretName: postgres-additional-database-credentials
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi

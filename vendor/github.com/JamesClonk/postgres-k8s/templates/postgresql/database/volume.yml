@@ -1,0 +1,40 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("_ytt.lib.yml", "disk", "shared_memory")
+
+#@ if data.values.postgres.persistent_volume:
+#@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata":{"name":"postgres"}}), expects=1
+---
+spec:
+  volumeClaimTemplates:
+  #@overlay/match by=overlay.subset({"metadata":{"name":"data"}}), expects=1
+  - spec: #@overlay/merge
+      resources:
+        requests:
+          storage: #@ disk()
+
+#@ else:
+#@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata":{"name":"postgres"}}), expects=1
+---
+spec:
+  template:
+    spec:
+      volumes:
+      #@overlay/match by=overlay.subset({"name":"data"}), missing_ok=True
+      - name: data
+        emptyDir:
+          sizeLimit: #@ disk()
+  volumeClaimTemplates: #@overlay/remove
+#@ end
+
+#@overlay/match by=overlay.subset({"kind": "StatefulSet", "metadata":{"name":"postgres"}}), expects=1
+---
+spec:
+  template:
+    spec:
+      volumes:
+      #@overlay/match by=overlay.subset({"name":"dshm"}), expects=1
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: #@ shared_memory()

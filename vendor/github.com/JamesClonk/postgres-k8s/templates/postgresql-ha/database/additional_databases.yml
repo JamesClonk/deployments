@@ -1,0 +1,107 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:assert", "assert")
+#@ load("@ytt:base64", "base64")
+#@ load("@ytt:overlay", "overlay")
+#@ load("_ytt.lib.yml", "labels")
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-postgresql-ha-postgres-additional-databases
+  namespace: #@ data.values.namespace
+  labels: #@ labels("additional-databases")
+  annotations:
+    kapp.k14s.io/versioned: ""
+#@yaml/text-templated-strings
+data:
+  additional_databases.sh: |
+    #!/bin/bash
+    set -e
+    (@ for db in data.values.postgres.additional_databases: @)
+    (@ if len(db.name) == 0: @)
+    (@  assert.fail("name of additional database cannot be empty") @)
+    (@ end @)
+    (@ if len(db.user) == 0: @)
+    (@  assert.fail("user of additional database cannot be empty") @)
+    (@ end @)
+    (@ if len(db.password) == 0: @)
+    (@  assert.fail("password of additional database cannot be empty") @)
+    (@ end @)
+    export DB_USERNAME=$(cat /docker-entrypoint-initdb.d/secret/(@= db.name @).username)
+    export DB_PASSWORD=$(cat /docker-entrypoint-initdb.d/secret/(@= db.name @).password)
+
+    cat > /tmp/setup_db.sql <<EOF
+    CREATE DATABASE (@= db.name @);
+    CREATE ROLE ${DB_USERNAME} LOGIN PASSWORD '${DB_PASSWORD}';
+    GRANT ALL PRIVILEGES ON DATABASE (@= db.name @) TO ${DB_USERNAME};
+    EOF
+
+    export PGPASSWORD=$(cat /docker-entrypoint-initdb.d/secret/postgres.password)
+    psql -v ON_ERROR_STOP=1 -U postgres -f /tmp/setup_db.sql
+    psql -v ON_ERROR_STOP=1 -U postgres -d (@= db.name @) -c 'CREATE EXTENSION citext'
+
+    rm -f /tmp/setup_db.sql
+    (@ end @)
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-postgresql-ha-postgres-additional-database-credentials
+  namespace: #@ data.values.namespace
+  labels: #@ labels("postgres-additional-database-credentials")
+  annotations:
+    kapp.k14s.io/versioned: ""
+#@yaml/text-templated-strings
+data:
+  #@ if len(data.values.postgres.database.password) == 0:
+  #@  assert.fail("postgres.database.password cannot be empty")
+  #@ end
+  postgres.password: #@ base64.encode(data.values.postgres.database.password)
+  #@ for db in data.values.postgres.additional_databases:
+  #@ if len(db.name) == 0:
+  #@  assert.fail("name of additional database cannot be empty")
+  #@ end
+  #@ if len(db.user) == 0:
+  #@  assert.fail("user of additional database cannot be empty")
+  #@ end
+  #@ if len(db.password) == 0:
+  #@  assert.fail("password of additional database cannot be empty")
+  #@ end
+  (@= db.name @).username: (@= base64.encode(db.user) @)
+  (@= db.name @).password: (@= base64.encode(db.password) @)
+  #@ end
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-postgresql-ha-pgpool-additional-database-credentials
+  namespace: #@ data.values.namespace
+  labels: #@ labels("pgpool-additional-database-credentials")
+  annotations:
+    kapp.k14s.io/versioned: ""
+#@yaml/text-templated-strings
+data:
+  #@ if len(data.values.postgres.database.password) == 0:
+  #@  assert.fail("postgres.database.password cannot be empty")
+  #@ end
+  #@ users = "postgres"
+  #@ passwords = data.values.postgres.database.password
+
+  #@ if len(data.values.postgres.database.password) == 0:
+  #@  assert.fail("postgres.database.password cannot be empty")
+  #@ end
+  #@ for db in data.values.postgres.additional_databases:
+  #@ if len(db.name) == 0:
+  #@  assert.fail("name of additional database cannot be empty")
+  #@ end
+  #@ if len(db.user) == 0:
+  #@  assert.fail("user of additional database cannot be empty")
+  #@ end
+  #@ if len(db.password) == 0:
+  #@  assert.fail("password of additional database cannot be empty")
+  #@ end
+  #@ users = users + ";" + db.user
+  #@ passwords = passwords + ";" + db.password
+  #@ end
+  usernames: #@ base64.encode(users)
+  passwords: #@ base64.encode(passwords)
