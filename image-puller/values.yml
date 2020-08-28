@@ -19,7 +19,7 @@ images:
 - "jamesclonk/moviedb-backend:6abf341bd5f1d050e43ac34be3f56b0f72e4af75"
 #! postgres mirroring
 - "jamesclonk/postgres@sha256:e4a446a0f4b54465790e12ee5a684f1c21d5aeb6d3a6e4f8448c0ee4a6c2bce4"
-- "jamesclonk/postgres@sha256:4db3e7ffd082919137993ed957f3360ed9ee1901a9122f0446daefce45fc85af"
+- "jamesclonk/postgres@sha256:9f325740426d14a92f71013796d98a50fe385da64a7c5b6b753d0705add05a21"
 - "jamesclonk/postgres@sha256:fcb0acce73e0382249e268c4616d83f9ff6e5dda467904905fd24317ec56712a"
 #! bitnami postgresql-ha mirroring
 - "jamesclonk/postgresql-ha@sha256:098abc3999a9458f8063074775d31555e10b11d5e0d26fbb3502e5fe3d8b2732"
