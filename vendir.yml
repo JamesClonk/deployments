@@ -33,7 +33,7 @@ directories:
   - path: .
     git:
       url: https://github.com/JamesClonk/postgres-k8s
-      ref: 0ad193db0249cf2e93a912473633ee3c9ae3cfdf
+      ref: a14617f0208c6731977868cc7fe15e6b27f7a0ec
     includePaths:
     - "templates/**/*"
 - path: postgres/templates

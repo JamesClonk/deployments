@@ -1,0 +1,9 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels(component):
+  component: #@ component
+  app: prometheus
+  release: prometheus
+  chart: prometheus-11.12.0
+  heritage: Helm
+#@ end

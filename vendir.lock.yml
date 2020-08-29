@@ -17,8 +17,8 @@ directories:
   path: prometheus/build/charts/prometheus
 - contents:
   - git:
-      commitTitle: use bitnami postgresql for single instance [ci skip]
-      sha: 0ad193db0249cf2e93a912473633ee3c9ae3cfdf
+      commitTitle: fix [ci skip]
+      sha: a14617f0208c6731977868cc7fe15e6b27f7a0ec
     path: .
   path: vendor/github.com/JamesClonk/postgres-k8s
 - contents:
