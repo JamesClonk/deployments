@@ -45,7 +45,16 @@ datasources:
       access: proxy
       isDefault: true
 
+dashboardsConfigMaps:
+  default: grafana-dashboards
+
 sidecar:
+  dashboards:
+    enabled: false
+  datasources:
+    enabled: false
+  notifiers:
+    enabled: false
   resources:
     limits:
       cpu: 150m

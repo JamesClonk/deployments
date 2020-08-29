@@ -183,7 +183,7 @@ spec:
         app.kubernetes.io/name: grafana
         app.kubernetes.io/instance: grafana
       annotations:
-        checksum/config: 9c4768ed13e80abf89fa8ac9dc77973c126c4de8ef3fff5448f4637783d85e7b
+        checksum/config: de92675dcf26644c6b4a54f523e3c6a214df0c97ab88a264b6989d8b6a8cad75
         checksum/dashboards-json-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
         checksum/sc-dashboard-provider-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
     spec:
@@ -202,6 +202,8 @@ spec:
           subPath: grafana.ini
         - name: storage
           mountPath: /var/lib/grafana
+        - name: dashboards-default
+          mountPath: /var/lib/grafana/dashboards/default
         - name: config
           mountPath: /etc/grafana/provisioning/datasources/datasources.yaml
           subPath: datasources.yaml
@@ -245,5 +247,8 @@ spec:
       - name: config
         configMap:
           name: grafana
+      - name: dashboards-default
+        configMap:
+          name: grafana-dashboards
       - name: storage
         emptyDir: {}
