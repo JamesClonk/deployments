@@ -1,0 +1,34 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind": "PodSecurityPolicy"}), expects=1
+---
+metadata:
+  #@overlay/match missing_ok=True
+  annotations:
+    #@overlay/match missing_ok=True
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
+    #@overlay/match missing_ok=True
+    apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+    #@overlay/match missing_ok=True
+    seccomp.security.alpha.kubernetes.io/defaultProfileName:  'runtime/default'
+    #@overlay/match missing_ok=True
+    apparmor.security.beta.kubernetes.io/defaultProfileName:  'runtime/default'
+spec:
+  #@overlay/match missing_ok=True
+  allowPrivilegeEscalation: false
+
+#@overlay/match by=overlay.subset({"kind": "Deployment", "metadata":{"name":"grafana"}}), expects=1
+---
+spec:
+  template:
+    spec:
+      containers:
+      #@overlay/match by=overlay.subset({"name":"grafana"}), expects=1
+      - name: grafana
+        #@overlay/match missing_ok=True
+        securityContext:
+          #@overlay/match missing_ok=True
+          privileged: false
+          #@overlay/match missing_ok=True
+          allowPrivilegeEscalation: false

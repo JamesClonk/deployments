@@ -16,6 +16,10 @@ directories:
     path: .
   path: prometheus/build/charts/prometheus
 - contents:
+  - directory: {}
+    path: .
+  path: grafana/build/charts/grafana
+- contents:
   - git:
       commitTitle: fix [ci skip]
       sha: a14617f0208c6731977868cc7fe15e6b27f7a0ec

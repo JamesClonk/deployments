@@ -1,0 +1,57 @@
+rbac:
+  create: true
+  pspEnabled: true
+  namespaced: true
+
+serviceAccount:
+  create: true
+
+testFramework:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 192Mi
+  requests:
+    cpu: 150m
+    memory: 192Mi
+
+persistence:
+  enabled: false
+  size: 512Mi
+
+initChownData:
+  resources:
+    limits:
+      cpu: 150m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+admin:
+  existingSecret: grafana-credentials
+  userKey: admin-user
+  passwordKey: admin-password
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.prometheus.svc.cluster.local
+      access: proxy
+      isDefault: true
+
+sidecar:
+  resources:
+    limits:
+      cpu: 150m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+namespaceOverride: grafana

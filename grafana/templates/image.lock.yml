@@ -1,0 +1,10 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.24.0
+overrides:
+- image: grafana/grafana:7.1.1
+  newImage: index.docker.io/jamesclonk/grafana@sha256:61c56f3d9551afecf9a10e9f8b30a5055ceafa581cdb397b56d3b6efe6632561
+  preresolved: true
+- image: index.docker.io/jamesclonk/grafana@sha256:61c56f3d9551afecf9a10e9f8b30a5055ceafa581cdb397b56d3b6efe6632561
+  newImage: index.docker.io/jamesclonk/grafana@sha256:61c56f3d9551afecf9a10e9f8b30a5055ceafa581cdb397b56d3b6efe6632561
+  preresolved: true

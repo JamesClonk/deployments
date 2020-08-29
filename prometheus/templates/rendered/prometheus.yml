@@ -1580,7 +1580,7 @@ spec:
         image: prom/prometheus:v2.20.1
         imagePullPolicy: IfNotPresent
         args:
-        - --storage.tsdb.retention.time=7d
+        - --storage.tsdb.retention.time=5d
         - --config.file=/etc/config/prometheus.yml
         - --storage.tsdb.path=/data
         - --web.console.libraries=/etc/prometheus/console_libraries

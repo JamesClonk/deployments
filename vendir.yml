@@ -9,8 +9,9 @@ directories:
   - path: .
     git:
       url: https://github.com/helm/charts
-      ref: f42e3c4b827d8ee54cce31de2619631bfa484610 # version: prometheus/11.12.0
+      ref: f42e3c4b827d8ee54cce31de2619631bfa484610 # version: prometheus/11.12.0, grafana/5.5.5
     includePaths:
+    - stable/grafana/**/*
     - stable/prometheus/**/*
     - stable/kube-state-metrics/**/*
 - path: prometheus/build/charts/kube-state-metrics
@@ -25,6 +26,13 @@ directories:
   - path: .
     directory:
       path: vendor/github.com/helm/charts/stable/prometheus
+    excludePaths:
+    - LICENSE
+- path: grafana/build/charts/grafana
+  contents:
+  - path: .
+    directory:
+      path: vendor/github.com/helm/charts/stable/grafana
     excludePaths:
     - LICENSE
 

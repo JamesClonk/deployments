@@ -29,6 +29,9 @@ images:
 - "jamesclonk/prometheus@sha256:788260ebd13613456c168d2eed8290f119f2b6301af2507ff65908d979c66c17"
 - "jamesclonk/prometheus@sha256:0a9031142481adfb964fe7f65e698d01a6260de982f0322bc44496c3dcc866f1"
 - "jamesclonk/prometheus@sha256:2f82f0da199c60a7699c43c63a295c44e673242de0b7ee1b17c2d5a23bec34cb"
+#! grafana mirroring
+- "jamesclonk/grafana@sha256:97d91ee0aa9771e696cdf44c2b1672af484fd846eaf52ba2db6061f5c78a89d5"
+- "jamesclonk/grafana@sha256:61c56f3d9551afecf9a10e9f8b30a5055ceafa581cdb397b56d3b6efe6632561"
 #! other stuff
 - "jamesclonk/backman:latest"
 - "jamesclonk/web-container:latest"

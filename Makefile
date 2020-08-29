@@ -33,11 +33,23 @@ diff:
 status:
 	@cd $(call ARGS,${DEFAULT_APP}); ./status.sh
 
-.PHONY: dashboard
-## dashboard: open kubernetes dashboard
-dashboard:
+.PHONY: dashboard-ui
+## dashboard-ui: open kubernetes dashboard
+dashboard-ui:
 	sleep 2 && firefox 'https://127.0.0.1:4443' &
 	@kubectl -n kubernetes-dashboard port-forward service/kubernetes-dashboard 4443:443
+
+.PHONY: prometheus-ui
+## prometheus-ui: open prometheus webui
+prometheus-ui:
+	sleep 2 && firefox 'http://127.0.0.1:8080' &
+	@kubectl -n prometheus port-forward service/prometheus-server 8080:80
+
+.PHONY: grafana-ui
+## grafana-ui: open grafana webui
+grafana-ui:
+	sleep 2 && firefox 'http://127.0.0.1:8080' &
+	@kubectl -n grafana port-forward service/grafana 8080:80
 
 .PHONY: target
 ## target: targets a kubernetes environment
@@ -49,5 +61,5 @@ target:
 setup:
 	./setup.sh
 
-image-puller repo-mirrorer cf-env kuard jcio home-info ircollector irvisualizer postgres production prod testing test local microk8s:
+image-puller repo-mirrorer cf-env kuard jcio home-info ircollector irvisualizer prometheus grafana postgres production prod testing test local microk8s:
 	@exit $?
