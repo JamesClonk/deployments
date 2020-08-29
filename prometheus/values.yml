@@ -11,3 +11,7 @@ ingress:
   auth: "${PROMETHEUS_BASIC_AUTH}"
   username: "${PROMETHEUS_BASIC_AUTH_USERNAME}"
   password: "${PROMETHEUS_BASIC_AUTH_PASSWORD}"
+
+backman:
+  username: "${BACKMAN_USERNAME}"
+  password: "${BACKMAN_PASSWORD}"

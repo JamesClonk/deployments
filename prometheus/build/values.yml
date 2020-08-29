@@ -64,6 +64,12 @@ nodeExporter:
 
 server:
   enabled: true
+  extraSecretMounts:
+  - name: secret-files
+    mountPath: /etc/secrets
+    subPath: ""
+    secretName: prometheus-secret-files
+    readOnly: true
   persistentVolume:
     enabled: false
     size: 2Gi
@@ -104,6 +110,15 @@ pushgateway:
   persistentVolume:
     enabled: false
     size: 512Mi
+
+extraScrapeConfigs: |
+  - job_name: 'backman'
+    basic_auth:
+      username: __BACKMAN_USERNAME__
+      password_file: /etc/secrets/backman
+    static_configs:
+    - targets:
+      - backman.backman.svc.cluster.local:8080
 
 networkPolicy:
   enabled: true

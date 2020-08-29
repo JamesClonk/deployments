@@ -649,6 +649,14 @@ data:
         target_label: kubernetes_pod_name
       scrape_interval: 5m
       scrape_timeout: 30s
+    - job_name: 'backman'
+      basic_auth:
+        username: __BACKMAN_USERNAME__
+        password_file: /etc/secrets/backman
+      static_configs:
+      - targets:
+        - backman.backman.svc.cluster.local:8080
+
     alerting:
       alertmanagers:
       - kubernetes_sd_configs:
@@ -1619,6 +1627,10 @@ spec:
         - name: storage-volume
           mountPath: /data
           subPath: ""
+        - name: secret-files
+          mountPath: /etc/secrets
+          subPath: null
+          readOnly: true
       securityContext:
         fsGroup: 65534
         runAsGroup: 65534
@@ -1632,3 +1644,6 @@ spec:
       - name: storage-volume
         emptyDir:
           sizeLimit: 2Gi
+      - name: secret-files
+        secret:
+          secretName: prometheus-secret-files
