@@ -1,0 +1,29 @@
+#@ load("@ytt:data", "data")
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: #@ data.values.app
+  namespace: #@ data.values.namespace
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: #@ data.values.app + "-basic-auth"
+    nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - secretName: #@ data.values.app + "-tls"
+    hosts:
+    #@ for/end host in data.values.domains:
+    - #@ data.values.app + "." + host
+  rules:
+  #@ for/end host in data.values.domains:
+  - host: #@ data.values.app + "." + host
+    http:
+      paths:
+      - backend:
+          serviceName: prometheus-server
+          servicePort: 80

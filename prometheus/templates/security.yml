@@ -24,6 +24,12 @@ spec:
           app.kubernetes.io/instance: grafana
     ports:
     - port: 9090
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    ports:
+    - port: 9090
 
 #@overlay/match by=overlay.subset({"kind": "PodSecurityPolicy"}), expects="5+"
 ---
