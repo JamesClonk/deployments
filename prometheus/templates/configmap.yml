@@ -16,21 +16,76 @@ data:
     groups:
     - name: instances
       rules:
-      - alert: InstanceDown
+      - alert: Instance_Down
         expr: up == 0
         for: 5m
         annotations:
-          title: 'Instance {{ $labels.instance }}.{{ $labels.job }} down'
+          title: 'Instance {{ $labels.instance }} / {{ $labels.job }} down'
           description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.'
         labels:
           severity: warning
-    - name: demo
+
+    - name: cpu
       rules:
-      - alert: InstanceUp
-        expr: up == 1
-        for: 1m
+      - alert: CPU_Requests
+        expr: (sum(kube_pod_container_resource_requests_cpu_cores) by (node) / sum(kube_node_status_allocatable_cpu_cores) by (node) * 100) > 65
+        for: 5m
         annotations:
-          title: 'Instance {{ $labels.instance }}.{{ $labels.job }} up'
-          description: '{{ $labels.instance }} of job {{ $labels.job }} has been up for more than 1 minute.'
+          title: 'K8s node {{ $labels.instance }} CPU resource requests > 65%'
+          description: 'Kubernetes node {{ $labels.instance }} has resource requests on CPU shares over 65% for more than 5 minutes.'
         labels:
-          severity: debug
+          severity: warning
+      - alert: CPU_Limits
+        expr: (sum(kube_pod_container_resource_limits_cpu_cores) by (node) / sum(kube_node_status_allocatable_cpu_cores) by (node) * 100) > 90
+        for: 5m
+        annotations:
+          title: 'K8s node {{ $labels.instance }} CPU resource limits > 90%'
+          description: 'Kubernetes node {{ $labels.instance }} has resource limits on CPU shares over 90% for more than 5 minutes.'
+        labels:
+          severity: critical
+      - alert: CPU_Usage
+        expr: ceil(sum (rate (container_cpu_usage_seconds_total{id="/"}[5m])) by (instance) / sum (machine_cpu_cores) by (instance) * 100) > 70
+        for: 10m
+        annotations:
+          title: 'K8s node {{ $labels.instance }} CPU usage > 70%'
+          description: 'Kubernetes node {{ $labels.instance }} has a CPU usage of `{{ $value }}%` for more than 10 minutes.'
+        labels:
+          severity: critical
+
+    - name: memory
+      rules:
+      - alert: Memory_Requests
+        expr: (sum(kube_pod_container_resource_requests_memory_bytes) by (node) / sum(kube_node_status_allocatable_memory_bytes) by (node) * 100) > 65
+        for: 5m
+        annotations:
+          title: 'K8s node {{ $labels.instance }} memory resource requests > 65%'
+          description: 'Kubernetes node {{ $labels.instance }} has resource requests on memory over 65% for more than 5 minutes.'
+        labels:
+          severity: warning
+      - alert: Memory_Limits
+        expr: (sum(kube_pod_container_resource_limits_memory_bytes) by (node) / sum(kube_node_status_allocatable_memory_bytes) by (node) * 100) > 90
+        for: 5m
+        annotations:
+          title: 'K8s node {{ $labels.instance }} memory resource limits > 90%'
+          description: 'Kubernetes node {{ $labels.instance }} has resource limits on memory over 90% for more than 5 minutes.'
+        labels:
+          severity: critical
+      - alert: Memory_Usage
+        expr: ceil(sum(container_memory_working_set_bytes{id="/"}) by (instance) / sum(machine_memory_bytes) by (instance) * 100) > 70
+        for: 10m
+        annotations:
+          title: 'K8s node {{ $labels.instance }} memory usage > 70%'
+          description: 'Kubernetes node {{ $labels.instance }} has a memory usage of `{{ $value }}%` for more than 10 minutes.'
+        labels:
+          severity: critical
+
+    - name: disk
+      rules:
+      - alert: Disk_Usage
+        expr: ceil(sum (container_fs_usage_bytes{device=~"^/dev/.*$",id="/"}) by (instance) / sum (container_fs_limit_bytes{device=~"^/dev/.*$",id="/"}) by (instance) * 100) > 70
+        for: 5m
+        annotations:
+          title: 'K8s node {{ $labels.instance }} disk usage > 70%'
+          description: 'Kubernetes node {{ $labels.instance }} has a disk usage of `{{ $value }}%` for more than 5 minutes.'
+        labels:
+          severity: critical

@@ -81,6 +81,8 @@ server:
     subPath: ""
     secretName: prometheus-secret-files
     readOnly: true
+  strategy:
+    type: Recreate
   persistentVolume:
     enabled: true
     size: 5Gi
