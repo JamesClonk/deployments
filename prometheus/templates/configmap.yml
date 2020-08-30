@@ -8,6 +8,17 @@ metadata:
     #@overlay/match missing_ok=True
     kapp.k14s.io/versioned: ""
 
+#@overlay/match by=overlay.subset({"kind": "Deployment", "metadata":{"name":"prometheus-alertmanager"}}), expects=1
+---
+spec:
+  template:
+    spec:
+      volumes: #! force recreate of prometheus-alertmanager if alerting-rules inside prometheus-server configmap change
+      #@overlay/append
+      - name: prometheus-config-volume
+        configMap:
+          name: prometheus-server
+
 #@overlay/match by=overlay.subset({"kind": "ConfigMap", "metadata":{"name":"prometheus-server"}}), expects=1
 ---
 data:
@@ -83,9 +94,28 @@ data:
       rules:
       - alert: Disk_Usage
         expr: ceil(sum (container_fs_usage_bytes{device=~"^/dev/.*$",id="/"}) by (instance) / sum (container_fs_limit_bytes{device=~"^/dev/.*$",id="/"}) by (instance) * 100) > 70
-        for: 5m
+        for: 10m
         annotations:
           title: 'K8s node {{ $labels.instance }} disk usage > 70%'
-          description: 'Kubernetes node {{ $labels.instance }} has a disk usage of `{{ $value }}%` for more than 5 minutes.'
+          description: 'Kubernetes node {{ $labels.instance }} has a disk usage of `{{ $value }}%` for more than 10 minutes.'
+        labels:
+          severity: critical
+
+    - name: backman
+      rules:
+      - alert: Backup_Failure
+        expr: sum(rate(backman_scheduler_backup_failures_total[24h])) by (job) > 0
+        for: 10m
+        annotations:
+          title: '{{ $labels.job }}: backup failure'
+          description: '{{ $labels.job }} is reporting `{{ $value }}%` failed backups!'
+        labels:
+          severity: critical
+      - alert: Backup_Filesize
+        expr: min(backman_backup_filesize_last) by (name, type) < 100000
+        for: 10m
+        annotations:
+          title: 'backman filesize issue detected'
+          description: '{{ $labels.type }} backup {{ $labels.name }} is reporting a filesize of only `{{ $value }}b` for its last backup!'
         labels:
           severity: critical
