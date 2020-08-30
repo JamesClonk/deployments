@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-system
+  labels: #! ensure label for network policies to be able to target kube-system namespaced pods like ingress, etc..
+    name: kube-system
+    kapp.k14s.io/delete-strategy: orphan
+  annotations:
+    kapp.k14s.io/delete-strategy: orphan

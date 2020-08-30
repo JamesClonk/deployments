@@ -6,6 +6,7 @@ kind: Deployment
 metadata:
   name: #@ data.values.app
   namespace: #@ data.values.namespace
+  labels: #@ labels("backman","gui")
 spec:
   selector:
     matchLabels: #@ labels("backman","gui")
@@ -14,10 +15,18 @@ spec:
     metadata:
       labels: #@ labels("backman","gui")
     spec:
+      serviceAccountName: #@ data.values.app
+      securityContext:
+        runAsUser: 1007
+        runAsGroup: 1007
+        fsGroup: 1007
       affinity: #@ podAntiAffinity("backman","gui")
       containers:
       - name: backman
         image: #@ data.values.backman.image
+        securityContext:
+          privileged: false
+          allowPrivilegeEscalation: false
         ports:
         - containerPort: 8080
         env:

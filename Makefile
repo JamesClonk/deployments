@@ -67,5 +67,5 @@ target:
 setup:
 	./setup.sh
 
-image-puller repo-mirrorer cf-env kuard jcio home-info ircollector irvisualizer prometheus grafana postgres production prod testing test local microk8s:
+007_base image-puller repo-mirrorer cf-env kuard jcio home-info ircollector irvisualizer prometheus grafana postgres production prod testing test local microk8s:
 	@exit $?

@@ -11,6 +11,9 @@ backman:
   replicas: 1
   image: "jamesclonk/backman:1.15.0"
 
+  enable_network_policy: true
+  enable_pod_security_policy: true
+
   username: "${BACKMAN_USERNAME}"
   password: "${BACKMAN_PASSWORD}"
 
