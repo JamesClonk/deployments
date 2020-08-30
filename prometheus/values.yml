@@ -15,3 +15,9 @@ ingress:
 backman:
   username: "${BACKMAN_USERNAME}"
   password: "${BACKMAN_PASSWORD}"
+
+alertmanager:
+  email_from: "${PROMETHEUS_EMAIL_FROM}"
+  email_to: "${PROMETHEUS_EMAIL_TO}"
+  email_password: "${PROMETHEUS_EMAIL_PASSWORD}"
+  slack_api_url: "${PROMETHEUS_SLACK_WEBHOOK}"

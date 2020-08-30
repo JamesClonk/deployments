@@ -45,6 +45,12 @@ prometheus-ui:
 	sleep 2 && firefox 'http://127.0.0.1:8080' &
 	@kubectl -n prometheus port-forward service/prometheus-server 8080:80
 
+.PHONY: alertmanager-ui
+## alertmanager-ui: open alertmanager webui
+alertmanager-ui:
+	sleep 2 && firefox 'http://127.0.0.1:8080' &
+	@kubectl -n prometheus port-forward service/prometheus-alertmanager 8080:80
+
 .PHONY: grafana-ui
 ## grafana-ui: open grafana webui
 grafana-ui:

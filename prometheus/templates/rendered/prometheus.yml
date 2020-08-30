@@ -370,28 +370,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
-    component: alertmanager
-    app: prometheus
-    release: prometheus
-    chart: prometheus-11.12.0
-    heritage: Helm
-  name: prometheus-alertmanager
-  namespace: prometheus
-data:
-  alertmanager.yml: |
-    global: {}
-    receivers:
-    - name: default-receiver
-    route:
-      group_interval: 5m
-      group_wait: 10s
-      receiver: default-receiver
-      repeat_interval: 3h
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels:
     component: server
     app: prometheus
     release: prometheus
@@ -684,6 +662,24 @@ data:
     {}
   rules: |
     {}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    component: server
+    app: prometheus
+    release: prometheus
+    chart: prometheus-11.12.0
+    heritage: Helm
+  name: prometheus-server
+  namespace: prometheus
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
@@ -1481,8 +1477,8 @@ spec:
         runAsUser: 65534
       volumes:
       - name: config-volume
-        configMap:
-          name: prometheus-alertmanager
+        secret:
+          secretName: prometheus-alertmanager
       - name: storage-volume
         emptyDir: {}
 ---
@@ -1588,7 +1584,7 @@ spec:
         image: prom/prometheus:v2.20.1
         imagePullPolicy: IfNotPresent
         args:
-        - --storage.tsdb.retention.time=5d
+        - --storage.tsdb.retention.time=7d
         - --config.file=/etc/config/prometheus.yml
         - --storage.tsdb.path=/data
         - --web.console.libraries=/etc/prometheus/console_libraries
@@ -1642,8 +1638,8 @@ spec:
         configMap:
           name: prometheus-server
       - name: storage-volume
-        emptyDir:
-          sizeLimit: 2Gi
+        persistentVolumeClaim:
+          claimName: prometheus-server
       - name: secret-files
         secret:
           secretName: prometheus-secret-files
