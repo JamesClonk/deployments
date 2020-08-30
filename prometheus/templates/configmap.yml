@@ -7,3 +7,30 @@ metadata:
   annotations:
     #@overlay/match missing_ok=True
     kapp.k14s.io/versioned: ""
+
+#@overlay/match by=overlay.subset({"kind": "ConfigMap", "metadata":{"name":"prometheus-server"}}), expects=1
+---
+data:
+  #@overlay/match expects=1
+  alerting_rules.yml: |
+    groups:
+    - name: instances
+      rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 5m
+        annotations:
+          title: 'Instance {{ $labels.instance }}.{{ $labels.job }} down'
+          description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.'
+        labels:
+          severity: warning
+    - name: demo
+      rules:
+      - alert: InstanceUp
+        expr: up == 1
+        for: 1m
+        annotations:
+          title: 'Instance {{ $labels.instance }}.{{ $labels.job }} up'
+          description: '{{ $labels.instance }} of job {{ $labels.job }} has been up for more than 1 minute.'
+        labels:
+          severity: debug
