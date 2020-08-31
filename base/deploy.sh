@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 source ../setup.sh
-KUBE_APP_NAME=base
 
 # deploy
 echo "deploying base setup ..."
