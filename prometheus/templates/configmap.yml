@@ -39,21 +39,21 @@ data:
     - name: cpu
       rules:
       - alert: CPU_Requests
-        expr: (sum(kube_pod_container_resource_requests_cpu_cores) by (node) / sum(kube_node_status_allocatable_cpu_cores) by (node) * 100) > 65
+        expr: (sum(kube_pod_container_resource_requests_cpu_cores) by (node) / sum(kube_node_status_allocatable_cpu_cores) by (node) * 100) > 75
         for: 5m
         annotations:
-          title: 'K8s node {{ $labels.instance }} CPU resource requests > 65%'
-          description: 'Kubernetes node {{ $labels.instance }} has resource requests on CPU shares over 65% for more than 5 minutes.'
+          title: 'K8s node {{ $labels.instance }} CPU resource requests > 75%'
+          description: 'Kubernetes node {{ $labels.instance }} has resource requests on CPU shares over 75% for more than 5 minutes.'
         labels:
           severity: warning
       - alert: CPU_Limits
-        expr: (sum(kube_pod_container_resource_limits_cpu_cores) by (node) / sum(kube_node_status_allocatable_cpu_cores) by (node) * 100) > 90
+        expr: (sum(kube_pod_container_resource_limits_cpu_cores) by (node) / sum(kube_node_status_allocatable_cpu_cores) by (node) * 100) > 95
         for: 5m
         annotations:
-          title: 'K8s node {{ $labels.instance }} CPU resource limits > 90%'
-          description: 'Kubernetes node {{ $labels.instance }} has resource limits on CPU shares over 90% for more than 5 minutes.'
+          title: 'K8s node {{ $labels.instance }} CPU resource limits > 95%'
+          description: 'Kubernetes node {{ $labels.instance }} has resource limits on CPU shares over 95% for more than 5 minutes.'
         labels:
-          severity: critical
+          severity: warning
       - alert: CPU_Usage
         expr: ceil(sum (rate (container_cpu_usage_seconds_total{id="/"}[5m])) by (instance) / sum (machine_cpu_cores) by (instance) * 100) > 70
         for: 10m
@@ -66,21 +66,21 @@ data:
     - name: memory
       rules:
       - alert: Memory_Requests
-        expr: (sum(kube_pod_container_resource_requests_memory_bytes) by (node) / sum(kube_node_status_allocatable_memory_bytes) by (node) * 100) > 65
+        expr: (sum(kube_pod_container_resource_requests_memory_bytes) by (node) / sum(kube_node_status_allocatable_memory_bytes) by (node) * 100) > 75
         for: 5m
         annotations:
-          title: 'K8s node {{ $labels.instance }} memory resource requests > 65%'
-          description: 'Kubernetes node {{ $labels.instance }} has resource requests on memory over 65% for more than 5 minutes.'
+          title: 'K8s node {{ $labels.instance }} memory resource requests > 75%'
+          description: 'Kubernetes node {{ $labels.instance }} has resource requests on memory over 75% for more than 5 minutes.'
         labels:
           severity: warning
       - alert: Memory_Limits
-        expr: (sum(kube_pod_container_resource_limits_memory_bytes) by (node) / sum(kube_node_status_allocatable_memory_bytes) by (node) * 100) > 90
+        expr: (sum(kube_pod_container_resource_limits_memory_bytes) by (node) / sum(kube_node_status_allocatable_memory_bytes) by (node) * 100) > 95
         for: 5m
         annotations:
-          title: 'K8s node {{ $labels.instance }} memory resource limits > 90%'
-          description: 'Kubernetes node {{ $labels.instance }} has resource limits on memory over 90% for more than 5 minutes.'
+          title: 'K8s node {{ $labels.instance }} memory resource limits > 95%'
+          description: 'Kubernetes node {{ $labels.instance }} has resource limits on memory over 95% for more than 5 minutes.'
         labels:
-          severity: critical
+          severity: warning
       - alert: Memory_Usage
         expr: ceil(sum(container_memory_working_set_bytes{id="/"}) by (instance) / sum(machine_memory_bytes) by (instance) * 100) > 70
         for: 10m
