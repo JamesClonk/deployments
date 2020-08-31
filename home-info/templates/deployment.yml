@@ -14,10 +14,18 @@ spec:
     metadata:
       labels: #@ labels("dashboard")
     spec:
+      serviceAccountName: #@ data.values.app
+      securityContext:
+        runAsUser: 1007
+        runAsGroup: 1007
+        fsGroup: 1007
       affinity: #@ podAntiAffinity("dashboard")
       containers:
       - name: home-info-dashboard
         image: #@ data.values.home_info.image
+        securityContext:
+          privileged: false
+          allowPrivilegeEscalation: false
         ports:
         - containerPort: 8080
         env:
