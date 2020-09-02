@@ -3,11 +3,14 @@
 job: ${KUBE_APP_NAME}
 namespace: ${KUBE_APP_NAME}
 
-image: "jamesclonk/image-puller:101b7af72ad941657f6dd93ce82c39ff349d4eef"
+image: "jamesclonk/image-puller:02fe61e3bc0895b7ecb3086760c5a9457e0fccbe"
+
+cronjob: true
+run_job: false
 
 images:
 #! direct jc.io stuff
-- "jamesclonk/image-puller:101b7af72ad941657f6dd93ce82c39ff349d4eef"
+- "jamesclonk/image-puller:02fe61e3bc0895b7ecb3086760c5a9457e0fccbe"
 - "jamesclonk/repo-mirrorer:0f100962dfc32b5a15da6cc73ba3f98e007832a8"
 - "jamesclonk/backman:1.15.0"
 - "jamesclonk/cf-env:89d20c44e3d6b1a4e0c0502e9d1f5bc908e81264"

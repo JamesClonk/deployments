@@ -1,4 +1,30 @@
 #@ load("@ytt:data", "data")
+
+#@ def jobTemplate():
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: #@ data.values.job
+        image: #@ data.values.image
+        volumeMounts:
+        - name: #@ data.values.job + "-config"
+          mountPath: /app/images.dat
+          subPath: images.dat
+      volumes:
+      - name: #@ data.values.job + "-config"
+        configMap:
+          name: #@ data.values.job + "-config"
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "50m"
+        limits:
+          memory: "64Mi"
+          cpu: "50m"
+#@ end
+
+#@ if data.values.cronjob:
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -11,25 +37,15 @@ spec:
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
   jobTemplate:
-    spec:
-      template:
-        spec:
-          restartPolicy: Never
-          containers:
-          - name: #@ data.values.job
-            image: #@ data.values.image
-            volumeMounts:
-            - name: #@ data.values.job + "-config"
-              mountPath: /app/images.dat
-              subPath: images.dat
-          volumes:
-          - name: #@ data.values.job + "-config"
-            configMap:
-              name: #@ data.values.job + "-config"
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "50m"
-            limits:
-              memory: "64Mi"
-              cpu: "50m"
+    spec: #@ jobTemplate()
+#@ end
+
+#@ if data.values.run_job:
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: #@ data.values.job
+  namespace: #@ data.values.namespace
+spec: #@ jobTemplate()
+#@ end
