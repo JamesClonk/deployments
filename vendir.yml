@@ -1,7 +1,7 @@
 ---
 apiVersion: vendir.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.9.0
+minimumRequiredVersion: 0.10.0
 
 directories:
 - path: vendor/github.com/helm/charts
@@ -9,7 +9,7 @@ directories:
   - path: .
     git:
       url: https://github.com/helm/charts
-      ref: f42e3c4b827d8ee54cce31de2619631bfa484610 # version: prometheus/11.12.0, grafana/5.5.5
+      ref: f42e3c4b827d8ee54cce31de2619631bfa484610 # chart versions: prometheus/11.12.0, grafana/5.5.5
     includePaths:
     - stable/grafana/**/*
     - stable/prometheus/**/*
@@ -33,6 +33,30 @@ directories:
   - path: .
     directory:
       path: vendor/github.com/helm/charts/stable/grafana
+    excludePaths:
+    - LICENSE
+
+- path: vendor/github.com/grafana/loki
+  contents:
+  - path: .
+    git:
+      url: https://github.com/grafana/loki
+      ref: 00f494e536654b9c16bb2a27f7d43b1ca9752217 # chart versions: loki/0.31.0, promtail/0.24.0
+    includePaths:
+    - production/helm/loki/**/*
+    - production/helm/promtail/**/*
+- path: loki/build/charts/loki
+  contents:
+  - path: .
+    directory:
+      path: vendor/github.com/grafana/loki/production/helm/loki
+    excludePaths:
+    - LICENSE
+- path: loki/build/charts/promtail
+  contents:
+  - path: .
+    directory:
+      path: vendor/github.com/grafana/loki/production/helm/promtail
     excludePaths:
     - LICENSE
 

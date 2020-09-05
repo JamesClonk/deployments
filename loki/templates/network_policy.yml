@@ -1,0 +1,46 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind": "NetworkPolicy", "metadata":{"name":"loki"}}), expects=1
+---
+spec:
+  #@overlay/replace, expects=1
+  ingress:
+  - from: #! allow ingress traffic from promtail
+    - podSelector:
+        matchLabels:
+          app: promtail
+          release: promtail
+    ports:
+    - port: 3100
+  - from: #! allow ingress traffic from all prometheus components
+    - namespaceSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+      podSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+    ports:
+    - port: 3100
+  - from: #! allow ingress traffic from grafana
+    - namespaceSelector:
+        matchLabels:
+          app.kubernetes.io/name: grafana
+          app.kubernetes.io/instance: grafana
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: grafana
+          app.kubernetes.io/instance: grafana
+    ports:
+    - port: 3100
+  - from: #! allow ingress traffic from ingress pods/controller
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx
+    ports:
+    - port: 3100

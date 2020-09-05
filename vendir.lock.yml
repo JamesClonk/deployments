@@ -21,6 +21,20 @@ directories:
   path: grafana/build/charts/grafana
 - contents:
   - git:
+      commitTitle: updating images to 1.6.0 (#2504)
+      sha: 00f494e536654b9c16bb2a27f7d43b1ca9752217
+    path: .
+  path: vendor/github.com/grafana/loki
+- contents:
+  - directory: {}
+    path: .
+  path: loki/build/charts/loki
+- contents:
+  - directory: {}
+    path: .
+  path: loki/build/charts/promtail
+- contents:
+  - git:
       commitTitle: fix [ci skip]
       sha: a14617f0208c6731977868cc7fe15e6b27f7a0ec
     path: .

@@ -94,6 +94,9 @@ data:
       name: Prometheus
       type: prometheus
       url: http://prometheus-server.prometheus.svc.cluster.local
+    - name: Loki
+      type: loki
+      url: http://loki.loki.svc.cluster.local:3100
   dashboardproviders.yaml: |
     apiVersion: 1
     providers:

@@ -1,0 +1,8 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels():
+  app: loki
+  chart: loki-0.31.0
+  heritage: Helm
+  release: loki
+#@ end

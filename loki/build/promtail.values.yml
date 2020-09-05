@@ -1,0 +1,19 @@
+loki:
+  serviceName: "loki"
+  servicePort: 3100
+  serviceScheme: http
+
+rbac:
+  create: true
+  pspEnabled: true
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+serviceAccount:
+  create: true

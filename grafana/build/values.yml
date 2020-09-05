@@ -44,6 +44,9 @@ datasources:
       url: http://prometheus-server.prometheus.svc.cluster.local
       access: proxy
       isDefault: true
+    - name: Loki
+      type: loki
+      url: http://loki.loki.svc.cluster.local:3100
 
 dashboardProviders:
   dashboardproviders.yaml:
