@@ -35,6 +35,9 @@ images:
 #! grafana mirroring
 - "jamesclonk/grafana@sha256:97d91ee0aa9771e696cdf44c2b1672af484fd846eaf52ba2db6061f5c78a89d5"
 - "jamesclonk/grafana@sha256:61c56f3d9551afecf9a10e9f8b30a5055ceafa581cdb397b56d3b6efe6632561"
+#! loki mirroring
+- "jamesclonk/loki@sha256:72fdf006e78141aa1f449acdbbaa195d4b7ad6be559a6710e4bcfe5ea2d7cc80"
+- "jamesclonk/loki@sha256:e8572e1db54baba005fe793a6c22ec6d22c568f68a65144509fc5ccb30e46047"
 #! other stuff
 - "jamesclonk/backman:latest"
 - "jamesclonk/web-container:latest"
