@@ -8,9 +8,10 @@ deployments=(
 	"cert-manager"
 	"dashboard"
 
-	# monitoring and alerting
+	# metrics, monitoring, alerting, logs
 	"prometheus"
 	"grafana"
+	"loki"
 
 	# demo/test apps
 	"cf-env"
