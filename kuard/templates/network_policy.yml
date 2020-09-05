@@ -1,0 +1,36 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+
+#@ if data.values.kuard.enable_network_policy:
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: #@ data.values.app
+  namespace: #@ data.values.namespace
+  labels: #@ labels()
+spec:
+  podSelector:
+    matchLabels: #@ labels()
+  ingress:
+  - from: #! allow ingress traffic from all prometheus components
+    - namespaceSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+      podSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+    ports:
+    - port: 8080
+  - from: #! allow ingress traffic from ingress pods/controller
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx
+    ports:
+    - port: 8080
+#@ end

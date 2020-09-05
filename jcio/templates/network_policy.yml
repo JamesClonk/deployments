@@ -1,0 +1,103 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+
+#@ if data.values.enable_network_policy:
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: jcio-frontend
+  namespace: #@ data.values.namespace
+  labels: #@ labels("www","frontend")
+spec:
+  podSelector:
+    matchLabels: #@ labels("www","frontend")
+  ingress:
+  - from: #! allow ingress traffic from all prometheus components
+    - namespaceSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+      podSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+    ports:
+    - port: 3000
+  - from: #! allow ingress traffic from ingress pods/controller
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx
+    ports:
+    - port: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: moviedb-frontend
+  namespace: #@ data.values.namespace
+  labels: #@ labels("moviedb","frontend")
+spec:
+  podSelector:
+    matchLabels: #@ labels("moviedb","frontend")
+  ingress:
+  - from: #! allow ingress traffic from all prometheus components
+    - namespaceSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+      podSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+    ports:
+    - port: 3007
+  - from: #! allow ingress traffic from ingress pods/controller
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx
+    ports:
+    - port: 3007
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: moviedb-backend
+  namespace: #@ data.values.namespace
+  labels: #@ labels("moviedb","backend")
+spec:
+  podSelector:
+    matchLabels: #@ labels("moviedb","backend")
+  ingress:
+  - from: #! allow ingress traffic from moviedb-frontend
+    - podSelector:
+        matchLabels: #@ labels("moviedb","frontend")
+    ports:
+    - port: 4007
+  - from: #! allow ingress traffic from all prometheus components
+    - namespaceSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+      podSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+    ports:
+    - port: 4007
+  - from: #! allow ingress traffic from ingress pods/controller
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx
+    ports:
+    - port: 4007
+#@ end

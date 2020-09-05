@@ -11,4 +11,6 @@ kuard:
   replicas: 1
   image: "gcr.io/kuar-demo/kuard-amd64@sha256:1ecc9fb2c871302fdb57a25e0c076311b7b352b0a9246d442940ca8fb4efe229"
 
+  enable_network_policy: true
+
   auth: "${KUARD_BASIC_AUTH}"

@@ -7,6 +7,8 @@ domains:
 - ${KUBE_DOMAIN_ALPHA}
 - ${KUBE_DOMAIN_BETA}
 
+enable_network_policy: true
+
 db_uri: "postgres://${IR_VISUALIZER_DB_USERNAME}:${IR_VISUALIZER_DB_PASSWORD}@${IR_VISUALIZER_DB_HOST}/${IR_VISUALIZER_DB_NAME}?sslmode=require"
 loggly_token: "${IR_VISUALIZER_LOGGLY_TOKEN}"
 

@@ -7,6 +7,8 @@ domains:
 - ${KUBE_DOMAIN_ALPHA}
 - ${KUBE_DOMAIN_BETA}
 
+enable_network_policy: true
+
 jcio:
   replicas: 2
   image: "jamesclonk/jcio-frontend:5a967a725f4ac8f0f3209241ed16b091ddcf089f"

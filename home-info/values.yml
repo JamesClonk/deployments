@@ -12,7 +12,7 @@ home_info:
   image: "jamesclonk/home-info-dashboard:29132cf31dd416c2b0cf7d68ab1bcace74f72178"
 
   enable_network_policy: true
-  enable_pod_security_policy: true
+  enable_pod_security_policy: false
 
   db_uri: "postgres://${HOME_INFO_DB_USERNAME}:${HOME_INFO_DB_PASSWORD}@${HOME_INFO_DB_HOST}/${HOME_INFO_DB_NAME}?sslmode=require"
 
