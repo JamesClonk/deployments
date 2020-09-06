@@ -63,6 +63,10 @@ spec:
   template:
     metadata:
       labels: #@ labels("ircollector","backend")
+      annotations:
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
     spec:
       affinity: #@ podAntiAffinity("ircollector","backend")
       containers:
