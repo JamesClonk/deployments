@@ -141,25 +141,36 @@ data:
 
     - name: ircollector
       rules:
+      - alert: Visualizer_Error
+        expr: rate(irvisualizer_errors_total[5m]) > 0
+        for: 5m
+        annotations:
+          title: '{{ $labels.job }}: visualizer error'
+          description: '{{ $labels.job }} is reporting visualizer errors!'
+        labels:
+          severity: warning
+
+    - name: ircollector
+      rules:
       - alert: Client_Login_Failure
-        expr: rate(ircollector_api_client_login_error_total[10m]) > 0
-        for: 10m
+        expr: rate(ircollector_api_client_login_error_total[5m]) > 0
+        for: 5m
         annotations:
           title: '{{ $labels.job }}: API client login failure'
           description: '{{ $labels.job }} is reporting API client login failures!'
         labels:
           severity: warning
       - alert: Client_Error
-        expr: rate(ircollector_api_client_request_error_total[10m]) > 0
-        for: 10m
+        expr: rate(ircollector_api_client_request_error_total[5m]) > 0
+        for: 5m
         annotations:
           title: '{{ $labels.job }}: API client error'
           description: '{{ $labels.job }} is reporting API client request errors!'
         labels:
           severity: warning
       - alert: Collector_Error
-        expr: rate(ircollector_errors_total[10m]) > 0
-        for: 10m
+        expr: rate(ircollector_errors_total[5m]) > 0
+        for: 5m
         annotations:
           title: '{{ $labels.job }}: collector error'
           description: '{{ $labels.job }} is reporting collector errors!'
