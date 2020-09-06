@@ -9,9 +9,9 @@ pipelineStages:
     selector: '{app=~"backman|home-info|irvisualizer|ircollector|jcio"} |~ "panic"'
     stages:
     - metrics:
-        panic_total:
+        app_panic_total:
           type: Counter
-          description: "Total golang panics"
+          description: "Total app panics"
           config:
             match_all: true
             action: inc
@@ -19,9 +19,9 @@ pipelineStages:
     selector: '{app=~"home-info|irvisualizer|ircollector|jcio"} |~ "error"'
     stages:
     - metrics:
-        error_total:
+        app_error_total:
           type: Counter
-          description: "Total errors"
+          description: "Total app errors"
           config:
             match_all: true
             action: inc

@@ -78,21 +78,21 @@ data:
             selector: '{app=~"backman|home-info|irvisualizer|ircollector|jcio"} |~ "panic"'
             stages:
             - metrics:
-                panic_total:
+                app_panic_total:
                   config:
                     action: inc
                     match_all: true
-                  description: Total golang panics
+                  description: Total app panics
                   type: Counter
         - match:
             selector: '{app=~"home-info|irvisualizer|ircollector|jcio"} |~ "error"'
             stages:
             - metrics:
-                error_total:
+                app_error_total:
                   config:
                     action: inc
                     match_all: true
-                  description: Total errors
+                  description: Total app errors
                   type: Counter
       kubernetes_sd_configs:
       - role: pod
@@ -141,21 +141,21 @@ data:
             selector: '{app=~"backman|home-info|irvisualizer|ircollector|jcio"} |~ "panic"'
             stages:
             - metrics:
-                panic_total:
+                app_panic_total:
                   config:
                     action: inc
                     match_all: true
-                  description: Total golang panics
+                  description: Total app panics
                   type: Counter
         - match:
             selector: '{app=~"home-info|irvisualizer|ircollector|jcio"} |~ "error"'
             stages:
             - metrics:
-                error_total:
+                app_error_total:
                   config:
                     action: inc
                     match_all: true
-                  description: Total errors
+                  description: Total app errors
                   type: Counter
       kubernetes_sd_configs:
       - role: pod
@@ -208,21 +208,21 @@ data:
             selector: '{app=~"backman|home-info|irvisualizer|ircollector|jcio"} |~ "panic"'
             stages:
             - metrics:
-                panic_total:
+                app_panic_total:
                   config:
                     action: inc
                     match_all: true
-                  description: Total golang panics
+                  description: Total app panics
                   type: Counter
         - match:
             selector: '{app=~"home-info|irvisualizer|ircollector|jcio"} |~ "error"'
             stages:
             - metrics:
-                error_total:
+                app_error_total:
                   config:
                     action: inc
                     match_all: true
-                  description: Total errors
+                  description: Total app errors
                   type: Counter
       kubernetes_sd_configs:
       - role: pod
@@ -281,21 +281,21 @@ data:
             selector: '{app=~"backman|home-info|irvisualizer|ircollector|jcio"} |~ "panic"'
             stages:
             - metrics:
-                panic_total:
+                app_panic_total:
                   config:
                     action: inc
                     match_all: true
-                  description: Total golang panics
+                  description: Total app panics
                   type: Counter
         - match:
             selector: '{app=~"home-info|irvisualizer|ircollector|jcio"} |~ "error"'
             stages:
             - metrics:
-                error_total:
+                app_error_total:
                   config:
                     action: inc
                     match_all: true
-                  description: Total errors
+                  description: Total app errors
                   type: Counter
       kubernetes_sd_configs:
       - role: pod
@@ -356,21 +356,21 @@ data:
             selector: '{app=~"backman|home-info|irvisualizer|ircollector|jcio"} |~ "panic"'
             stages:
             - metrics:
-                panic_total:
+                app_panic_total:
                   config:
                     action: inc
                     match_all: true
-                  description: Total golang panics
+                  description: Total app panics
                   type: Counter
         - match:
             selector: '{app=~"home-info|irvisualizer|ircollector|jcio"} |~ "error"'
             stages:
             - metrics:
-                error_total:
+                app_error_total:
                   config:
                     action: inc
                     match_all: true
-                  description: Total errors
+                  description: Total app errors
                   type: Counter
       kubernetes_sd_configs:
       - role: pod
@@ -520,7 +520,7 @@ spec:
         app: promtail
         release: promtail
       annotations:
-        checksum/config: d1c64cafc6cf5f345bb61e24e2f8e76230a3629085f8a230680a74657c771493
+        checksum/config: 5898e5a2a69a15fe6259c83e20c757800d14137944adb75f2c8c386dc0812301
         prometheus.io/port: http-metrics
         prometheus.io/scrape: "true"
     spec:
