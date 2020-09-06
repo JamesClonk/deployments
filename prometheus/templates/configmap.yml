@@ -139,7 +139,7 @@ data:
         labels:
           severity: warning
 
-    - name: ircollector
+    - name: irvisualizer
       rules:
       - alert: Visualizer_Error
         expr: rate(irvisualizer_errors_total[5m]) > 0
