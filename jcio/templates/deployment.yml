@@ -13,6 +13,10 @@ spec:
   template:
     metadata:
       labels: #@ labels("www","frontend")
+      annotations:
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "9090"
+        prometheus.io/scrape: "true"
     spec:
       affinity: #@ podAntiAffinity("www","frontend")
       containers:
@@ -20,6 +24,7 @@ spec:
         image: #@ data.values.jcio.image
         ports:
         - containerPort: 3000
+        - containerPort: 9090
         env:
         - name: PORT
           value: "3000"

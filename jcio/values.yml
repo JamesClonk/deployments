@@ -11,7 +11,7 @@ enable_network_policy: true
 
 jcio:
   replicas: 2
-  image: "jamesclonk/jcio-frontend:5a967a725f4ac8f0f3209241ed16b091ddcf089f"
+  image: "jamesclonk/jcio-frontend:d566dd41b65011a921713c7837043e659920e7c5"
 
 moviedb:
   hmac_secret: "${JCIO_HTTP_HMAC_SECRET}"
