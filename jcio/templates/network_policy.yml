@@ -23,7 +23,7 @@ spec:
           app: prometheus
           release: prometheus
     ports:
-    - port: 3000
+    - port: 9090
   - from: #! allow ingress traffic from ingress pods/controller
     - namespaceSelector:
         matchLabels:
