@@ -13,6 +13,10 @@ spec:
   template:
     metadata:
       labels: #@ labels("irvisualizer","frontend")
+      annotations:
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
     spec:
       affinity: #@ podAntiAffinity("irvisualizer","frontend")
       containers:
