@@ -1,0 +1,8 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"kind": "DaemonSet", "metadata":{"name":"promtail"}}), expects=1
+---
+metadata:
+  labels:
+    app: promtail #@overlay/remove

@@ -122,7 +122,7 @@ data:
 
     - name: jcio
       rules:
-      - alert: Client_Login_Failure
+      - alert: Frontend_Newsfeed_Failure
         expr: rate(jcio_frontend_newsfeed_failures[10m]) > 0
         for: 10m
         annotations:
@@ -130,7 +130,7 @@ data:
           description: '{{ $labels.job }} is reporting newsfeed failures!'
         labels:
           severity: warning
-      - alert: Client_Login_Failure
+      - alert: Stdlib_Newsreader_Failure
         expr: rate(jcio_stdlib_newsreader_feed_failures[10m]) > 0
         for: 10m
         annotations:
@@ -176,3 +176,14 @@ data:
           description: '{{ $labels.job }} is reporting collector errors!'
         labels:
           severity: warning
+
+    - name: promtail
+      rules:
+      - alert: GolangPanic
+        expr: avg(promtail_custom_app_panic_total) by (app, app_service, app_service_component) > 0
+        for: 5m
+        annotations:
+          title: '{{ $labels.job }}: Golang panic'
+          description: '{{ $labels.job }} is reporting Golang panics!'
+        labels:
+          severity: critical
