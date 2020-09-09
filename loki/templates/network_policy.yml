@@ -12,6 +12,7 @@ spec:
   podSelector:
     matchLabels:
       release: promtail
+      application: promtail
   ingress:
   - from: #! allow ingress traffic from all prometheus components
     - namespaceSelector:
