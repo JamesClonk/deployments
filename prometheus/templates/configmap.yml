@@ -187,3 +187,11 @@ data:
           description: '{{ $labels.job }} is reporting Golang panics!'
         labels:
           severity: critical
+      - alert: Error
+        expr: avg(promtail_custom_app_error_total) by (app, app_service, app_service_component) > 0
+        for: 10m
+        annotations:
+          title: '{{ $labels.job }}: error'
+          description: '{{ $labels.job }} is reporting errors.'
+        labels:
+          severity: info
