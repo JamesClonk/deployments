@@ -139,6 +139,25 @@ data:
         labels:
           severity: warning
 
+    - name: home-info
+      rules:
+      - alert: Alerting_Error
+        expr: rate(homeinfo_dashboard_alerting_errors_total[5m]) > 0
+        for: 5m
+        annotations:
+          title: '{{ $labels.job }}: home-info alerting error'
+          description: '{{ $labels.job }} is reporting home-info alerting errors!'
+        labels:
+          severity: warning
+      - alert: Sensor_Error
+        expr: rate(homeinfo_dashboard_sensor_errors_total[5m]) > 0
+        for: 5m
+        annotations:
+          title: '{{ $labels.job }}: home-info sensor error'
+          description: '{{ $labels.job }} is reporting home-info sensor errors!'
+        labels:
+          severity: warning
+
     - name: irvisualizer
       rules:
       - alert: Visualizer_Error
