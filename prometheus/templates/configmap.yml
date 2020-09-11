@@ -126,16 +126,16 @@ data:
         expr: rate(jcio_frontend_newsfeed_failures[10m]) > 0
         for: 10m
         annotations:
-          title: '{{ $labels.job }}: newsfeed failure'
-          description: '{{ $labels.job }} is reporting newsfeed failures!'
+          title: '{{ $labels.app }}: newsfeed failure'
+          description: '{{ $labels.app }} is reporting newsfeed failures!'
         labels:
           severity: warning
       - alert: Stdlib_Newsreader_Failure
         expr: rate(jcio_stdlib_newsreader_feed_failures[10m]) > 0
         for: 10m
         annotations:
-          title: '{{ $labels.job }}: newsreader feed failure'
-          description: '{{ $labels.job }} is reporting newsreader feed failures!'
+          title: '{{ $labels.app }}: newsreader feed failure'
+          description: '{{ $labels.app }} is reporting newsreader feed failures!'
         labels:
           severity: warning
 
@@ -145,16 +145,16 @@ data:
         expr: rate(homeinfo_dashboard_alerting_errors_total[5m]) > 0
         for: 5m
         annotations:
-          title: '{{ $labels.job }}: home-info alerting error'
-          description: '{{ $labels.job }} is reporting home-info alerting errors!'
+          title: '{{ $labels.app }}: home-info alerting error'
+          description: '{{ $labels.app }} is reporting home-info alerting errors!'
         labels:
           severity: warning
       - alert: Sensor_Error
         expr: rate(homeinfo_dashboard_sensor_errors_total[5m]) > 0
         for: 5m
         annotations:
-          title: '{{ $labels.job }}: home-info sensor error'
-          description: '{{ $labels.job }} is reporting home-info sensor errors!'
+          title: '{{ $labels.app }}: home-info sensor error'
+          description: '{{ $labels.app }} is reporting home-info sensor errors!'
         labels:
           severity: warning
 
@@ -164,8 +164,8 @@ data:
         expr: rate(irvisualizer_errors_total[5m]) > 0
         for: 5m
         annotations:
-          title: '{{ $labels.job }}: visualizer error'
-          description: '{{ $labels.job }} is reporting visualizer errors!'
+          title: '{{ $labels.app_service }}: visualizer error'
+          description: '{{ $labels.app_service }} is reporting visualizer errors!'
         labels:
           severity: warning
 
@@ -175,24 +175,24 @@ data:
         expr: rate(ircollector_api_client_login_error_total[5m]) > 0
         for: 5m
         annotations:
-          title: '{{ $labels.job }}: API client login failure'
-          description: '{{ $labels.job }} is reporting API client login failures!'
+          title: '{{ $labels.app_service }}: API client login failure'
+          description: '{{ $labels.app_service }} is reporting API client login failures!'
         labels:
           severity: warning
       - alert: Client_Error
         expr: rate(ircollector_api_client_request_error_total[5m]) > 0
         for: 5m
         annotations:
-          title: '{{ $labels.job }}: API client error'
-          description: '{{ $labels.job }} is reporting API client request errors!'
+          title: '{{ $labels.app_service }}: API client error'
+          description: '{{ $labels.app_service }} is reporting API client request errors!'
         labels:
           severity: warning
       - alert: Collector_Error
         expr: rate(ircollector_errors_total[5m]) > 0
         for: 5m
         annotations:
-          title: '{{ $labels.job }}: collector error'
-          description: '{{ $labels.job }} is reporting collector errors!'
+          title: '{{ $labels.app_service }}: collector error'
+          description: '{{ $labels.app_service }} is reporting collector errors!'
         labels:
           severity: warning
 
@@ -202,15 +202,15 @@ data:
         expr: avg(promtail_custom_app_panic_total) by (app, app_service, app_service_component) > 0
         for: 5m
         annotations:
-          title: '{{ $labels.job }}: Golang panic'
-          description: '{{ $labels.job }} is reporting Golang panics!'
+          title: '{{ $labels.app }}: Golang panic'
+          description: '{{ $labels.app }}/{{ $labels.app_service }} is reporting Golang panics!'
         labels:
           severity: critical
       - alert: Error
         expr: avg(promtail_custom_app_error_total) by (app, app_service, app_service_component) > 0
         for: 5m
         annotations:
-          title: '{{ $labels.job }}: error'
-          description: '{{ $labels.job }} is reporting errors.'
+          title: '{{ $labels.app }}: error'
+          description: '{{ $labels.app }}/{{ $labels.app_service }} is reporting errors.'
         labels:
           severity: info
