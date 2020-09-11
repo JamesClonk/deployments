@@ -9,7 +9,7 @@ domains:
 
 home_info:
   replicas: 2
-  image: "jamesclonk/home-info-dashboard:2ae6d1e7957410c9c1e658e65bf9415741b2c266"
+  image: "jamesclonk/home-info-dashboard:17639585b570b5fc50e076eb873b2db7d9baa4f6"
 
   enable_network_policy: true
   enable_pod_security_policy: false
