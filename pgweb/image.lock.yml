@@ -3,5 +3,8 @@ kind: Config
 minimumRequiredVersion: 0.24.0
 overrides:
 - image: sosedoff/pgweb:0.11.6
-  newImage: index.docker.io/sosedoff/pgweb@sha256:fcb0acce73e0382249e268c4616d83f9ff6e5dda467904905fd24317ec56712a
+  newImage: index.docker.io/jamesclonk/pgweb@sha256:fcb0acce73e0382249e268c4616d83f9ff6e5dda467904905fd24317ec56712a
+  preresolved: true
+- image: index.docker.io/sosedoff/pgweb@sha256:fcb0acce73e0382249e268c4616d83f9ff6e5dda467904905fd24317ec56712a
+  newImage: index.docker.io/jamesclonk/pgweb@sha256:fcb0acce73e0382249e268c4616d83f9ff6e5dda467904905fd24317ec56712a
   preresolved: true

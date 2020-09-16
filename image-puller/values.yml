@@ -20,6 +20,8 @@ images:
 - "jamesclonk/jcio-frontend:d566dd41b65011a921713c7837043e659920e7c5"
 - "jamesclonk/moviedb-frontend:87286a8dd8d0ff6fb9108880b51887854ad0872c"
 - "jamesclonk/moviedb-backend:6abf341bd5f1d050e43ac34be3f56b0f72e4af75"
+#! pgweb mirroring
+- "jamesclonk/pgweb@sha256:fcb0acce73e0382249e268c4616d83f9ff6e5dda467904905fd24317ec56712a"
 #! bitnami postgresql mirroring
 - "jamesclonk/postgresql@sha256:fdffa1d98b9ae2d045a69133ee8aad7cc6cbd24ac3e1dffb28ce3f5140be5a7e"
 - "jamesclonk/postgresql@sha256:b0eae02b16fed8fd6a2f7b13e68152657cd1a06f7b90192cf5244bfe78cb745f"
