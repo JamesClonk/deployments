@@ -20,6 +20,9 @@ deployments=(
 	# all your backups are belong to us!
 	"backman"
 
+	# what's my db up to?
+	"pgweb"
+
 	# actual useful apps go here..
 	"jcio"
 	"home-info"

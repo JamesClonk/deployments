@@ -1,0 +1,79 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels", "podAntiAffinity")
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: #@ data.values.app
+  namespace: #@ data.values.namespace
+  labels: #@ labels()
+spec:
+  selector:
+    matchLabels: #@ labels()
+  replicas: #@ data.values.pgweb.replicas
+  template:
+    metadata:
+      labels: #@ labels()
+    spec:
+      serviceAccountName: #@ data.values.app
+      securityContext:
+        runAsUser: 2000
+        runAsGroup: 2000
+        fsGroup: 2000
+      affinity: #@ podAntiAffinity()
+      containers:
+      - name: pgweb
+        image: #@ data.values.pgweb.image
+        securityContext:
+          privileged: false
+          allowPrivilegeEscalation: false
+        ports:
+        - containerPort: 8081
+        command: ["/usr/bin/pgweb"]
+        args: ["--bind=0.0.0.0", "--listen=8081", "--bookmarks-dir=/pgweb/bookmarks"]
+        envFrom:
+        - secretRef:
+            name: #@ data.values.app
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "50m"
+          limits:
+            memory: "64Mi"
+            cpu: "100m"
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - 'wget http://localhost:8081 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 5
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - 'wget http://localhost:8081 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
+          failureThreshold: 5
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: #@ data.values.app + "-bookmarks"
+          mountPath: /pgweb/bookmarks/home_info.toml
+          subPath: home_info.toml
+        - name: #@ data.values.app + "-bookmarks"
+          mountPath: /pgweb/bookmarks/irvisualizer.toml
+          subPath: irvisualizer.toml
+        - name: #@ data.values.app + "-bookmarks"
+          mountPath: /pgweb/bookmarks/jcio.toml
+          subPath: jcio.toml
+      volumes:
+      - name: #@ data.values.app + "-bookmarks"
+        secret:
+          secretName: #@ data.values.app

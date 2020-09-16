@@ -1,0 +1,36 @@
+#@data/values
+---
+app: ${KUBE_APP_NAME}
+namespace: ${KUBE_APP_NAME}
+
+domains:
+- ${KUBE_DOMAIN_ALPHA}
+- ${KUBE_DOMAIN_BETA}
+
+pgweb:
+  replicas: 1
+  image: "sosedoff/pgweb:0.11.6"
+
+  enable_pod_security_policy: false
+  enable_network_policy: true
+
+  auth:
+    username: "${PGWEB_AUTH_USERNAME}"
+    password: "${PGWEB_AUTH_PASSWORD}"
+
+databases:
+  home_info:
+    username: "${HOME_INFO_DB_USERNAME}"
+    password: "${HOME_INFO_DB_PASSWORD}"
+    host: "${HOME_INFO_DB_HOST}"
+    db_name: "${HOME_INFO_DB_NAME}"
+  irvisualizer:
+    username: "${IR_VISUALIZER_DB_USERNAME}"
+    password: "${IR_VISUALIZER_DB_PASSWORD}"
+    host: "${IR_VISUALIZER_DB_HOST}"
+    db_name: "${IR_VISUALIZER_DB_NAME}"
+  jcio:
+    username: "${JCIO_MOVIEDB_USERNAME}"
+    password: "${JCIO_MOVIEDB_PASSWORD}"
+    host: "${JCIO_MOVIEDB_HOST}"
+    db_name: "${JCIO_MOVIEDB_NAME}"

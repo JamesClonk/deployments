@@ -1,0 +1,36 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels():
+  app: #@ data.values.app
+  app.service: postgres
+  app.service.component: dashboard
+#@ end
+
+#@ def labelSelector():
+  matchExpressions:
+  - key: app
+    operator: In
+    values:
+    - #@ data.values.app
+  - key: app.service
+    operator: In
+    values:
+    - postgres
+  - key: app.service.component
+    operator: In
+    values:
+    - dashboard
+#@ end
+
+#@ def podAntiAffinity():
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        topologyKey: kubernetes.io/hostname
+        labelSelector: #@ labelSelector()
+#@ end
+
+#@ def connstr(username, password, host, db_name):
+#@   return "postgres://{}:{}@{}/{}?sslmode=require".format(username, password, host, db_name)
+#@ end
