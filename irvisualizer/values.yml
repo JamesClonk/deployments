@@ -22,7 +22,7 @@ irvisualizer:
 
 ircollector:
   replicas: 1
-  image: "jamesclonk/ircollector:247933264422513358836234f64849d86e8ed226"
+  image: "jamesclonk/ircollector:d41f35a96ee8cc387df96af06684021687fbcaae"
 
   auth:
     username: "${IR_VISUALIZER_AUTH_USERNAME}"
