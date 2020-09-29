@@ -21,6 +21,15 @@ spec:
         runAsUser: 2007
         runAsGroup: 2007
         fsGroup: 2007
+      initContainers:
+      - name: volume-mount-hack
+        image: busybox
+        command: ["sh", "-c", "chown -R 2007:2007 /var/syncthing"]
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: storage
+          mountPath: /var/syncthing
       containers:
       - name: syncthing
         image: #@ data.values.syncthing.image
@@ -30,8 +39,13 @@ spec:
         ports:
         - containerPort: 8384
         - containerPort: 22000
-        command: ["/bin/syncthing"]
-        args: ["-home", "/var/syncthing"]
+        command: ["/bin/entrypoint.sh"]
+        args: ["/bin/syncthing", "-config", "/var/syncthing/config", "-data", "/var/syncthing/data"]
+        env:
+        - name: PUID
+          value: "2007"
+        - name: PGID
+          value: "2007"
         envFrom:
         - secretRef:
             name: #@ data.values.app
@@ -74,7 +88,7 @@ spec:
         - name: storage
           mountPath: /var/syncthing
         - name: #@ data.values.app + "-config"
-          mountPath: /var/syncthing/config.xml
+          mountPath: /var/syncthing/config/config.xml
           subPath: config.xml
       volumes:
       - name: #@ data.values.app + "-config"
