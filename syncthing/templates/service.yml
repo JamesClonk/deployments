@@ -1,0 +1,41 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ data.values.app + "-headless"
+  namespace: #@ data.values.namespace
+  labels: #@ labels("headless-service")
+spec:
+  clusterIP: None
+  ports:
+  - port: 8384
+    targetPort: 8384
+  selector: #@ labels("server")
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ data.values.app + "-gui"
+  namespace: #@ data.values.namespace
+  labels: #@ labels("gui-service")
+spec:
+  ports:
+  - port: 8384
+    targetPort: 8384
+  selector: #@ labels("server")
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ data.values.app + "-server"
+  namespace: #@ data.values.namespace
+  labels: #@ labels("server-service")
+spec:
+  ports:
+  - port: 22000
+    targetPort: 22000
+  selector: #@ labels("server")

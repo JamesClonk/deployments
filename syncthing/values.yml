@@ -1,0 +1,19 @@
+#@data/values
+---
+app: ${KUBE_APP_NAME}
+namespace: ${KUBE_APP_NAME}
+
+domains:
+- ${KUBE_DOMAIN_ALPHA}
+- ${KUBE_DOMAIN_BETA}
+
+ingress:
+  auth: "${SYNCTHING_BASIC_AUTH}"
+  username: "${SYNCTHING_BASIC_AUTH_USERNAME}"
+  password: "${SYNCTHING_BASIC_AUTH_PASSWORD}"
+
+syncthing:
+  image: "syncthing/syncthing:1.9"
+
+  enable_pod_security_policy: false
+  enable_network_policy: true

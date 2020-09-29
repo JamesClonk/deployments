@@ -1,0 +1,10 @@
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.24.0
+overrides:
+- image: syncthing/syncthing:1.9
+  newImage: index.docker.io/jamesclonk/syncthing@sha256:2efb582a1de1dae576f5cd2f7943ec5406b311822d3b591961d8ab1d764f338e
+  preresolved: true
+- image: index.docker.io/syncthing/syncthing@sha256:2efb582a1de1dae576f5cd2f7943ec5406b311822d3b591961d8ab1d764f338e
+  newImage: index.docker.io/jamesclonk/syncthing@sha256:2efb582a1de1dae576f5cd2f7943ec5406b311822d3b591961d8ab1d764f338e
+  preresolved: true

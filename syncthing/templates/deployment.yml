@@ -1,0 +1,95 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: #@ data.values.app
+  namespace: #@ data.values.namespace
+  labels: #@ labels("deployment")
+spec:
+  serviceName: #@ data.values.app + "-headless"
+  selector:
+    matchLabels: #@ labels("server")
+  replicas: 1
+  template:
+    metadata:
+      labels: #@ labels("server")
+    spec:
+      serviceAccountName: #@ data.values.app
+      securityContext:
+        runAsUser: 2007
+        runAsGroup: 2007
+        fsGroup: 2007
+      containers:
+      - name: syncthing
+        image: #@ data.values.syncthing.image
+        securityContext:
+          privileged: false
+          allowPrivilegeEscalation: false
+        ports:
+        - containerPort: 8384
+        - containerPort: 22000
+        command: ["/bin/syncthing"]
+        args: ["-home", "/var/syncthing"]
+        envFrom:
+        - secretRef:
+            name: #@ data.values.app
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "150m"
+          limits:
+            memory: "64Mi"
+            cpu: "200m"
+        readinessProbe:
+          # httpGet:
+          #   path: /
+          #   port: 8384
+          exec:
+            command:
+            - sh
+            - -c
+            - 'wget http://localhost:8384 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 5
+        livenessProbe:
+          # httpGet:
+          #   path: /
+          #   port: 8384
+          exec:
+            command:
+            - sh
+            - -c
+            - 'wget http://localhost:8384 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
+          failureThreshold: 5
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: storage
+          mountPath: /var/syncthing
+        - name: #@ data.values.app + "-config"
+          mountPath: /var/syncthing/config.xml
+          subPath: config.xml
+      volumes:
+      - name: #@ data.values.app + "-config"
+        secret:
+          secretName: #@ data.values.app
+      - name: storage
+        emptyDir:
+          sizeLimit: 1Gi
+  # volumeClaimTemplates:
+  # - metadata:
+  #     name: storage
+  #     annotations: {}
+  #   spec:
+  #     accessModes:
+  #     - ReadWriteOnce
+  #     resources:
+  #       requests:
+  #         storage: 10Gi

@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ingress-nginx-tcp-services
+  namespace: kube-system
+  annotations:
+    meta.helm.sh/release-name: kapsule-ingress
+    meta.helm.sh/release-namespace: kube-system
+    kapp.k14s.io/delete-strategy: orphan
+  labels:
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    k8s.scw.cloud/ingress: nginx
+    k8s.scw.cloud/object: ConfigMap
+    k8s.scw.cloud/system: ingress
+    kapp.k14s.io/delete-strategy: orphan
+data:
+  22000: "syncthing/syncthing-server:22000" #! unfortunately needs to be hardcoded since nginx-ingress has only 1 global tcp configmap

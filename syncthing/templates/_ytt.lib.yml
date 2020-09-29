@@ -1,0 +1,23 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels(component):
+  app: #@ data.values.app
+  app.service: syncthing
+  app.service.component: #@ component
+#@ end
+
+#@ def labelSelector(component):
+  matchExpressions:
+  - key: app
+    operator: In
+    values:
+    - #@ data.values.app
+  - key: app.service
+    operator: In
+    values:
+    - syncthing
+  - key: app.service.component
+    operator: In
+    values:
+    - #@ component
+#@ end
