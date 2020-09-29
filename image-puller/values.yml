@@ -16,7 +16,7 @@ images:
 - "jamesclonk/cf-env:89d20c44e3d6b1a4e0c0502e9d1f5bc908e81264"
 - "jamesclonk/home-info-dashboard:17639585b570b5fc50e076eb873b2db7d9baa4f6"
 - "jamesclonk/irvisualizer:387a0f13eb7e9863d5ebe9b709c7e8850cd49c72"
-- "jamesclonk/ircollector:d41f35a96ee8cc387df96af06684021687fbcaae"
+- "jamesclonk/ircollector:f8ac8eae6dffa2457d4610636121ccd8c0c3245c"
 - "jamesclonk/jcio-frontend:d566dd41b65011a921713c7837043e659920e7c5"
 - "jamesclonk/moviedb-frontend:87286a8dd8d0ff6fb9108880b51887854ad0872c"
 - "jamesclonk/moviedb-backend:6abf341bd5f1d050e43ac34be3f56b0f72e4af75"
