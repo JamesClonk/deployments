@@ -24,7 +24,7 @@ spec:
       initContainers:
       - name: volume-mount-hack
         image: busybox
-        command: ["sh", "-c", "chown -R 2007:2007 /var/syncthing"]
+        command: ["sh", "-c", "mkdir -p /var/syncthing/config; chown -R 2007:2007 /var/syncthing"]
         securityContext:
           runAsUser: 0
         volumeMounts:
@@ -57,31 +57,31 @@ spec:
             memory: "64Mi"
             cpu: "200m"
         readinessProbe:
-          # httpGet:
-          #   path: /
-          #   port: 8384
-          exec:
-            command:
-            - sh
-            - -c
-            - 'wget http://localhost:8384 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
+          httpGet:
+            path: /
+            port: 8384
+          # exec:
+          #   command:
+          #   - sh
+          #   - -c
+          #   - 'wget http://localhost:8384 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
           failureThreshold: 5
           initialDelaySeconds: 30
           periodSeconds: 15
           successThreshold: 1
           timeoutSeconds: 5
         livenessProbe:
-          # httpGet:
-          #   path: /
-          #   port: 8384
-          exec:
-            command:
-            - sh
-            - -c
-            - 'wget http://localhost:8384 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
+          httpGet:
+            path: /
+            port: 8384
+          # exec:
+          #   command:
+          #   - sh
+          #   - -c
+          #   - 'wget http://localhost:8384 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
           failureThreshold: 5
-          initialDelaySeconds: 60
-          periodSeconds: 30
+          initialDelaySeconds: 30
+          periodSeconds: 15
           successThreshold: 1
           timeoutSeconds: 5
         volumeMounts:
@@ -94,6 +94,7 @@ spec:
       - name: #@ data.values.app + "-config"
         secret:
           secretName: #@ data.values.app
+          defaultMode: 432
       - name: storage
         emptyDir:
           sizeLimit: 1Gi
