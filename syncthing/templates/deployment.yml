@@ -22,14 +22,17 @@ spec:
         runAsGroup: 2007
         fsGroup: 2007
       initContainers:
-      - name: volume-mount-hack
-        image: busybox
-        command: ["sh", "-c", "mkdir -p /var/syncthing/config; chown -R 2007:2007 /var/syncthing"]
+      - name: bootstrap
+        image: #@ data.values.busybox.image
+        command: ["sh", "-c", "mkdir -p /var/syncthing/config; cp -u /var/syncthing/bootstrap/config.xml /var/syncthing/config/config.xml; chown -R 2007:2007 /var/syncthing || true"]
         securityContext:
           runAsUser: 0
         volumeMounts:
         - name: storage
           mountPath: /var/syncthing
+        - name: #@ data.values.app + "-config"
+          mountPath: /var/syncthing/bootstrap/config.xml
+          subPath: config.xml
       containers:
       - name: syncthing
         image: #@ data.values.syncthing.image
@@ -48,7 +51,7 @@ spec:
           value: "2007"
         envFrom:
         - secretRef:
-            name: #@ data.values.app
+            name: #@ data.values.app + "-basic-auth"
         resources:
           requests:
             memory: "64Mi"
@@ -87,9 +90,9 @@ spec:
         volumeMounts:
         - name: storage
           mountPath: /var/syncthing
-        - name: #@ data.values.app + "-config"
-          mountPath: /var/syncthing/config/config.xml
-          subPath: config.xml
+        # - name: #@ data.values.app + "-config"
+        #   mountPath: /var/syncthing/config/config.xml
+        #   subPath: config.xml
       volumes:
       - name: #@ data.values.app + "-config"
         secret:
