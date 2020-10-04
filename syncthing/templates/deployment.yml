@@ -54,22 +54,17 @@ spec:
             name: #@ data.values.app + "-basic-auth"
         resources:
           requests:
-            memory: "64Mi"
+            memory: "128Mi"
             cpu: "150m"
           limits:
-            memory: "64Mi"
+            memory: "128Mi"
             cpu: "200m"
         readinessProbe:
           httpGet:
             path: /
             port: 8384
-          # exec:
-          #   command:
-          #   - sh
-          #   - -c
-          #   - 'wget http://localhost:8384 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
           failureThreshold: 5
-          initialDelaySeconds: 30
+          initialDelaySeconds: 15
           periodSeconds: 15
           successThreshold: 1
           timeoutSeconds: 5
@@ -77,11 +72,6 @@ spec:
           httpGet:
             path: /
             port: 8384
-          # exec:
-          #   command:
-          #   - sh
-          #   - -c
-          #   - 'wget http://localhost:8384 -q -O /dev/null --user "${AUTH_USER}" --password "${AUTH_PASS}"'
           failureThreshold: 5
           initialDelaySeconds: 30
           periodSeconds: 15
@@ -90,24 +80,18 @@ spec:
         volumeMounts:
         - name: storage
           mountPath: /var/syncthing
-        # - name: #@ data.values.app + "-config"
-        #   mountPath: /var/syncthing/config/config.xml
-        #   subPath: config.xml
       volumes:
       - name: #@ data.values.app + "-config"
         secret:
           secretName: #@ data.values.app
           defaultMode: 432
-      - name: storage
-        emptyDir:
-          sizeLimit: 1Gi
-  # volumeClaimTemplates:
-  # - metadata:
-  #     name: storage
-  #     annotations: {}
-  #   spec:
-  #     accessModes:
-  #     - ReadWriteOnce
-  #     resources:
-  #       requests:
-  #         storage: 10Gi
+  volumeClaimTemplates:
+  - metadata:
+      name: storage
+      annotations: {}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
