@@ -32,7 +32,7 @@ metadata:
   name: #@ data.values.job
   namespace: #@ data.values.namespace
 spec:
-  schedule: "37 13 * * 3"
+  schedule: "37 13 * * 0,3"
   concurrencyPolicy: Replace
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
