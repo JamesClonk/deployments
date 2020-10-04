@@ -21,18 +21,19 @@ spec:
         runAsUser: 2007
         runAsGroup: 2007
         fsGroup: 2007
-      initContainers:
-      - name: bootstrap
-        image: #@ data.values.busybox.image
-        command: ["sh", "-c", "mkdir -p /var/syncthing/config; cp -u /var/syncthing/bootstrap/config.xml /var/syncthing/config/config.xml; chown -R 2007:2007 /var/syncthing || true"]
-        securityContext:
-          runAsUser: 0
-        volumeMounts:
-        - name: storage
-          mountPath: /var/syncthing
-        - name: #@ data.values.app + "-config"
-          mountPath: /var/syncthing/bootstrap/config.xml
-          subPath: config.xml
+      #! fucking busybox "cp" does not have a -n flag, and -u does not seem to work! :(
+      # initContainers:
+      # - name: bootstrap
+      #   image: #@ data.values.busybox.image
+      #   command: ["sh", "-c", "mkdir -p /var/syncthing/config; cp -u /var/syncthing/bootstrap/config.xml /var/syncthing/config/config.xml; chown -R 2007:2007 /var/syncthing || true"]
+      #   securityContext:
+      #     runAsUser: 0
+      #   volumeMounts:
+      #   - name: storage
+      #     mountPath: /var/syncthing
+      #   - name: #@ data.values.app + "-config"
+      #     mountPath: /var/syncthing/bootstrap/config.xml
+      #     subPath: config.xml
       containers:
       - name: syncthing
         image: #@ data.values.syncthing.image
