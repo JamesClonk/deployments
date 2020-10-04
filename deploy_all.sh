@@ -28,6 +28,9 @@ deployments=(
 	"home-info"
 	"irvisualizer"
 
+	# put my files into the clouds!
+	"syncthing"
+
 	# also some cronjobs for good fun..
 	"image-puller"
 	"repo-mirrorer"

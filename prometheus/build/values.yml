@@ -67,10 +67,10 @@ nodeExporter:
       apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
   resources:
     limits:
-      cpu: 200m
+      cpu: 100m
       memory: 64Mi
     requests:
-      cpu: 100m
+      cpu: 50m
       memory: 32Mi
 
 server:

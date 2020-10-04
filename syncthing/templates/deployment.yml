@@ -54,11 +54,11 @@ spec:
             name: #@ data.values.app + "-basic-auth"
         resources:
           requests:
-            memory: "128Mi"
-            cpu: "150m"
-          limits:
-            memory: "128Mi"
+            memory: "256Mi"
             cpu: "200m"
+          limits:
+            memory: "256Mi"
+            cpu: "300m"
         readinessProbe:
           httpGet:
             path: /
