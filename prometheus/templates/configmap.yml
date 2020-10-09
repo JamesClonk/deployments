@@ -39,23 +39,23 @@ data:
     - name: cpu
       rules:
       - alert: CPU_Requests
-        expr: (sum(kube_pod_container_resource_requests_cpu_cores) by (node) / sum(kube_node_status_allocatable_cpu_cores) by (node) * 100) > 75
+        expr: (sum(kube_pod_container_resource_requests_cpu_cores) by (node) / sum(kube_node_status_allocatable_cpu_cores) by (node) * 100) > 85
         for: 5m
         annotations:
-          title: 'K8s node {{ $labels.instance }} CPU resource requests > 75%'
-          description: 'Kubernetes node {{ $labels.instance }} has resource requests on CPU shares over 75% for more than 5 minutes.'
+          title: 'K8s node {{ $labels.instance }} CPU resource requests > 85%'
+          description: 'Kubernetes node {{ $labels.instance }} has resource requests on CPU shares over 85% for more than 5 minutes.'
         labels:
           severity: warning
       - alert: CPU_Limits
-        expr: (sum(kube_pod_container_resource_limits_cpu_cores) by (node) / sum(kube_node_status_allocatable_cpu_cores) by (node) * 100) > 95
+        expr: (sum(kube_pod_container_resource_limits_cpu_cores) by (node) / sum(kube_node_status_allocatable_cpu_cores) by (node) * 100) > 100
         for: 5m
         annotations:
-          title: 'K8s node {{ $labels.instance }} CPU resource limits > 95%'
-          description: 'Kubernetes node {{ $labels.instance }} has resource limits on CPU shares over 95% for more than 5 minutes.'
+          title: 'K8s node {{ $labels.instance }} CPU resource limits > 100%'
+          description: 'Kubernetes node {{ $labels.instance }} has resource limits on CPU shares over 100% for more than 5 minutes.'
         labels:
           severity: warning
       - alert: CPU_Usage
-        expr: ceil(sum (rate (container_cpu_usage_seconds_total{id="/"}[5m])) by (instance) / sum (machine_cpu_cores) by (instance) * 100) > 70
+        expr: ceil(sum (rate (container_cpu_usage_seconds_total{id="/"}[5m])) by (instance) / 2 * 100) > 70
         for: 10m
         annotations:
           title: 'K8s node {{ $labels.instance }} CPU usage > 70%'
@@ -82,7 +82,7 @@ data:
         labels:
           severity: warning
       - alert: Memory_Usage
-        expr: ceil(sum(container_memory_working_set_bytes{id="/"}) by (instance) / sum(machine_memory_bytes) by (instance) * 100) > 70
+        expr: ceil(sum(container_memory_working_set_bytes{id="/"}) by (instance) / 3000000000 * 100) > 70
         for: 10m
         annotations:
           title: 'K8s node {{ $labels.instance }} memory usage > 70%'
