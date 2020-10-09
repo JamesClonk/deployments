@@ -50,7 +50,7 @@ spec:
             cpu: "50m"
           limits:
             memory: "64Mi"
-            cpu: "150m"
+            cpu: "100m"
         readinessProbe:
           httpGet:
             path: /
