@@ -1292,10 +1292,10 @@ spec:
           hostPort: 9100
         resources:
           limits:
-            cpu: 100m
-            memory: 64Mi
-          requests:
             cpu: 50m
+            memory: 32Mi
+          requests:
+            cpu: 10m
             memory: 32Mi
         volumeMounts:
         - name: proc
@@ -1389,10 +1389,10 @@ spec:
           timeoutSeconds: 5
         resources:
           limits:
-            cpu: 100m
-            memory: 64Mi
-          requests:
             cpu: 50m
+            memory: 32Mi
+          requests:
+            cpu: 10m
             memory: 32Mi
 ---
 apiVersion: apps/v1
@@ -1615,10 +1615,10 @@ spec:
           successThreshold: 1
         resources:
           limits:
-            cpu: 500m
+            cpu: 400m
             memory: 768Mi
           requests:
-            cpu: 300m
+            cpu: 250m
             memory: 768Mi
         volumeMounts:
         - name: config-volume
