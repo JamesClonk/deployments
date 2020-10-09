@@ -35,11 +35,11 @@ spec:
         resources:
           requests:
             memory: "64Mi"
-            cpu: "150m"
+            cpu: "100m"
             ephemeral-storage: "1Gi"
           limits:
             memory: "64Mi"
-            cpu: "250m"
+            cpu: "200m"
             ephemeral-storage: "1Gi"
         readinessProbe:
           httpGet:
@@ -89,10 +89,10 @@ spec:
         resources:
           requests:
             memory: "64Mi"
-            cpu: "200m"
+            cpu: "100m"
           limits:
             memory: "64Mi"
-            cpu: "250m"
+            cpu: "200m"
         readinessProbe:
           httpGet:
             path: /health
