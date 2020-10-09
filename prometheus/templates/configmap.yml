@@ -214,3 +214,11 @@ data:
           description: '{{ $labels.app }}/{{ $labels.app_service }} is reporting errors.'
         labels:
           severity: info
+      - alert: PushFailure
+        expr: avg(promtail_custom_repo_mirrorer_failed_push) by (job) > 0
+        for: 10m
+        annotations:
+          title: '{{ $labels.job }}: push failure'
+          description: '{{ $labels.job }} is reporting push failures.'
+        labels:
+          severity: warning

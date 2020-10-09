@@ -25,6 +25,16 @@ pipelineStages:
           config:
             match_all: true
             action: inc
+- match:
+    selector: '{namespace="repo-mirrorer"} |~ "failed to push"'
+    stages:
+    - metrics:
+        repo_mirrorer_failed_push:
+          type: Counter
+          description: "Total repo-mirrorer failed pushes"
+          config:
+            match_all: true
+            action: inc
 
 rbac:
   create: true
