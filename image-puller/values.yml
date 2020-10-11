@@ -15,7 +15,7 @@ images:
 - "jamesclonk/backman:1.15.0"
 - "jamesclonk/cf-env:89d20c44e3d6b1a4e0c0502e9d1f5bc908e81264"
 - "jamesclonk/home-info-dashboard:f146a89557db4d22635f96bbea62ffc256a2d3d6"
-- "jamesclonk/irvisualizer:1b21f162b3070dd4c758f2701bc1806b063e305a"
+- "jamesclonk/irvisualizer:382c99cb742fe74b6cac9e70c56ca10cfc3920ec"
 - "jamesclonk/ircollector:f8ac8eae6dffa2457d4610636121ccd8c0c3245c"
 - "jamesclonk/jcio-frontend:d566dd41b65011a921713c7837043e659920e7c5"
 - "jamesclonk/moviedb-frontend:87286a8dd8d0ff6fb9108880b51887854ad0872c"
