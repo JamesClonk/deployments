@@ -14,7 +14,7 @@ loggly_token: "${IR_VISUALIZER_LOGGLY_TOKEN}"
 
 irvisualizer:
   replicas: 2
-  image: "jamesclonk/irvisualizer:387a0f13eb7e9863d5ebe9b709c7e8850cd49c72"
+  image: "jamesclonk/irvisualizer:1b21f162b3070dd4c758f2701bc1806b063e305a"
 
   auth:
     username: "${IR_VISUALIZER_AUTH_USERNAME}"
