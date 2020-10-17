@@ -59,6 +59,9 @@ fi
 # which env are we targetting?
 if [ -z "${KUBE_ENVIRONMENT}" ]; then
 	export KUBE_ENVIRONMENT=$(kubectl config current-context)
+	if [ "${KUBE_ENVIRONMENT}" == "minikube" ]; then
+		export KUBE_ENVIRONMENT="local"
+	fi
 	if [ "${KUBE_ENVIRONMENT}" == "microk8s" ]; then
 		export KUBE_ENVIRONMENT="local"
 	fi
