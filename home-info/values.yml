@@ -21,6 +21,8 @@ home_info:
     password: "${HOME_INFO_AUTH_PASSWORD}"
   slack:
     token: "${HOME_INFO_SLACK_TOKEN}"
+  teams:
+    webhook_url: "${HOME_INFO_TEAMS_WEBHOOK_URL}"
   telebot:
     username: "${HOME_INFO_TELEBOT_USERNAME}"
     token: "${HOME_INFO_TELEBOT_TOKEN}"
