@@ -14,7 +14,7 @@ images:
 - "jamesclonk/repo-mirrorer:0f100962dfc32b5a15da6cc73ba3f98e007832a8"
 - "jamesclonk/backman:1.15.0"
 - "jamesclonk/cf-env:89d20c44e3d6b1a4e0c0502e9d1f5bc908e81264"
-- "jamesclonk/home-info-dashboard:7f76990ed9d981307c06fef04d583d52c036f8c3"
+- "jamesclonk/home-info-dashboard:1edac358b37dc12e2ce55f810adc6c6a8f704dee"
 - "jamesclonk/irvisualizer:382c99cb742fe74b6cac9e70c56ca10cfc3920ec"
 - "jamesclonk/ircollector:f8ac8eae6dffa2457d4610636121ccd8c0c3245c"
 - "jamesclonk/jcio-frontend:d566dd41b65011a921713c7837043e659920e7c5"
