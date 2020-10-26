@@ -25,6 +25,8 @@ images:
 - "jamesclonk/syncthing@sha256:2efb582a1de1dae576f5cd2f7943ec5406b311822d3b591961d8ab1d764f338e"
 #! pgweb mirroring
 - "jamesclonk/pgweb@sha256:fcb0acce73e0382249e268c4616d83f9ff6e5dda467904905fd24317ec56712a"
+#! prometheus-msteams proxy mirroring
+- "jamesclonk/msteams@sha256:c69cc0661eabf703694eb7a6e861d7b6c3333b0b8b153aa5e88a32b0ba21c97b"
 #! bitnami postgresql mirroring
 - "jamesclonk/postgresql@sha256:fdffa1d98b9ae2d045a69133ee8aad7cc6cbd24ac3e1dffb28ce3f5140be5a7e"
 - "jamesclonk/postgresql@sha256:b0eae02b16fed8fd6a2f7b13e68152657cd1a06f7b90192cf5244bfe78cb745f"

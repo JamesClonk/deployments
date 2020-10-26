@@ -1,0 +1,23 @@
+#@ load("@ytt:data", "data")
+#@ load("_ytt.lib.yml", "labels")
+
+#@ if data.values.msteams.enable_network_policy:
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: #@ data.values.app
+  namespace: #@ data.values.namespace
+  labels: #@ labels()
+spec:
+  podSelector:
+    matchLabels: #@ labels()
+  ingress:
+  - from: #! allow ingress traffic from all prometheus components
+    - podSelector:
+        matchLabels:
+          app: prometheus
+          release: prometheus
+    ports:
+    - port: 2000
+#@ end

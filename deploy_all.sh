@@ -10,6 +10,7 @@ deployments=(
 
 	# metrics, monitoring, alerting, logs
 	"prometheus"
+	"prometheus-msteams"
 	"grafana"
 	"loki"
 

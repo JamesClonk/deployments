@@ -1,0 +1,17 @@
+#@data/values
+---
+app: ${KUBE_APP_NAME}
+namespace: prometheus
+
+domains:
+- ${KUBE_DOMAIN_ALPHA}
+- ${KUBE_DOMAIN_BETA}
+
+msteams:
+  replicas: 1
+  image: "quay.io/prometheusmsteams/prometheus-msteams:v1.4.1"
+
+  enable_pod_security_policy: false
+  enable_network_policy: true
+
+  webhook_url: "${PROMETHEUS_MSTEAMS_WEBHOOK_URL}"
