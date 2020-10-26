@@ -35,7 +35,7 @@ data:
                   {{- else -}}
                       {{- .CommonAnnotations.summary -}}
                   {{- end -}}",
-      "title": "Prometheus Alert ({{ .Status | title }})",
+      "title": "Prometheus Alert ({{ .Status | title }}) - {{ .CommonLabels.alertname }} for {{ .CommonLabels.job }}",
       "sections": [ {{$externalUrl := .ExternalURL}}
       {{- range $index, $alert := .Alerts }}{{- if $index }},{{- end }}
         {
