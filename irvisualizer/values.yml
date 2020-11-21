@@ -14,7 +14,7 @@ loggly_token: "${IR_VISUALIZER_LOGGLY_TOKEN}"
 
 irvisualizer:
   replicas: 2
-  image: "jamesclonk/irvisualizer:b764a9f434197540bd2a382cd03d1dd7e5e02fc6"
+  image: "jamesclonk/irvisualizer:cd7455095d96dd34f8c0c3978c658b42e9aeea96"
 
   auth:
     username: "${IR_VISUALIZER_AUTH_USERNAME}"
@@ -22,7 +22,7 @@ irvisualizer:
 
 ircollector:
   replicas: 1
-  image: "jamesclonk/ircollector:f8ac8eae6dffa2457d4610636121ccd8c0c3245c"
+  image: "jamesclonk/ircollector:71b58ed77aebf7930f8ce52fa2fbb554d11ef5bb"
 
   auth:
     username: "${IR_VISUALIZER_AUTH_USERNAME}"
